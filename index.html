@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel = "stylesheet" type = "text/css" href = "./css/myStyle.css" />
+        <title>Circuiti RC</title>
+    </head>
+    <body>
+        
+        <!-- HEADER SECTION -->
+        <div class="header">
+            <h1>Circuiti RC</h1>
+            <p>by Luca Palumbo</p>
+        </div>
+        
+        <!-- CONTENT SECTION -->
+        <button class="tablink" onclick="openPage('circuitiRC', this)" id="defaultOpen">Circuiti RC</button>
+        <button class="tablink" onclick="openPage('News', this)">News</button>
+        <button class="tablink" onclick="openPage('Contact', this)">Contact</button>
+        <button class="tablink" onclick="openPage('About', this)">About</button>
+
+        <div id="circuitiRC" class="tabcontent" >
+            <div class='subContainer'>
+                <h2 class='subTitle'>Spiegazione e teoria</h2>
+                
+                <!-- SIDEBAR SECCTION -->
+                <div class="sidenav">
+                    <div>Indice:</div>
+                    <a href="#cosasono">Cosa Sono</a>
+                    <a href="#caricacondensatore">Carica condensatore</a>
+                    <a href="#scaricacondensatore">Scarica condensatore</a>
+                    <a href="#bilancioenergetico">Bilancio energetico</a>
+                </div>
+                <div id="cosasono">
+                    <h3>Cosa sono?</h3>
+                    <img class="imgTeoria" src="./img/circuitoRC.png" alt="circuito RC" > 
+                    <p id="p1">
+                        Fino ad ora abbiamo utilizzato circuiti in condizioni 
+                        stazionarie, ovvero le cui grandezze fondamentali 
+                        (correnti, d.d.p., carica dei condensatori ) non 
+                        variano nel tempo. Un circuito RC &egrave; un esempio 
+                        di circuiti non stazionario. <br/>
+                        Il circuito RC contiene, oltre a una batteria o 
+                        generatore di tensione, una o pi&ugrave; resistenze e 
+                        uno o pi&ugrave; condensatori.
+                        Consideriamo il condensatore inizialmente scarico. <br/>
+                        Attraverso l'interruttore S possiamo mettere in contatto 
+                        il condensatore con la batteria.                    
+                    </p>
+                    <br/>
+                    <br/>
+                    <img class="imgTeoria" src="./img/circuitoRCfasi.png" alt="fasi di un circuito RC">
+                    <div id="p2">
+                        <ul id="fasi">
+                            <li>
+                                <strong>Fase di Carica:</strong> mettiamo in contatto 
+                                l'interruttore S col punto a. La batteria inizia a 
+                                trasferire carica al condensatore finche la d.d.p
+                                deltaV tra i piatti del condensatore non eguaglia la 
+                                f.e.m. della batteria.
+                            </li>
+                            <li>
+                                <strong>Condensatore totalmente carico:</strong> a 
+                                carica completata la corrente cessa: il condensatore 
+                                carico interrompe il flusso della corrente.
+                            </li>
+                            <li>
+                                <strong>Fase di scarica:</strong> scarichiamo il 
+                                condensatore collegando S col punto b: si genera 
+                                una corrente nella maglia chiysa che dissipa l'energia 
+                                del condensatore sulla resistenza R.
+                            </li>
+                        </ul>               
+                    </div>
+                </div>
+                <br/>
+                <hr width="400px"/>
+                <div id="caricacondensatore">
+                    <h3>Processo di carica del condensatore</h3>
+                    <img class="imgTeoria" src="./img/circuitoRC2.png" alt="circuito RC in carica">
+                    <div>
+                        In ogni istante del processo di carica, come nel caso statico 
+                        le equazioni della corrente sono date dalle leggi di Kirchoff. 
+                        La differenza è che in questo caso le grandezze sono variabili 
+                        nel tempo.
+                    </div>
+                </div>             
+
+                
+            </div>        
+        </div>
+
+        <div id="News" class="tabcontent">
+            <h3>News</h3>
+            <p>Some news this fine day!</p> 
+        </div>
+
+        <div id="Contact" class="tabcontent">
+            <h3>Contact</h3>
+            <p>Get in touch, or swing by for a cup of coffee.</p>
+        </div>
+
+        <div id="About" class="tabcontent">
+            <h3>About</h3>
+            <p>Who we are and what we do.</p>
+        </div>
+
+        
+
+
+        <!-- SCRIPT SECTION -->
+        <script>
+            function openPage(pageName,elmnt,color) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+            document.getElementById(pageName).style.display = "block";
+            //elmnt.style.backgroundColor = '#f7642f';
+            elmnt.style.backgroundColor = '#1abc9c';
+        }
+
+            // Get the element with id="defaultOpen" and click on it
+            document.getElementById("defaultOpen").click();
+        </script>
+   
+    </body>
+</html>
