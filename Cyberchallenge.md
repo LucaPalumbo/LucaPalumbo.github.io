@@ -1,5 +1,5 @@
 # Cyberchallenge 2020
-
+![Cyberchallenge](cclogo.png "Cybechallenge")
 ## Inizio
 Ho scoperto di [Cyberchallenge](https://cyberchallenge.it/) per caso quando ero in terza superiore. 
 Ne ho sentito parlare per la prima volta su telegram, in uno dei milioni di gruppi di informatica e cybersecurity.
