@@ -26,11 +26,12 @@ La gara è stata fighissima, ed era la prima a cui ho partecipato in maniera com
 
 Il 18 giugno ricevo un messaggio. Le regole sono cambiate. Alla gara nazionale sono ammessi 6 studenti, non più 4. Come in un reality show vengo ripescato ed entro a far parte della squadra dell'univesità di pisa.
 
+![Team](team.PNG "Team")
 ## Attack / Defense 
 Alla gara nazionale a ogni squadra viene fornito un server. L'obiettivo è quello di attaccare i server avversari e difendere i propri. Ogni segreto (flag) che si ruba fa guadagnare punti, ogni segreto che ci viene rubato fa perdere punti e ogni istante in cui il server è offline fa perdere punti.
 
 Il mio team si qualifica primo, seguito dal politecnico di milano e dall'univesità di verona.
-![Team](team.PNG "Team")
+
 ![Cyberchallenge](ccclassifica.jpg "Podio")
 Qui puoi vedere la presentazione di una challenge risolta dal team durante la gara 
 [![Video]({image-url})]({https://www.facebook.com/watch/?v=1701794816667062} "Link Title")
