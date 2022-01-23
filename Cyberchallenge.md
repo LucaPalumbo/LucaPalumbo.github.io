@@ -9,7 +9,7 @@ Con mia grande sorpresa a febbraio 2020 ho superato prima il test di logica e po
 
 ## Il corso
 
-Cyberchallenge è un corso di 3 mesi di lezioni di cybersecurity ( 6 ore a settimana ). Le lezioni si concentrano sulla parte pratica, mettere mano sui programmi, sul codice, sulle vulnerabilità, scrivere exploit... A tenere le lezioni sono i professori e gli studenti della edizione precendete di cyberchallenge precedente (a pisa almeno).
+Cyberchallenge è un corso di 3 mesi di lezioni di cybersecurity ( 6 ore a settimana ). Le lezioni si concentrano sulla parte pratica, mettere mano sui programmi, sul codice, sulle vulnerabilità, scrivere exploit... A tenere le lezioni sono i professori e gli studenti della edizione di cyberchallenge precedente (a pisa almeno).
 
 Gli argomenti affrontati sono tantissimi. Binary exploitation, crittografia, Web security, hardware security, reverse engineering... Troppe cose per essere trattate con completezza in poco tempo, quindi molto del lavoro da fare per risolvere le sfide proposte è di approfondimento individuale. 
 
