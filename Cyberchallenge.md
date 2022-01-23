@@ -38,7 +38,4 @@ Qui puoi vedere la presentazione di una challenge risolta dal team durante la ga
 
 
 
-
-[![Demo CountPages alpha](https://share.gifyoutube.com/KzB6Gb.gif)](https://youtu.be/4nhHd_qiviI?t=9817)
-[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://www.facebook.com/watch/?v=1701794816667062)
-[![Video]({image-url})](https://www.facebook.com/watch/?v=1701794816667062 "Link Title")1
+[comment]: <> ([![Demo CountPages alpha](https://share.gifyoutube.com/KzB6Gb.gif)](https://youtu.be/4nhHd_qiviI?t=9817) [![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://www.facebook.com/watch/?v=1701794816667062) [![Video]({image-url})](https://www.facebook.com/watch/?v=1701794816667062 "Link Title")1 ) 
