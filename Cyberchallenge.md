@@ -34,4 +34,4 @@ Il mio team si qualifica primo, seguito dal politecnico di milano e dall'univesi
 
 ![Cyberchallenge](ccclassifica.jpg "Podio")
 Qui puoi vedere la presentazione di una challenge risolta dal team durante la gara 
-[![Video]({image-url})]({https://www.facebook.com/watch/?v=1701794816667062} "Link Title")
+[![Video]({image-url})](https://www.facebook.com/watch/?v=1701794816667062 "Link Title")
