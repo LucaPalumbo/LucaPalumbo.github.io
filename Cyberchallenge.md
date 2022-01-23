@@ -36,6 +36,6 @@ Il mio team si qualifica primo, seguito dal politecnico di milano e dall'univesi
 Qui puoi vedere la presentazione di una challenge risolta dal team durante la gara 
 <video src='https://youtu.be/4nhHd_qiviI?t=9817' width=180/>
 
+[![Watch the video](https://img.youtube.com/vi/nTQUwghvy5Q/default.jpg)](https://youtu.be/4nhHd_qiviI?t=9817)
 
 
-[comment]: <> ([![Demo CountPages alpha](https://share.gifyoutube.com/KzB6Gb.gif)](https://youtu.be/4nhHd_qiviI?t=9817) [![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://www.facebook.com/watch/?v=1701794816667062) [![Video]({image-url})](https://www.facebook.com/watch/?v=1701794816667062 "Link Title")1 ) 
