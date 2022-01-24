@@ -5,8 +5,9 @@ le relazioni e vengono decretati i vincitori.
 
 Ovviamente non appena ho scoperto di questa gare non me la sono lasciata sfuggire. Si può dire che questa è stata la mia prima esperienza di laboratorio seria.
 
+Così ho iscritto il mio team, [**AstroLorenzini**](https://istitutolorenzinipescia.edu.it/), composto solo da me!
 ## L'idea
-Farsi venire in mente una buona idea per un esperimento è molto difficile. Ho letto i report della edizione precedente e erano interessantissimi.
+Farsi venire in mente una buona idea per un esperimento è molto difficile. Ho letto i report della edizione precedente e erano interessantissimi, mentre io per diverso tempo ero in alto mare.
 
 Alla fine ho deciso di determinare l'eccentricità dell'ISS attorno al pianeta, ma rimaneva un problema. Come fare?
 
@@ -20,8 +21,16 @@ l'altro dentro il modulo Columbus). Questi computer sono stati regalati dalla ra
 Per il mio esperimento ho usato Izzy, non perchè avessi veramente necessità di fotografie. Il mio esperimento non si basa su image analysis, ma perchè ho pensato che avere 
 delle foto dallo spazio scattate da me (in un certo senso) sia figo. Tutto quà :)
 
-Il codice (python) che ho inviato alle ESA è molto semplice, ogni 12 secondi scatta una fotografia e raccoglie dati da tutti i sensori del sensehat montati sul computer. Questi includono 
-giroscopio, accelerometro, magnetometro, sensore di temperature, umidità...
+Ho usato il raspberry-pi (con tanto di sensori e camere) che mi è stato inviato dalla ESA per scrivere e testare il codice python da spedire sulla ISS.
+Il codice che ho scritto è molto semplice, ogni 12 secondi scatta una fotografia e raccoglie dati da tutti i sensori del sensehat montati sul computer. Questi includono 
+giroscopio, accelerometro, magnetometro, sensore di temperature, umidità ecc...
 Non tutti mi servivano, ma non si sa mai. Inoltre se mi fosse venuta un'altra idea per un eseperimento futuro in questo modo ho tutti i dati a disposizione.
 
 Non ho fatto alcun tipo di analisi dati in orbita. Perché rischiare che qualcosa vada storto? Meglio tenere il codice semplice. Tutta l'analisi dati l'ho fatta sulla terraferma.
+
+## Report e risultati
+Il mio lavoro è stato selezionato tra gli *Highly Commended*, ossia tra i lavori che hanno dimostrato grande merito scientifico e un uso innovativo dell'hardware astropi.
+
+Qui puoi trovare i [codici usati](https://github.com/LucaPalumbo/AstroLorenzini) per l'analisi dati.
+Qui trovi invece la lista di tutti i [vincitori e highly commended](https://www.esa.int/Education/AstroPI/And_the_finalists_of_the_2019-20_Astro_Pi_Challenge_Mission_Space_Lab_are) compreso il mio [report finale](https://esamultimedia.esa.int/docs/edu/ap_2020/AstroLorenzini_report.pdf)
+
