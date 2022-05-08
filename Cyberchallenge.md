@@ -1,29 +1,17 @@
 # Cyberchallenge 2020
 ![Cyberchallenge](cclogo.png "Cybechallenge")
-## Inizio
-Ho scoperto di [Cyberchallenge](https://cyberchallenge.it/) per caso quando ero in terza superiore. 
-Ne ho sentito parlare per la prima volta su telegram, in uno dei milioni di gruppi di informatica e cybersecurity.
-
-Incuriosito, mi sono informato meglio e ho deciso che avrei provato il test di ammissione per il corso all'università di Pisa. Quindi ho iniziato a prepararmi risolvendo vecchie gare delle olimpiadi di informatica.
-Con mia grande sorpresa a febbraio 2020 ho superato prima il test di logica e poi il test di programmazione, competendo con 100 persone, molti dei quali universitari.
 
 ## Il corso
 
-Cyberchallenge è un corso di 3 mesi di lezioni di cybersecurity ( 6 ore a settimana ). Le lezioni si concentrano sulla parte pratica, mettere mano sui programmi, sul codice, sulle vulnerabilità, scrivere exploit... A tenere le lezioni sono i professori e gli studenti della edizione di cyberchallenge precedente.
+Cyberchallenge è un corso di 3 mesi di lezioni di cybersecurity (6 ore a settimana). Le lezioni si concentrano sulla parte pratica, mettere mano sui programmi, sul codice, sulle vulnerabilità, scrivere exploit... A tenere le lezioni sono i professori e gli studenti della edizione di cyberchallenge precedente.
 
-Gli argomenti affrontati sono tantissimi. Binary exploitation, crittografia, Web security, hardware security, reverse engineering... Troppe cose per essere trattate con completezza in poco tempo, quindi molto del lavoro da fare per risolvere le sfide proposte è di approfondimento individuale. 
+Gli argomenti affrontati sono tantissimi. Binary exploitation, crittografia, web security, hardware security, reverse engineering... Troppe cose per essere trattate con completezza in poco tempo, quindi molto del lavoro da fare per risolvere le sfide proposte è di approfondimento individuale. 
 
 
-## Jeopardy, fine della mia esperienza
+## Jeopardy
 Al termine delle lezioni si svolge una gara locale in ogni università che partecipa al progetto. Bisogna hackerare tutti i sistemi che si riesce tra quelli proposti. Più segreti (flag) rubi, più punti guadagni. 
 
-I primi 4 classificati compongono la squadra per la gara nazionale. Io sono arrivato 6. Un peccato ma tutto sommato mi sono divertito e ho imparato un sacco di cose. Questo è l'importante.
-
-
-
-
-
-Il 18 giugno ricevo un messaggio. Le regole sono cambiate. Alla gara nazionale sono ammessi 6 studenti, non più 4. Come in un reality show vengo ripescato ed entro a far parte della squadra dell'univesità di pisa.
+I primi 6 classificati compongono la squadra per la gara nazione. Io sono arrivato sesto.
 
 ![Team](team.PNG "Team")
 ## Attack / Defense 
