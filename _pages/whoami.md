@@ -1,5 +1,5 @@
 ---
-title: "whoami"
+title: "$ whoami"
 permalink: /whoami
 layout: single
 author_profile: trues
@@ -11,6 +11,7 @@ Hi, Luca here! Too many interests to summarize but I'll try:
 - Reverse engineer @ fibonhack
 - AI student
 - Physics BSc
+- Homebrewer 🍻
 
 ---
 
