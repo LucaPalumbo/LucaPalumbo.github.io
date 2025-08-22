@@ -11,9 +11,9 @@ tags:
   - idekctf
 author: "Luca"
 excerpt: "Reverse engineering a React Native application"
-header:
-  overlay_image: /assets/images/jekyll-header.jpg
-  caption: "Image by Luca"
+# header:
+#   overlay_image: /assets/images/jekyll-header.jpg
+#   caption: "Image by Luca"
 read_time: true
 ---
 
@@ -153,6 +153,8 @@ r24 = 'Type something and press enter...';
 r17['placeholder'] = r24;
 r17['value'] = r23;
 r17['onChangeText'] = r22;
+[...]
+```
 
 The next ~1000 lines contain the main application code.
 
