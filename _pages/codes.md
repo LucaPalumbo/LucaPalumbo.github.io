@@ -6,8 +6,7 @@ author_profile: true
 classes: wide
 ---
 
-Ecco una selezione dei miei progetti personali e universitari.  
-Clicca sul titolo per vedere il codice su GitHub 🚀
+A collection of codes:
 
 <div class="grid__wrapper">
 
