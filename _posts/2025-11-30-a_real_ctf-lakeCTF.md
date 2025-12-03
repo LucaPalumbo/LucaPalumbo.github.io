@@ -28,8 +28,8 @@ The challenge provided:
 
 The `A_REAL_CTF` game consisted in a simple parkour game, where you are supposed to jump from block to block to reach a flag (an actual one), and then come back, to reach a blue block.
 
-![App Interface](/assets/images/2025-10-30-a_real_ctf-lakeCTF/game_1.PNG)
-![App Interface](/assets/images/2025-10-30-a_real_ctf-lakeCTF/game_2.PNG)
+![App Interface](/assets/images/2025-11-30-a_real_ctf-lakeCTF/game_1.PNG)
+![App Interface](/assets/images/2025-11-30-a_real_ctf-lakeCTF/game_2.PNG)
 
 Onece you reach the blue block, you can save a binary file and then a new text box appears in the game saying "Response from the server: Simulation successful but no flag for you" (or sometimes "Simulation failed").
 
@@ -277,7 +277,7 @@ Going back to IDA, I found out that these data should contains coordinates of sp
 But how do I know what represents what in these data? I decided to use [UnityExplorer](https://github.com/sinai-dev/UnityExplorer) to dump the coordinates of the blocks in level 0, and then match them with the data dumped from the verifier.
 
 
-![App Interface](/assets/images/2025-10-30-a_real_ctf-lakeCTF/game_4.PNG)
+![App Interface](/assets/images/2025-11-30-a_real_ctf-lakeCTF/game_4.PNG)
 
 By this comparison, I was able to recover the position of relevant information inside the dumped data.
 
@@ -402,11 +402,11 @@ else Debug.LogWarning("Flag not found");
 
 After running this script inside the Unity game, level 1 was finally reconstructed!
 
-![App Interface](/assets/images/2025-10-30-a_real_ctf-lakeCTF/game_5.PNG)
+![App Interface](/assets/images/2025-11-30-a_real_ctf-lakeCTF/game_5.PNG)
 
 # Winning level 1
 Now that level 1 was reconstructed, I just had to win it.
 Actually it was impossible to win locally, cause the flag collisions were not working, but it didt matter, I just had to reach the starting position after touching the flag.
 
 Then i saved the replay file, patched the level ID using python, opened again the game and uploaded the patched replay file to the verifier.
-![App Interface](/assets/images/2025-10-30-a_real_ctf-lakeCTF/game_6.png)
+![App Interface](/assets/images/2025-11-30-a_real_ctf-lakeCTF/game_6.png)
