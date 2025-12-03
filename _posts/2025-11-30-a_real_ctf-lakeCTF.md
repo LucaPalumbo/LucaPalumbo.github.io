@@ -1,6 +1,6 @@
 ---
 title: "A_REAL_CTF, lakeCTF 2025 Quals"
-date: 2025-08-21T12:00:00+00:00
+date: 2025-11-30T12:00:00+00:00
 categories:
   - writeup
 tags:
