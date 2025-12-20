@@ -9,7 +9,7 @@ author_profile: trues
 Hi, Luca here! Too many interests to summarize but I'll try:
 - Cybersecurity enthusiast
 - Reverse engineer @ fibonhack
-- AI student
+- Trying to make a driverless car @ E-Team
 - Physics BSc
 - Homebrewer 🍻
 
