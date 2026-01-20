@@ -4,6 +4,8 @@ main:
   #   url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
   - title: "$ whoami"
     url: /whoami
+  - title: "Resources"
+    url: /resources
   - title: "Codes"
     url: /codes
   - title: "Education"
