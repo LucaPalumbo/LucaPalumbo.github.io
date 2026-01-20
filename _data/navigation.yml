@@ -8,5 +8,7 @@ main:
     url: /resources
   - title: "Codes"
     url: /codes
+  - title: "Writeups"
+    url: /writeups
   - title: "Education"
     url: /education
