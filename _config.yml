@@ -115,7 +115,7 @@ analytics:
 author:
   name             : "Luca Palumbo"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Reverse engineering, CTF, and AI stuff"
+  bio              : "Reverse engineering, pwn, CTFs and AI stuff"
   location         : "Pisa, Italy"
   email            :
   links:

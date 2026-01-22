@@ -6,13 +6,17 @@ author_profile: true
 classes: wide
 ---
 
-A collection of codes:
+A collection of projects:
 
 <div class="grid__wrapper">
 
   <div class="grid__item">
     <h3><a href="https://github.com/LucaPalumbo/ghidra-unstrip">Ghidra Unstrip</a></h3>
     <p>Ghidra Unstrip automatically extracts functions, variables, types, and decompiled source code from Ghidra's analysis and adds both symbol table (.symtab) and DWARF debug info to stripped binaries, making them fully debuggable with GDB and other tools.</p>
+  </div>
+  <div class="grid__item">
+    <h3><a href="https://github.com/E-TeamUnipi/pacsim/tree/develop">E-Team Pacsim</a></h3>
+    <p>A fork of <a href="https://github.com/pacsim/pacsim">Pacsim</a>, a ROS2 autonomous racing cars simulator for formula student competitions. This fork adds a lidar sensor that uses a surface-sampling algorithm to generate a pointcloud of the track (floor and cones). </p>
   </div>
 
   <div class="grid__item">
