@@ -1,9 +1,21 @@
 ---
-title: "kpwn"
+title: "k-pwn notes"
 permalink: /kernel-pwn-notes
 layout: single
 author_profile: trues
 ---
+
+# Privilege escalation
+whenever you find a way to call arbitrary functions you should try to call:
+```c
+commit_creds(prepare_kernel_cred(0));
+```
+to get root privileges.
+An altervative is to use:
+```c
+run_cmd("/bin/chmod 777 /flag");
+```
+or whichever command you want to run as root.
 
 
 # Bypass seccomp via shellcode in kernel space
