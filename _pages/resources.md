@@ -5,6 +5,9 @@ permalink: /resources/
 author_profile: true
 ---
 
+## [Personal Notes on Kernel Pwn](/kernel-pwn-notes)
+(not intended to be complete, just some notes for myself)
+
 ## [Reverse Engineering - CyberChallenge](/assets/pdfs/RevCC25.pdf)
 
 A beginner-friendly guide to reverse engineering concepts and techniques, created for the CyberChallenge.it competition.
