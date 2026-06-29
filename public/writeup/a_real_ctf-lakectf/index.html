@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link rel="icon" type="image/png" href="/avatar.png">
+<title>A_REAL_CTF, lakeCTF 2025 Quals</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+  integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap');
+
+  .font-jersey {
+
+    font-family: "Ubuntu Sans Mono", monospace;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+
+  .md-content .katex-display {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .md-content .katex-display>.katex {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: 300ms ease-in-out;
+  }
+
+  .is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  html.is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  html.is-animating {
+    cursor: progress;
+  }
+
+  html.is-leaving .swup-transition-fade {
+    opacity: 0;
+  }
+</style>
+
+<script src="https://unpkg.com/swup@4"></script>
+<script src="https://unpkg.com/@swup/preload-plugin@3"></script>
+<script src="https://unpkg.com/@swup/progress-plugin@3"></script>
+<script>
+  const swup = new Swup({
+    containers: ['#swup'],
+    animationSelector: '[class*="swup-transition-"]',
+    cache: true,
+    preload: true,
+    animateHistoryBrowsing: true,
+
+    plugins: [
+      new SwupPreloadPlugin(),
+      new SwupProgressPlugin()
+    ]
+  })
+  window.swup = swup
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  crossorigin="anonymous"></script>
+
+<script>
+  
+
+  
+  const KATEX_CONFIG = {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false}
+    ],
+    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+    throwOnError: false
+  };
+
+  
+  function renderKatex() {
+    
+    if (typeof renderMathInElement !== "function") {
+      console.log("⏳ Waiting for KaTeX to load...");
+      return;
+    }
+
+    
+    const contentArea = document.getElementById('swup') || document.body;
+
+    try {
+      renderMathInElement(contentArea, KATEX_CONFIG);
+      console.log("✅ KaTeX rendered successfully");
+    } catch (error) {
+      console.error("❌ KaTeX rendering error:", error);
+    }
+  }
+
+  
+  function renderKatexWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof renderMathInElement === "function") {
+        renderKatex();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ KaTeX auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering KaTeX...");
+        
+        setTimeout(() => renderKatexWithRetry(3, 50), 50);
+      });
+      console.log("✅ KaTeX-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderKatexWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+  
+  window.renderKatex = renderKatex;
+</script>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  let initialized = false;
+
+  function renderMermaid() {
+    const contentArea = document.getElementById('swup') || document.body;
+    const mermaidBlocks = contentArea.querySelectorAll('.language-mermaid, .mermaid');
+
+    if (mermaidBlocks.length === 0) {
+      console.log("ℹ️ No mermaid blocks found on this page");
+      return;
+    }
+
+    if (!initialized) {
+      mermaid.initialize({startOnLoad: false, theme: 'dark'});
+      initialized = true;
+    }
+
+    mermaidBlocks.forEach(el => {
+      if (el.dataset.processed === 'true') {
+        const source = el.dataset.mermaidSource;
+        if (source) {
+          el.innerHTML = source;
+          el.removeAttribute('data-processed');
+        }
+      } else {
+        el.dataset.mermaidSource = el.textContent;
+      }
+    });
+
+    mermaid.run({nodes: mermaidBlocks})
+      .then(() => console.log("✅ Mermaid rendered successfully"))
+      .catch(err => console.error("❌ Mermaid rendering error:", err));
+  }
+
+  function renderMermaidWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof mermaid.initialize === "function") {
+        renderMermaid();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ Mermaid auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering mermaid...");
+        
+        setTimeout(() => renderMermaidWithRetry(3, 50), 50);
+      });
+      console.log("✅ Mermaid-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderMermaidWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+
+
+</script>
+
+
+</head>
+
+<body class="min-h-screen flex flex-col bg-black font-jersey text-white text-3xl">
+  <header>
+    <div class="sticky absolute top-0 z-50">
+  <nav class="w-full border-b border-gray-800 bg-[#070709]/95 backdrop-blur-sm text-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        
+        <div class="flex items-center gap-3">
+
+          <a href='http://localhost:1313/' class="flex items-center gap-3 group" aria-label="Homepage">
+
+            <img src='https://picsum.photos/200' alt="Luca Palumbo"
+              class="w-10 h-10 rounded-sm border-2 border-gray-700 object-cover transition-transform duration-300 transform group-hover:scale-105"
+              style="animation: border-breathe 4s ease-in-out infinite;" />
+            <span class="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-wide">
+              Luca Palumbo
+              <span class="inline-block ml-2" style="animation: flicker 1.6s steps(2, end) infinite;">_</span>
+            </span>
+          </a>
+        </div>
+
+        
+        <div class="flex items-center gap-4">
+          
+          <div class="hidden md:flex items-center">
+            
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/projects/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a aria-current="true" href="/writeup/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Writeups</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/extra/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Extra</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+          </div>
+
+          
+          <div class="md:hidden">
+            <button id="nav-toggle" aria-controls="mobile-menu" aria-expanded="false"
+              class="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label="Open menu">
+              <svg class="h-6 w-6 text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div id="mobile-menu" class="md:hidden hidden pb-4">
+        
+        
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/projects/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a aria-current="true" href="/writeup/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Writeups</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/extra/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Extra</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+      </div>
+    </div>
+  </nav>
+
+  
+  <style>
+    @keyframes flicker {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      10% {
+        opacity: 0.2;
+        transform: translateY(-1px);
+      }
+
+      20% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes border-breathe {
+      0% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+
+      50% {
+        box-shadow: 0 0 18px 6px rgba(99, 102, 241, 0.03);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+    }
+  </style>
+
+  
+  <script>
+    (function () {
+      const btn = document.getElementById('nav-toggle');
+      const menu = document.getElementById('mobile-menu');
+      if (!btn || !menu) return;
+      btn.addEventListener('click', () => {
+        const open = menu.classList.toggle('hidden') === false;
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+</div>
+
+  </header>
+
+  <main class="flex-1 w-full">
+    <div id="swup" class="swup-transition-fade">
+      <div class="max-w-3xl lg:max-w-6xl xl:max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-10 lg:py-16">
+        
+<div class="grid grid-cols-12 gap-8">
+  
+  <aside class="hidden lg:block col-span-3">
+    <div class="sticky top-24">
+      <div class="mb-3 text-xs uppercase tracking-widest text-gray-500">Table of contents</div><nav class="toc border border-gray-800/70 bg-[#070709] rounded-sm p-4 text-base text-gray-300">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#challenge-overview">Challenge Overview</a></li>
+    <li><a href="#the-game">The game</a></li>
+    <li><a href="#reversing-the-communication-protocol">Reversing the communication protocol</a></li>
+    <li><a href="#replay-file">Replay file</a></li>
+    <li><a href="#the-verifier">The verifier</a></li>
+    <li><a href="#searching-for-level-1">Searching for level 1</a></li>
+    <li><a href="#reconstructing-the-level-1">Reconstructing the level 1</a></li>
+    <li><a href="#winning-level-1">Winning level 1</a></li>
+  </ul>
+</nav>
+      </nav></div>
+  </aside>
+
+  
+  <article class="col-span-12 lg:col-span-9">
+    <header class="mb-6">
+  <h1 class="text-2xl sm:text-3xl md:text-4xl tracking-wide text-white">
+    A_REAL_CTF, lakeCTF 2025 Quals
+  </h1>
+
+  <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm sm:text-base text-gray-400">
+    <span class="font-mono">Nov 30, 2025 • 00:00</span>
+    <span class="text-gray-700">/</span>
+    <span class="font-mono">10 min read</span>
+  </div><div class="mt-3 flex flex-wrap gap-2"><a href="/%20tags/reverse-engineering"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #reverse engineering
+    </a><a href="/%20tags/rust"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #rust
+    </a><a href="/%20tags/unity"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #unity
+    </a><a href="/%20tags/windows"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #windows
+    </a><a href="/%20tags/game"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #game
+    </a></div></header>
+
+
+    
+    <div class="lg:hidden mb-6">
+      <details class="border border-gray-800/70 bg-[#070709] rounded-sm">
+        <summary class="cursor-pointer select-none px-4 py-3 text-gray-200 hover:text-white transition-colors">
+          Table of contents
+        </summary>
+        <div class="px-4 pb-4 toc text-base text-gray-300">
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#challenge-overview">Challenge Overview</a></li>
+    <li><a href="#the-game">The game</a></li>
+    <li><a href="#reversing-the-communication-protocol">Reversing the communication protocol</a></li>
+    <li><a href="#replay-file">Replay file</a></li>
+    <li><a href="#the-verifier">The verifier</a></li>
+    <li><a href="#searching-for-level-1">Searching for level 1</a></li>
+    <li><a href="#reconstructing-the-level-1">Reconstructing the level 1</a></li>
+    <li><a href="#winning-level-1">Winning level 1</a></li>
+  </ul>
+</nav>
+        </div>
+      </details>
+    </div>
+
+    <div class="border border-gray-800/70 bg-[#070709] rounded-sm p-5 sm:p-7">
+
+      <div class="md-content text-lg sm:text-xl leading-relaxed text-gray-200">
+        <h2 id="challenge-overview" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Challenge Overview
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p><strong>Challenge Name:</strong> A_REAL_CTF<br>
+<strong>CTF:</strong> Lake CTF 2025<br>
+<strong>Category:</strong> Unity / Rust</p>
+<p>The challenge provided:</p>
+<ul>
+<li>a zip file containing a Unity game</li>
+<li>an ELF file name <code>verifier</code> written in Rust</li>
+</ul>
+<h2 id="the-game" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      The game
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>The <code>A_REAL_CTF</code> game consisted in a simple parkour game, where you are supposed to jump from block to block to reach a flag (an actual one), and then come back, to reach a blue block.</p>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/writeup/a_real_ctf-lakectf/images/game_1.PNG" loading="lazy" decoding="async"
+  alt="App Interface">
+<img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/writeup/a_real_ctf-lakectf/images/game_2.PNG" loading="lazy" decoding="async"
+  alt="App Interface"></p>
+<p>Onece you reach the blue block, you can save a binary file and then a new text box appears in the game saying &ldquo;Response from the server: Simulation successful but no flag for you&rdquo; (or sometimes &ldquo;Simulation failed&rdquo;).</p>
+<p>So, basically the <code>verifier</code> ELF is the server of the game, and the game itself uploads a file to the server letting you save it. If the file uploaded is &ldquo;correct&rdquo; in some sense, the server will give us the flag.</p>
+<h2 id="reversing-the-communication-protocol" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Reversing the communication protocol
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>First of all, we need to understand how the game communicates with the server. The first thing I did was to sniff traffic via Wireshark, but unfortunately the traffic was encrypted via TLS.</p>
+<p>So, I decided to decompile the Unity game. Uploaded the <code>Assembly-CSharp.dll</code> file to <a href="https://dnspy.org/">dnSpy</a> and started to explore the code.</p>
+<p>It wasn&rsquo;t hard to find this code:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">csharp</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System.Threading.Tasks;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> UnityEngine.Networking;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Token: 0x02000012 RID: 18</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PostRequest</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x06000042 RID: 66 RVA: 0x0000315C File Offset: 0x0000135C</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">async</span> Task&lt;<span style="color:#66d9ef">string</span>&gt; SendAsync(<span style="color:#66d9ef">string</span> url, <span style="color:#66d9ef">byte</span>[] bodyRaw)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">string</span> text;
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">using</span> (UnityWebRequest request = <span style="color:#66d9ef">new</span> UnityWebRequest(url, <span style="color:#e6db74">&#34;POST&#34;</span>))
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			request.uploadHandler = <span style="color:#66d9ef">new</span> UploadHandlerRaw(bodyRaw);
+</span></span><span style="display:flex;"><span>			request.downloadHandler = <span style="color:#66d9ef">new</span> DownloadHandlerBuffer();
+</span></span><span style="display:flex;"><span>			UnityWebRequestAsyncOperation operation = request.SendWebRequest();
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">while</span> (!operation.isDone)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">await</span> Task.Yield();
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> Exception(request.error);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			text = request.downloadHandler.text;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> text;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>Nothing fancy, just a simple POST request sending a byte array. So the server will probably be just a http server receiving a POST request with a binary body.</p>
+<h2 id="replay-file" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Replay file
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>Now that we know how client and server communicate, we need to understand what kind of file the client is sending to the server.
+To do so, I kept investingating the Unity code with dnSpy, and found these classes:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">csharp</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System.Collections.Generic;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Token: 0x0200000C RID: 12</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Replay</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x04000027 RID: 39</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">ulong</span> MAGIC = <span style="color:#ae81ff">72848253210177</span>UL;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x04000028 RID: 40</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">ushort</span> VERSION = <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x04000029 RID: 41</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">ushort</span> levelId;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x0400002A RID: 42</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> List&lt;FrameRecord&gt; frames;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">csharp</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System.IO;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> SFB;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> UnityEngine;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Token: 0x02000011 RID: 17</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ReplayWriter</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x06000039 RID: 57 RVA: 0x00002ED8 File Offset: 0x000010D8</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">private</span> ReplayWriter(Replay replay)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">this</span>.replay = replay;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x0600003A RID: 58 RVA: 0x00002EE8 File Offset: 0x000010E8</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> SaveReplay(Replay replay)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		Singleton&lt;CursorController&gt;.Instance.UnlockCursor();
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">string</span> text = StandaloneFileBrowser.SaveFilePanel(<span style="color:#e6db74">&#34;Save Binary File&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#e6db74">&#34;data&#34;</span>, <span style="color:#e6db74">&#34;bin&#34;</span>);
+</span></span><span style="display:flex;"><span>		Singleton&lt;CursorController&gt;.Instance.LockCursor();
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (text.Length == <span style="color:#ae81ff">0</span> || <span style="color:#66d9ef">string</span>.IsNullOrEmpty(text))
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		File.WriteAllBytes(text, ReplayWriter.replayToBytes(replay));
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x0600003B RID: 59 RVA: 0x00002F40 File Offset: 0x00001140</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">void</span> SendReplay(<span style="color:#66d9ef">byte</span>[] bodyRaw)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">string</span>.IsNullOrEmpty(ReplayWriter.serverURL))
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">string</span> text = Path.Combine(Application.dataPath, <span style="color:#e6db74">&#34;../server.txt&#34;</span>);
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (!File.Exists(text))
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				Singleton&lt;HUD&gt;.Instance.SendNotification(<span style="color:#e6db74">&#34;server.txt file not found at &#34;</span> + text);
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			ReplayWriter.serverURL = File.ReadAllText(text).Trim();
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		Singleton&lt;HUD&gt;.Instance.SendNotification(<span style="color:#e6db74">&#34;Uploading replay...&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">try</span>
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">string</span> text2 = <span style="color:#66d9ef">await</span> PostRequest.SendAsync(ReplayWriter.serverURL, bodyRaw);
+</span></span><span style="display:flex;"><span>			Singleton&lt;HUD&gt;.Instance.SendNotification(<span style="color:#e6db74">&#34;Response from server: \n&#34;</span> + text2);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">catch</span> (Exception ex)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			Debug.LogError(<span style="color:#e6db74">&#34;Error: &#34;</span> + ex.Message);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x0600003C RID: 60 RVA: 0x00002F77 File Offset: 0x00001177</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> UploadReplay(Replay replay)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		ReplayWriter.SendReplay(ReplayWriter.replayToBytes(replay));
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x0600003D RID: 61 RVA: 0x00002F84 File Offset: 0x00001184</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">byte</span>[] replayToBytes(Replay replay)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		ReplayWriter replayWriter = <span style="color:#66d9ef">new</span> ReplayWriter(replay);
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">byte</span>[] array;
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">using</span> (MemoryStream memoryStream = <span style="color:#66d9ef">new</span> MemoryStream())
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">using</span> (BinaryWriter binaryWriter = <span style="color:#66d9ef">new</span> BinaryWriter(memoryStream))
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				replayWriter.writeHeader(binaryWriter);
+</span></span><span style="display:flex;"><span>				replayWriter.writeFrames(binaryWriter);
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			array = memoryStream.ToArray();
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> array;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x0600003E RID: 62 RVA: 0x00002FF0 File Offset: 0x000011F0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> writeHeader(BinaryWriter writer)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.replay.frames.Count &gt; <span style="color:#ae81ff">65535</span>)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> Exception(<span style="color:#e6db74">&#34;Too many frames in replay to save!&#34;</span>);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		writer.Write(<span style="color:#ae81ff">72848253210177</span>UL);
+</span></span><span style="display:flex;"><span>		writer.Write(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>		writer.Write(<span style="color:#66d9ef">this</span>.replay.levelId);
+</span></span><span style="display:flex;"><span>		writer.Write((<span style="color:#66d9ef">ushort</span>)<span style="color:#66d9ef">this</span>.replay.frames.Count);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x0600003F RID: 63 RVA: 0x00003060 File Offset: 0x00001260</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> writeFrames(BinaryWriter writer)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">foreach</span> (FrameRecord frameRecord <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">this</span>.replay.frames)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">this</span>.writeFrame(writer, frameRecord);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x06000040 RID: 64 RVA: 0x000030BC File Offset: 0x000012BC</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> writeFrame(BinaryWriter writer, FrameRecord frame)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">this</span>.writePlayer(writer, frame.playerRecord);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x06000041 RID: 65 RVA: 0x000030CC File Offset: 0x000012CC</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> writePlayer(BinaryWriter writer, PlayerRecord player)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		writer.Write(player.position.x);
+</span></span><span style="display:flex;"><span>		writer.Write(player.position.y);
+</span></span><span style="display:flex;"><span>		writer.Write(player.position.z);
+</span></span><span style="display:flex;"><span>		writer.Write(player.rotation.x);
+</span></span><span style="display:flex;"><span>		writer.Write(player.rotation.y);
+</span></span><span style="display:flex;"><span>		writer.Write(player.rotation.z);
+</span></span><span style="display:flex;"><span>		writer.Write(player.rotation.w);
+</span></span><span style="display:flex;"><span>		writer.Write((<span style="color:#66d9ef">byte</span>)player.playerActions);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x04000033 RID: 51</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">private</span> Replay replay;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Token: 0x04000034 RID: 52</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">string</span> serverURL;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>So, the file sent is a binary file containing the information for a <code>Replay</code> of the game. The <code>Replay</code> struct contains:</p>
+<ul>
+<li>a magic number</li>
+<li>a version number</li>
+<li>a level ID</li>
+<li>a list of <code>FrameRecord</code> structs</li>
+</ul>
+<p>Each <code>FrameRecord</code> contains a <code>PlayerRecord</code>, which contains:</p>
+<ul>
+<li>position (x, y, z)</li>
+<li>rotation (x, y, z, w)</li>
+<li>player actions (as a byte)</li>
+</ul>
+<h2 id="the-verifier" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      The verifier
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>Now its time to analyze the <code>verifier</code> ELF file. I opened up IDA Free and searched for the string &ldquo;flag&rdquo;.
+After a bit of reversing, I found out a function that calls a method <code>verifier::replay::read_replay</code> and shortly after <code>verfier::simulator::Simulation::run</code>.<br>
+This function is the main function of the verifier, as it reads the replay file and then simulates it using the game physics (collisions, gravity, &hellip;) and checks if the game is won (flag and blue block reached). This prevents users from sending arbitrary replay files or using cheats to fly/teleport etc.</p>
+<p>If this last function calls returns false, then the program send to the game &ldquo;Simulation failed&rdquo;, otherwise it prints &ldquo;Simulation successful but no flag for you&rdquo; if the lever ID is not 1 or it sends the flag if the simulation is correct and the level ID is 1.</p>
+<p>Easy right? I just need to  win level 1 and the game will send me the flag! Problem is, inside the game there is no level 1, only level 0.</p>
+<h2 id="searching-for-level-1" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Searching for level 1
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>There was no trace about level 1 inside the Unity game files. The only possibility was that level 1 was hidden somewhere inside the verifier, after all that code is able to implement simulate collisions and check if the flag and blue block are reached, so the level data must be somewhere.</p>
+<p>After a bit of reversing, I found a function <code>verifier::game_config::read_level</code> that hopefully reads the level data. The function get called with 2 parameters, the first one passed by reference. So, I guessed, the first parameter is a struct where the level data is stored.
+This function is called 2 times, once for level 0 and once for level 1.</p>
+<p>I tried to reverse this function to be able to reconstruct this struct, but it was too complicated. So, I decided to use a different approach: by using GBD, I set a breakpoint at the beginning of the function, saved the address stored in <code>rdi</code> then dumped the memory at that address when the fucntion returned.</p>
+<p>This is the content of the memory dumped for level 0:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">c</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>pwndbg<span style="color:#f92672">&gt;</span> x<span style="color:#f92672">/</span><span style="color:#ae81ff">128</span>wx <span style="color:#ae81ff">0x7fffffffcef0</span> 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcef0</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x3f800000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf00</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x41caf3b6</span>	<span style="color:#ae81ff">0x40b6e148</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x40000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf10</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x40000000</span>	<span style="color:#ae81ff">0x40000000</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x0f000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf20</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x3f800000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf30</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0xbfc147ae</span>	<span style="color:#ae81ff">0x40d23d71</span>	<span style="color:#ae81ff">0x40d9a9fc</span>	<span style="color:#ae81ff">0x3f800000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf40</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x40800000</span>	<span style="color:#ae81ff">0x3f800000</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x0f000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf50</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x00000006</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x556c2230</span>	<span style="color:#ae81ff">0x00005555</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf60</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x00000006</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0xf7ca0000</span>	<span style="color:#ae81ff">0x00007fff</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf70</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0xc11cf5c3</span>	<span style="color:#ae81ff">0x40000000</span>	<span style="color:#ae81ff">0x3f400003</span>	<span style="color:#ae81ff">0x40000000</span>
+</span></span><span style="display:flex;"><span>[...]</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>But how to intepret this data?
+Going back to IDA, I found out that these data should contains coordinates of spawn points and the coordinates of the flag. Then a pointer is stored, pointing to another area in memory, that contains the coordinates and dimensions of the blocks composing the level.</p>
+<p>But how do I know what represents what in these data? I decided to use <a href="https://github.com/sinai-dev/UnityExplorer">UnityExplorer</a> to dump the coordinates of the blocks in level 0, and then match them with the data dumped from the verifier.</p>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/writeup/a_real_ctf-lakectf/images/game_4.PNG" loading="lazy" decoding="async"
+  alt="App Interface"></p>
+<p>By this comparison, I was able to recover the position of relevant information inside the dumped data.</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">c</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>pwndbg<span style="color:#f92672">&gt;</span> x<span style="color:#f92672">/</span><span style="color:#ae81ff">128</span>wx <span style="color:#ae81ff">0x7fffffffcef0</span> 
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcef0</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x3f800000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf00</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x41caf3b6</span>	<span style="color:#ae81ff">0x40b6e148</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x40000000</span> <span style="color:#960050;background-color:#1e0010">#</span> X,Y,Z of the spawn point<span style="color:#f92672">/</span>blue block
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf10</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x40000000</span>	<span style="color:#ae81ff">0x40000000</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x0f000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf20</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x3f800000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf30</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0xbfc147ae</span>	<span style="color:#ae81ff">0x40d23d71</span>	<span style="color:#ae81ff">0x40d9a9fc</span>	<span style="color:#ae81ff">0x3f800000</span> <span style="color:#960050;background-color:#1e0010">#</span> X,Y,Z of the flag
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf40</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x40800000</span>	<span style="color:#ae81ff">0x3f800000</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x0f000000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf50</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x00000006</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x556c2230</span>	<span style="color:#ae81ff">0x00005555</span> <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#ae81ff">0x5555556c2230</span> is a pointer to the blocks data
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf60</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x00000006</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0xf7ca0000</span>	<span style="color:#ae81ff">0x00007fff</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x7fffffffcf70</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0xc11cf5c3</span>	<span style="color:#ae81ff">0x40000000</span>	<span style="color:#ae81ff">0x3f400003</span>	<span style="color:#ae81ff">0x40000000</span>
+</span></span><span style="display:flex;"><span>[...]</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">c</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>pwndbg<span style="color:#f92672">&gt;</span> x<span style="color:#f92672">/</span><span style="color:#ae81ff">80</span>wx <span style="color:#ae81ff">0x5555556c2230</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c2230</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x3f800000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c2240</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x41c23d71</span>	<span style="color:#ae81ff">0x3fdd70a4</span>	<span style="color:#ae81ff">0x4063d70a</span>	<span style="color:#ae81ff">0x40a33333</span> <span style="color:#960050;background-color:#1e0010">#</span> X,Y,Z coordinates and scaleX of block <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c2250</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x40b92aae</span>	<span style="color:#ae81ff">0x415a75a3</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x0f000000</span> <span style="color:#960050;background-color:#1e0010">#</span> scaleY and scaleZ of block <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c2260</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x3f800000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c2270</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0xc0166666</span>	<span style="color:#ae81ff">0x3fdd70a4</span>	<span style="color:#ae81ff">0x4063d70a</span>	<span style="color:#ae81ff">0x40a33333</span> <span style="color:#960050;background-color:#1e0010">#</span> X,Y,Z coordinates and scaleX of block <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c2280</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x40b92aae</span>	<span style="color:#ae81ff">0x415a75a3</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x0f000000</span> <span style="color:#960050;background-color:#1e0010">#</span> scaleY and scaleZ of block <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c2290</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x3f800000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c22a0</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x419147ae</span>	<span style="color:#ae81ff">0x404f5c29</span>	<span style="color:#ae81ff">0x401322d1</span>	<span style="color:#ae81ff">0x40a9999a</span> <span style="color:#960050;background-color:#1e0010">#</span> X,Y,Z coordinates and scaleX of block <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c22b0</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x3f800000</span>	<span style="color:#ae81ff">0x3f800000</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x0f000000</span> <span style="color:#960050;background-color:#1e0010">#</span> scaleY and scaleZ of block <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c22c0</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x3f800000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c22d0</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x415947ae</span>	<span style="color:#ae81ff">0x407b126f</span>	<span style="color:#ae81ff">0x40923d71</span>	<span style="color:#ae81ff">0x3fa00000</span> <span style="color:#960050;background-color:#1e0010">#</span> X,Y,Z coordinates and scaleX of block <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c22e0</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x3f8b851f</span>	<span style="color:#ae81ff">0x3ffeb852</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x0f000000</span> <span style="color:#960050;background-color:#1e0010">#</span> scaleY and scaleZ of block <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c22f0</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x3f800000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c2300</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x412e6666</span>	<span style="color:#ae81ff">0x407b126f</span>	<span style="color:#ae81ff">0x40d75c29</span>	<span style="color:#ae81ff">0x3fa00000</span> <span style="color:#960050;background-color:#1e0010">#</span> X,Y,Z coordinates and scaleX of block <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c2310</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x3f8b851f</span>	<span style="color:#ae81ff">0x3ffeb852</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x0f000000</span> <span style="color:#960050;background-color:#1e0010">#</span> scaleY and scaleZ of block <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c2320</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x80000000</span>	<span style="color:#ae81ff">0x3f800000</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c2330</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x40b20c4a</span>	<span style="color:#ae81ff">0x40266666</span>	<span style="color:#ae81ff">0x40d1eb85</span>	<span style="color:#ae81ff">0x405d70a4</span> <span style="color:#960050;background-color:#1e0010">#</span> X,Y,Z coordinates and scaleX of block <span style="color:#ae81ff">6</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0x5555556c2340</span><span style="color:#f92672">:</span>	<span style="color:#ae81ff">0x3f8b851f</span>	<span style="color:#ae81ff">0x3ec28f5c</span>	<span style="color:#ae81ff">0x00000000</span>	<span style="color:#ae81ff">0x0f000000</span> <span style="color:#960050;background-color:#1e0010">#</span> scaleY and scaleZ of block <span style="color:#ae81ff">6</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>Now that I know how the level data is stored in memory, I can easily reconstruct all the relevant information (spawn point, flag point, blocks data) for level 1 by repeating the same process.</p>
+<p>By doing so, I obtained the following data for level 1:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">python3</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python3" data-lang="python3"><span style="display:flex;"><span><span style="color:#75715e"># x coordinates of the blocks</span>
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> [<span style="color:#ae81ff">24.280000686645508</span>, <span style="color:#ae81ff">2.619999885559082</span>, <span style="color:#ae81ff">18.15999984741211</span>, <span style="color:#ae81ff">14.1899995803833</span>, <span style="color:#ae81ff">12.010000228881836</span>, <span style="color:#ae81ff">10.012999534606934</span>, <span style="color:#ae81ff">8.09000015258789</span>, <span style="color:#ae81ff">6.320000171661377</span>, <span style="color:#ae81ff">17.170000076293945</span>, <span style="color:#ae81ff">18.170000076293945</span>, <span style="color:#ae81ff">16.079999923706055</span>]
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># y coordinates of the blocks</span>
+</span></span><span style="display:flex;"><span>y <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1.7300000190734863</span>, <span style="color:#ae81ff">10.510000228881836</span>, <span style="color:#ae81ff">5.909999847412109</span>, <span style="color:#ae81ff">9.569999694824219</span>, <span style="color:#ae81ff">10.572999954223633</span>, <span style="color:#ae81ff">11.770999908447266</span>, <span style="color:#ae81ff">11.770999908447266</span>, <span style="color:#ae81ff">11.770999908447266</span>, <span style="color:#ae81ff">6.380000114440918</span>, <span style="color:#ae81ff">7.050000190734863</span>, <span style="color:#ae81ff">8.300000190734863</span>]
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># z coordinates of the blocks</span>
+</span></span><span style="display:flex;"><span>z <span style="color:#f92672">=</span> [<span style="color:#ae81ff">33.40999984741211</span>, <span style="color:#ae81ff">36.5</span>, <span style="color:#ae81ff">32.14900207519531</span>, <span style="color:#ae81ff">37.20000076293945</span>, <span style="color:#ae81ff">36.70000076293945</span>, <span style="color:#ae81ff">36.70000076293945</span>, <span style="color:#ae81ff">36.70000076293945</span>, <span style="color:#ae81ff">36.70000076293945</span>, <span style="color:#ae81ff">34.42000198364258</span>, <span style="color:#ae81ff">37.20000076293945</span>, <span style="color:#ae81ff">37.29999923706055</span>]
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># scales of the blocks</span>
+</span></span><span style="display:flex;"><span>d1 <span style="color:#f92672">=</span> [<span style="color:#ae81ff">5.099999904632568</span>, <span style="color:#ae81ff">3.069999933242798</span>, <span style="color:#ae81ff">5.300000190734863</span>, <span style="color:#ae81ff">1.600000023841858</span>, <span style="color:#ae81ff">1.600000023841858</span>, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">1.25</span>, <span style="color:#ae81ff">1.25</span>, <span style="color:#ae81ff">1.5</span>]
+</span></span><span style="display:flex;"><span>d2 <span style="color:#f92672">=</span> [<span style="color:#ae81ff">5.786459922790527</span>, <span style="color:#ae81ff">1.3899999856948853</span>, <span style="color:#ae81ff">1.0</span>, <span style="color:#ae81ff">1.0</span>, <span style="color:#ae81ff">1.0</span>, <span style="color:#ae81ff">1.0</span>, <span style="color:#ae81ff">1.0</span>, <span style="color:#ae81ff">1.0</span>, <span style="color:#ae81ff">0.4000000059604645</span>, <span style="color:#ae81ff">1.090000033378601</span>, <span style="color:#ae81ff">1.090000033378601</span>]
+</span></span><span style="display:flex;"><span>d3 <span style="color:#f92672">=</span> [<span style="color:#ae81ff">13.653719902038574</span>, <span style="color:#ae81ff">2.640000104904175</span>, <span style="color:#ae81ff">1.0</span>, <span style="color:#ae81ff">1.0</span>, <span style="color:#ae81ff">1.0</span>, <span style="color:#ae81ff">1.5</span>, <span style="color:#ae81ff">1.5</span>, <span style="color:#ae81ff">1.5</span>, <span style="color:#ae81ff">1.9900000095367432</span>, <span style="color:#ae81ff">1.9900000095367432</span>, <span style="color:#ae81ff">0.3199999928474426</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># x,y,z of the spawn point/blue block</span>
+</span></span><span style="display:flex;"><span>blue_block <span style="color:#f92672">=</span> [<span style="color:#ae81ff">25.368999481201172</span>, <span style="color:#ae81ff">5.715000152587891</span>, <span style="color:#ae81ff">29.850000381469727</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># x,y,z of the flag</span>
+</span></span><span style="display:flex;"><span>flag <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1.9299999475479126</span>, <span style="color:#ae81ff">13.029999732971191</span>, <span style="color:#ae81ff">36.900001525878906</span>]</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><h2 id="reconstructing-the-level-1" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Reconstructing the level 1
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>Now that I have all the data needed to reconstruct level 1, I just need to write a script that changes objects properties in the Unity game to match level 1 data.</p>
+<p>For this purpose I used again <a href="https://github.com/sinai-dev/UnityExplorer">UnityExplorer</a>:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">csharp</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> UnityEngine;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System.Linq;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ===== YOUR DATA =====</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">float</span>[] x = {<span style="color:#ae81ff">24.2800007f</span>, <span style="color:#ae81ff">2.6199999f</span>, <span style="color:#ae81ff">18.16f</span>, <span style="color:#ae81ff">14.19f</span>, <span style="color:#ae81ff">12.01f</span>, <span style="color:#ae81ff">10.013f</span>, <span style="color:#ae81ff">8.09f</span>, <span style="color:#ae81ff">6.32f</span>, <span style="color:#ae81ff">17.17f</span>, <span style="color:#ae81ff">18.17f</span>, <span style="color:#ae81ff">16.08f</span>};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">float</span>[] y = {<span style="color:#ae81ff">1.73f</span>, <span style="color:#ae81ff">10.51f</span>, <span style="color:#ae81ff">5.91f</span>, <span style="color:#ae81ff">9.57f</span>, <span style="color:#ae81ff">10.573f</span>, <span style="color:#ae81ff">11.771f</span>, <span style="color:#ae81ff">11.771f</span>, <span style="color:#ae81ff">11.771f</span>, <span style="color:#ae81ff">6.38f</span>, <span style="color:#ae81ff">7.05f</span>, <span style="color:#ae81ff">8.3f</span>};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">float</span>[] z = {<span style="color:#ae81ff">33.41f</span>, <span style="color:#ae81ff">36.5f</span>, <span style="color:#ae81ff">32.149f</span>, <span style="color:#ae81ff">37.2f</span>, <span style="color:#ae81ff">36.7f</span>, <span style="color:#ae81ff">36.7f</span>, <span style="color:#ae81ff">36.7f</span>, <span style="color:#ae81ff">36.7f</span>, <span style="color:#ae81ff">34.42f</span>, <span style="color:#ae81ff">37.2f</span>, <span style="color:#ae81ff">37.3f</span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">float</span>[] d1 = {<span style="color:#ae81ff">5.1f</span>, <span style="color:#ae81ff">3.07f</span>, <span style="color:#ae81ff">5.3f</span>, <span style="color:#ae81ff">1.6f</span>, <span style="color:#ae81ff">1.6f</span>, <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">1.25f</span>, <span style="color:#ae81ff">1.25f</span>, <span style="color:#ae81ff">1.5f</span>};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">float</span>[] d2 = {<span style="color:#ae81ff">5.78646f</span>, <span style="color:#ae81ff">1.39f</span>, <span style="color:#ae81ff">1f</span>, <span style="color:#ae81ff">1f</span>, <span style="color:#ae81ff">1f</span>, <span style="color:#ae81ff">1f</span>, <span style="color:#ae81ff">1f</span>, <span style="color:#ae81ff">1f</span>, <span style="color:#ae81ff">0.4f</span>, <span style="color:#ae81ff">1.09f</span>, <span style="color:#ae81ff">1.09f</span>};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">float</span>[] d3 = {<span style="color:#ae81ff">13.65372f</span>, <span style="color:#ae81ff">2.64f</span>, <span style="color:#ae81ff">1f</span>, <span style="color:#ae81ff">1f</span>, <span style="color:#ae81ff">1f</span>, <span style="color:#ae81ff">1.5f</span>, <span style="color:#ae81ff">1.5f</span>, <span style="color:#ae81ff">1.5f</span>, <span style="color:#ae81ff">1.99f</span>, <span style="color:#ae81ff">1.99f</span>, <span style="color:#ae81ff">0.32f</span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Vector3 blueBlock = <span style="color:#66d9ef">new</span> Vector3(<span style="color:#ae81ff">25.369f</span>, <span style="color:#ae81ff">5.715f</span>, <span style="color:#ae81ff">29.85f</span>);
+</span></span><span style="display:flex;"><span>Vector3 flagPos   = <span style="color:#66d9ef">new</span> Vector3(<span style="color:#ae81ff">1.93f</span>, <span style="color:#ae81ff">13.03f</span>, <span style="color:#ae81ff">36.9f</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ===== FIND BLOCKS (by name or tag) =====</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Change this string if your block objects are named differently!</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> blocks = GameObject.FindObjectsOfType&lt;Transform&gt;()
+</span></span><span style="display:flex;"><span>    .Where(t =&gt; t.name.ToLower().Contains(<span style="color:#e6db74">&#34;block&#34;</span>))
+</span></span><span style="display:flex;"><span>    .OrderBy(t =&gt; t.name)
+</span></span><span style="display:flex;"><span>    .ToArray();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> i = <span style="color:#ae81ff">0</span>; i &lt; blocks.Length &amp;&amp; i &lt; x.Length; i++)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    blocks[i].position = <span style="color:#66d9ef">new</span> Vector3(x[i], y[i], z[i]);
+</span></span><span style="display:flex;"><span>    blocks[i].localScale = <span style="color:#66d9ef">new</span> Vector3(d1[i], d2[i], d3[i]);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Debug.Log(<span style="color:#e6db74">$&#34;Updated {Mathf.Min(blocks.Length, x.Length)} blocks&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ===== BLUE SPAWN BLOCK =====</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> blue = GameObject.FindObjectsOfType&lt;Transform&gt;()
+</span></span><span style="display:flex;"><span>    .FirstOrDefault(t =&gt; t.name.ToLower().Contains(<span style="color:#e6db74">&#34;blue&#34;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(blue != <span style="color:#66d9ef">null</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    blue.position = blueBlock;
+</span></span><span style="display:flex;"><span>    Debug.Log(<span style="color:#e6db74">&#34;Blue spawn moved&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span> Debug.LogWarning(<span style="color:#e6db74">&#34;Blue block not found&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ===== FLAG =====</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> flagObj = GameObject.FindObjectsOfType&lt;Transform&gt;()
+</span></span><span style="display:flex;"><span>    .FirstOrDefault(t =&gt; t.name.ToLower().Contains(<span style="color:#e6db74">&#34;flag&#34;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(flagObj != <span style="color:#66d9ef">null</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    flagObj.position = flagPos;
+</span></span><span style="display:flex;"><span>    Debug.Log(<span style="color:#e6db74">&#34;Flag moved&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span> Debug.LogWarning(<span style="color:#e6db74">&#34;Flag not found&#34;</span>);</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>After running this script inside the Unity game, level 1 was finally reconstructed!</p>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/writeup/a_real_ctf-lakectf/images/game_5.PNG" loading="lazy" decoding="async"
+  alt="App Interface"></p>
+<h2 id="winning-level-1" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Winning level 1
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>Now that level 1 was reconstructed, I just had to win it.
+Actually it was impossible to win locally, cause the flag collisions were not working, but it didt matter, I just had to reach the starting position after touching the flag.</p>
+<p>Then i saved the replay file, patched the level ID using python, opened again the game and uploaded the patched replay file to the verifier.
+<img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/writeup/a_real_ctf-lakectf/images/game_6.png" loading="lazy" decoding="async"
+  alt="App Interface"></p>
+
+      </div>
+    </div>
+  </article>
+</div>
+
+<style>
+  .toc {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  .toc li {
+    position: relative;
+    margin: 0.35rem 0;
+    padding-left: 1.25rem;
+     
+    overflow-wrap: anywhere;
+     
+    word-break: break-word;
+  }
+
+  .toc a {
+    display: block;
+     
+    padding: 0.15rem 0;
+    color: rgba(209, 213, 219, 0.92);
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-color: rgba(99, 102, 241, 0.85);
+    text-underline-offset: 3px;
+  }
+
+   
+  .toc ul ul {
+    margin: 0.4rem 0 0.4rem 0.35rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid rgba(55, 65, 81, 0.6);
+  }
+
+  .toc ul ul>li {
+    padding-left: 1.75rem;
+  }
+
+   
+  .toc ul ul>li::before {
+    content: "├";
+    position: absolute;
+    left: 0.35rem;
+    top: 0.2rem;
+     
+    color: rgba(99, 102, 241, 0.75);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .toc ul ul>li:last-child::before {
+    content: "└";
+  }
+
+   
+  @media (min-width: 1024px) {
+    .toc {
+      max-height: calc(100vh - 9rem);
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+  }
+
+
+   
+  .md-content ul,
+  .md-content ol {
+    margin: 1rem 0;
+    padding-left: 1.35rem;
+  }
+
+  .md-content ul {
+    list-style: disc;
+  }
+
+  .md-content ul ul {
+    list-style: circle;
+  }
+
+  .md-content ul ul ul {
+    list-style: square;
+  }
+
+  .md-content ol {
+    list-style: decimal;
+  }
+
+  .md-content ol ol {
+    list-style: lower-roman;
+  }
+
+  .md-content ol ol ol {
+    list-style: lower-alpha;
+  }
+
+  .md-content li {
+    margin: 0.35rem 0;
+  }
+
+   
+  .md-content pre,
+  .md-content code {
+    tab-size: 4;
+  }
+</style>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="border-t border-gray-800 bg-[#070709] text-gray-400">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col md:flex-row items-center justify-between py-6 space-y-4 md:space-y-0">
+
+      
+      <div class="text-sm sm:text-base md:text-lg">
+        <span class="relative inline-block">
+          © 2026 Luca Palumbo. All rights reserved. <br>
+          Made with <a href="https://gohugo.io" target="_blank">Hugo</a> | <a
+            href="https://github.com/Enerhim/enervoid-theme" target="_blank">Enervoid</a>
+        </span>
+      </div>
+
+      
+      <div class="flex items-center space-x-6 text-sm sm:text-base md:text-lg">
+
+        
+        <a href='https://github.com/LucaPalumbo' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-github-original"></i>
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://twitter.com/Luca_Palumbo_' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-twitter-original"></i>
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://linkedin.com/in/luca-palumbo-b9baa020a' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-linkedin-plain"></i>
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+
+      </div>
+    </div>
+  </div>
+</div>
+
+  </footer>
+</body>
+
+</html>

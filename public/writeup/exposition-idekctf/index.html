@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link rel="icon" type="image/png" href="/avatar.png">
+<title>Exposition, idekCTF 2025</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+  integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap');
+
+  .font-jersey {
+
+    font-family: "Ubuntu Sans Mono", monospace;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+
+  .md-content .katex-display {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .md-content .katex-display>.katex {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: 300ms ease-in-out;
+  }
+
+  .is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  html.is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  html.is-animating {
+    cursor: progress;
+  }
+
+  html.is-leaving .swup-transition-fade {
+    opacity: 0;
+  }
+</style>
+
+<script src="https://unpkg.com/swup@4"></script>
+<script src="https://unpkg.com/@swup/preload-plugin@3"></script>
+<script src="https://unpkg.com/@swup/progress-plugin@3"></script>
+<script>
+  const swup = new Swup({
+    containers: ['#swup'],
+    animationSelector: '[class*="swup-transition-"]',
+    cache: true,
+    preload: true,
+    animateHistoryBrowsing: true,
+
+    plugins: [
+      new SwupPreloadPlugin(),
+      new SwupProgressPlugin()
+    ]
+  })
+  window.swup = swup
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  crossorigin="anonymous"></script>
+
+<script>
+  
+
+  
+  const KATEX_CONFIG = {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false}
+    ],
+    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+    throwOnError: false
+  };
+
+  
+  function renderKatex() {
+    
+    if (typeof renderMathInElement !== "function") {
+      console.log("⏳ Waiting for KaTeX to load...");
+      return;
+    }
+
+    
+    const contentArea = document.getElementById('swup') || document.body;
+
+    try {
+      renderMathInElement(contentArea, KATEX_CONFIG);
+      console.log("✅ KaTeX rendered successfully");
+    } catch (error) {
+      console.error("❌ KaTeX rendering error:", error);
+    }
+  }
+
+  
+  function renderKatexWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof renderMathInElement === "function") {
+        renderKatex();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ KaTeX auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering KaTeX...");
+        
+        setTimeout(() => renderKatexWithRetry(3, 50), 50);
+      });
+      console.log("✅ KaTeX-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderKatexWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+  
+  window.renderKatex = renderKatex;
+</script>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  let initialized = false;
+
+  function renderMermaid() {
+    const contentArea = document.getElementById('swup') || document.body;
+    const mermaidBlocks = contentArea.querySelectorAll('.language-mermaid, .mermaid');
+
+    if (mermaidBlocks.length === 0) {
+      console.log("ℹ️ No mermaid blocks found on this page");
+      return;
+    }
+
+    if (!initialized) {
+      mermaid.initialize({startOnLoad: false, theme: 'dark'});
+      initialized = true;
+    }
+
+    mermaidBlocks.forEach(el => {
+      if (el.dataset.processed === 'true') {
+        const source = el.dataset.mermaidSource;
+        if (source) {
+          el.innerHTML = source;
+          el.removeAttribute('data-processed');
+        }
+      } else {
+        el.dataset.mermaidSource = el.textContent;
+      }
+    });
+
+    mermaid.run({nodes: mermaidBlocks})
+      .then(() => console.log("✅ Mermaid rendered successfully"))
+      .catch(err => console.error("❌ Mermaid rendering error:", err));
+  }
+
+  function renderMermaidWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof mermaid.initialize === "function") {
+        renderMermaid();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ Mermaid auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering mermaid...");
+        
+        setTimeout(() => renderMermaidWithRetry(3, 50), 50);
+      });
+      console.log("✅ Mermaid-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderMermaidWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+
+
+</script>
+
+
+</head>
+
+<body class="min-h-screen flex flex-col bg-black font-jersey text-white text-3xl">
+  <header>
+    <div class="sticky absolute top-0 z-50">
+  <nav class="w-full border-b border-gray-800 bg-[#070709]/95 backdrop-blur-sm text-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        
+        <div class="flex items-center gap-3">
+
+          <a href='http://localhost:1313/' class="flex items-center gap-3 group" aria-label="Homepage">
+
+            <img src='https://picsum.photos/200' alt="Luca Palumbo"
+              class="w-10 h-10 rounded-sm border-2 border-gray-700 object-cover transition-transform duration-300 transform group-hover:scale-105"
+              style="animation: border-breathe 4s ease-in-out infinite;" />
+            <span class="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-wide">
+              Luca Palumbo
+              <span class="inline-block ml-2" style="animation: flicker 1.6s steps(2, end) infinite;">_</span>
+            </span>
+          </a>
+        </div>
+
+        
+        <div class="flex items-center gap-4">
+          
+          <div class="hidden md:flex items-center">
+            
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/projects/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a aria-current="true" href="/writeup/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Writeups</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/extra/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Extra</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+          </div>
+
+          
+          <div class="md:hidden">
+            <button id="nav-toggle" aria-controls="mobile-menu" aria-expanded="false"
+              class="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label="Open menu">
+              <svg class="h-6 w-6 text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div id="mobile-menu" class="md:hidden hidden pb-4">
+        
+        
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/projects/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a aria-current="true" href="/writeup/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Writeups</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/extra/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Extra</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+      </div>
+    </div>
+  </nav>
+
+  
+  <style>
+    @keyframes flicker {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      10% {
+        opacity: 0.2;
+        transform: translateY(-1px);
+      }
+
+      20% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes border-breathe {
+      0% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+
+      50% {
+        box-shadow: 0 0 18px 6px rgba(99, 102, 241, 0.03);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+    }
+  </style>
+
+  
+  <script>
+    (function () {
+      const btn = document.getElementById('nav-toggle');
+      const menu = document.getElementById('mobile-menu');
+      if (!btn || !menu) return;
+      btn.addEventListener('click', () => {
+        const open = menu.classList.toggle('hidden') === false;
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+</div>
+
+  </header>
+
+  <main class="flex-1 w-full">
+    <div id="swup" class="swup-transition-fade">
+      <div class="max-w-3xl lg:max-w-6xl xl:max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-10 lg:py-16">
+        
+<div class="grid grid-cols-12 gap-8">
+  
+  <aside class="hidden lg:block col-span-3">
+    <div class="sticky top-24">
+      <div class="mb-3 text-xs uppercase tracking-widest text-gray-500">Table of contents</div><nav class="toc border border-gray-800/70 bg-[#070709] rounded-sm p-4 text-base text-gray-300">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#challenge-overview">Challenge Overview</a></li>
+    <li><a href="#initial-analysis">Initial Analysis</a>
+      <ul>
+        <li><a href="#application-interface">Application Interface</a></li>
+        <li><a href="#first-steps---static-analysis">First Steps - Static Analysis</a></li>
+      </ul>
+    </li>
+    <li><a href="#deep-dive---react-native-reverse-engineering">Deep Dive - React Native Reverse Engineering</a>
+      <ul>
+        <li><a href="#learning-about-react-native-architecture">Learning About React Native Architecture</a></li>
+        <li><a href="#locating-the-javascript-bundle">Locating the JavaScript Bundle</a></li>
+        <li><a href="#the-hermes-challenge">The Hermes Challenge</a></li>
+        <li><a href="#decompiling-hermes-bytecode">Decompiling Hermes Bytecode</a></li>
+        <li><a href="#analyzing-the-decompiled-output">Analyzing the Decompiled Output</a></li>
+        <li><a href="#finding-the-application-logic">Finding the Application Logic</a></li>
+        <li><a href="#the-flag-validation-logic">The Flag Validation Logic</a></li>
+      </ul>
+    </li>
+    <li><a href="#reverse-engineering-the-flag-parts">Reverse Engineering the Flag Parts</a>
+      <ul>
+        <li><a href="#part-1-the-date-hash-xor-challenge">Part 1: The Date-Hash-XOR Challenge</a></li>
+        <li><a href="#inverting-part-1-validation">Inverting Part 1 Validation</a></li>
+        <li><a href="#part-2-the-lights-out-game-challenge">Part 2: The Lights Out Game Challenge</a></li>
+        <li><a href="#solving-the-lights-out-puzzle">Solving the Lights Out Puzzle</a></li>
+        <li><a href="#part-3-rc4-cryptography-with-physics-parameters">Part 3: RC4 Cryptography with Physics Parameters</a></li>
+        <li><a href="#solving-the-rc4-challenge">Solving the RC4 Challenge</a></li>
+      </ul>
+    </li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#lessons-learned">Lessons Learned</a>
+      <ul>
+        <li><a href="#technical-skills-gained">Technical Skills Gained</a></li>
+        <li><a href="#javascript-quirks">JavaScript Quirks</a></li>
+      </ul>
+    </li>
+    <li><a href="#flag">Flag</a></li>
+  </ul>
+</nav>
+      </nav></div>
+  </aside>
+
+  
+  <article class="col-span-12 lg:col-span-9">
+    <header class="mb-6">
+  <h1 class="text-2xl sm:text-3xl md:text-4xl tracking-wide text-white">
+    Exposition, idekCTF 2025
+  </h1>
+
+  <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm sm:text-base text-gray-400">
+    <span class="font-mono">Aug 02, 2025 • 00:00</span>
+    <span class="text-gray-700">/</span>
+    <span class="font-mono">11 min read</span>
+  </div><div class="mt-3 flex flex-wrap gap-2"><a href="/%20tags/reverse-engineering"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #reverse engineering
+    </a><a href="/%20tags/react-native"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #react native
+    </a><a href="/%20tags/android"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #android
+    </a><a href="/%20tags/mobile"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #mobile
+    </a><a href="/%20tags/idekctf"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #idekctf
+    </a></div></header>
+
+
+    
+    <div class="lg:hidden mb-6">
+      <details class="border border-gray-800/70 bg-[#070709] rounded-sm">
+        <summary class="cursor-pointer select-none px-4 py-3 text-gray-200 hover:text-white transition-colors">
+          Table of contents
+        </summary>
+        <div class="px-4 pb-4 toc text-base text-gray-300">
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#challenge-overview">Challenge Overview</a></li>
+    <li><a href="#initial-analysis">Initial Analysis</a>
+      <ul>
+        <li><a href="#application-interface">Application Interface</a></li>
+        <li><a href="#first-steps---static-analysis">First Steps - Static Analysis</a></li>
+      </ul>
+    </li>
+    <li><a href="#deep-dive---react-native-reverse-engineering">Deep Dive - React Native Reverse Engineering</a>
+      <ul>
+        <li><a href="#learning-about-react-native-architecture">Learning About React Native Architecture</a></li>
+        <li><a href="#locating-the-javascript-bundle">Locating the JavaScript Bundle</a></li>
+        <li><a href="#the-hermes-challenge">The Hermes Challenge</a></li>
+        <li><a href="#decompiling-hermes-bytecode">Decompiling Hermes Bytecode</a></li>
+        <li><a href="#analyzing-the-decompiled-output">Analyzing the Decompiled Output</a></li>
+        <li><a href="#finding-the-application-logic">Finding the Application Logic</a></li>
+        <li><a href="#the-flag-validation-logic">The Flag Validation Logic</a></li>
+      </ul>
+    </li>
+    <li><a href="#reverse-engineering-the-flag-parts">Reverse Engineering the Flag Parts</a>
+      <ul>
+        <li><a href="#part-1-the-date-hash-xor-challenge">Part 1: The Date-Hash-XOR Challenge</a></li>
+        <li><a href="#inverting-part-1-validation">Inverting Part 1 Validation</a></li>
+        <li><a href="#part-2-the-lights-out-game-challenge">Part 2: The Lights Out Game Challenge</a></li>
+        <li><a href="#solving-the-lights-out-puzzle">Solving the Lights Out Puzzle</a></li>
+        <li><a href="#part-3-rc4-cryptography-with-physics-parameters">Part 3: RC4 Cryptography with Physics Parameters</a></li>
+        <li><a href="#solving-the-rc4-challenge">Solving the RC4 Challenge</a></li>
+      </ul>
+    </li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#lessons-learned">Lessons Learned</a>
+      <ul>
+        <li><a href="#technical-skills-gained">Technical Skills Gained</a></li>
+        <li><a href="#javascript-quirks">JavaScript Quirks</a></li>
+      </ul>
+    </li>
+    <li><a href="#flag">Flag</a></li>
+  </ul>
+</nav>
+        </div>
+      </details>
+    </div>
+
+    <div class="border border-gray-800/70 bg-[#070709] rounded-sm p-5 sm:p-7">
+
+      <div class="md-content text-lg sm:text-xl leading-relaxed text-gray-200">
+        <h1 id="exposition---idek-ctf-2025-writeup" class=" mt-8 mb-3 text-2xl sm:text-3xl text-white">
+    <span class="relative inline-block">
+      Exposition - Idek CTF 2025 Writeup
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h1>
+<h2 id="challenge-overview" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Challenge Overview
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p><strong>Challenge Name:</strong> Exposition<br>
+<strong>CTF:</strong> Idek CTF 2025<br>
+<strong>Category:</strong> Mobile/React Native</p>
+<p>The challenge presented us with a React Native application consisting of a simple physics-based interface. Users could input text that would spawn as colored rectangles in a physics simulation area, where these rectangles could move and collide with each other.</p>
+<h2 id="initial-analysis" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Initial Analysis
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<h3 id="application-interface" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Application Interface
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>The app features a minimal interface with:</p>
+<ul>
+<li>A large physics simulation area (gray background with blue dotted border)</li>
+<li>An input field at the bottom with the instruction &ldquo;Type text and press enter to create floating blocks!&rdquo;</li>
+<li>When text is entered, it creates colored rectangular blocks that can move and interact within the simulation area</li>
+</ul>
+<p><img class="mx-auto my-6 rounded-md border border-gray-800/70 bg-black/20" src="/writeup/exposition-idekctf/images/Screenshot_20250806_211708_exposition.jpg" loading="lazy" decoding="async"
+  alt="App Interface"></p>
+<p><em>The application showing three blocks created from inputs &ldquo;The&rdquo;, &ldquo;is&rdquo;, and &ldquo;flag&rdquo;</em></p>
+<h3 id="first-steps---static-analysis" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      First Steps - Static Analysis
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>Since only an APK file was provided, I began with static analysis using JADX to decompile the application.</p>
+<p>The first important file I examined was <code>com.exposition.MainApplication</code>:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">java</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">package</span> com.exposition;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.app.Application;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> android.content.Context;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.facebook.react.PackageList;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.facebook.react.ReactApplication;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.facebook.react.ReactHost;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.facebook.react.ReactNativeApplicationEntryPoint;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.facebook.react.ReactNativeHost;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.facebook.react.ReactPackage;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.facebook.react.defaults.DefaultReactHost;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.facebook.react.defaults.DefaultReactNativeHost;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ... [truncated for brevity]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainApplication</span> <span style="color:#66d9ef">extends</span> Application <span style="color:#66d9ef">implements</span> ReactApplication {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> ReactNativeHost reactNativeHost <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DefaultReactNativeHost(<span style="color:#66d9ef">this</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> isHermesEnabled;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> isNewArchEnabled;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">getUseDeveloperSupport</span>() {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// ... additional React Native configuration</span>
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">super</span>.<span style="color:#a6e22e">onCreate</span>();
+</span></span><span style="display:flex;"><span>        ReactNativeApplicationEntryPoint.<span style="color:#a6e22e">loadReactNative</span>(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>This confirmed that we were dealing with a React Native application, as evidenced by:</p>
+<ul>
+<li>Multiple imports from <code>com.facebook.react</code> packages</li>
+<li>Implementation of <code>ReactApplication</code> interface</li>
+<li>References to React Native components like <code>ReactNativeHost</code> and <code>ReactPackage</code></li>
+</ul>
+<h2 id="deep-dive---react-native-reverse-engineering" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Deep Dive - React Native Reverse Engineering
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<h3 id="learning-about-react-native-architecture" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Learning About React Native Architecture
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>Since I had never reversed a React Native application before, I started researching the architecture and reverse engineering techniques specific to this framework.</p>
+<p>I discovered a very helpful blog post: <a href="https://pilfer.github.io/mobile-reverse-engineering/react-native/reverse-engineering-and-instrumenting-react-native-apps/">Reverse Engineering and Instrumenting React Native Apps</a></p>
+<h3 id="locating-the-javascript-bundle" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Locating the JavaScript Bundle
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>Following the guide, I found that the React Native code was contained in:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">text</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>resources/assets/index.android.bundle</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>However, when I tried to examine this file, I encountered an obstacle:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">bash</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>feld@feld-ZenBook:~/Documents/ctf/idek2025/exposition/attachments/app-jadx/resources/assets$ file index.android.bundle 
+</span></span><span style="display:flex;"><span>index.android.bundle: Hermes JavaScript bytecode, version <span style="color:#ae81ff">96</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>The file wasn&rsquo;t plain JavaScript as I expected, but rather <strong>Hermes JavaScript bytecode</strong> - a specific bytecode format used by React Native applications when the Hermes JavaScript engine is enabled (which we had confirmed from the MainApplication code: <code>isHermesEnabled = true</code>).</p>
+<h3 id="the-hermes-challenge" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      The Hermes Challenge
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>This presented a significant challenge because Hermes bytecode is not human-readable like regular JavaScript. The bytecode is a compiled, optimized format that requires special tools to decompile back into readable JavaScript.</p>
+<h3 id="decompiling-hermes-bytecode" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Decompiling Hermes Bytecode
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>More research led me to discover <a href="https://github.com/P1sec/hermes-dec">hermes-dec</a>, a decompiler specifically designed for Hermes JavaScript bytecode. This tool can convert the bytecode back into readable JavaScript.</p>
+<p>I used the decompiler on the bundle:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">bash</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hbc-decompiler assets/index.android.bundle output.js</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>The decompilation was successful, but it produced a <strong>massive</strong> JavaScript file. React Native bundles typically contain not just the application code, but also the entire React Native framework, third-party libraries, and all dependencies bundled together into a single file.</p>
+<h3 id="analyzing-the-decompiled-output" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Analyzing the Decompiled Output
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>With the decompiled JavaScript in hand, I now faced the challenge of finding the relevant application code within thousands of lines of framework and library code.</p>
+<p>The decompiled file was <strong>massive</strong> - over 200,000 lines of heavily obfuscated JavaScript.</p>
+<h3 id="finding-the-application-logic" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Finding the Application Logic
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>To locate the relevant code, I used a simple but effective technique: <strong>searching for strings visible in the UI</strong>.</p>
+<p>I searched for the text <code>&quot;Type something and press enter&quot;</code> which was visible in the app interface, and this led me to find the core application logic.</p>
+<p>Here&rsquo;s the relevant section I discovered:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">javascript</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">r17</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_closure1_slot5</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r18</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r17</span>.<span style="color:#a6e22e">TextInput</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r17</span> <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r24</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_closure1_slot10</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r24</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r24</span>.<span style="color:#a6e22e">inputBox</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r17</span>[<span style="color:#e6db74">&#39;style&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">r24</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r24</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Type something and press enter...&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r17</span>[<span style="color:#e6db74">&#39;placeholder&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">r24</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r17</span>[<span style="color:#e6db74">&#39;value&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">r23</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r17</span>[<span style="color:#e6db74">&#39;onChangeText&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">r22</span>;
+</span></span><span style="display:flex;"><span>[...]</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>The next ~1000 lines contain the main application code.</p>
+<h3 id="the-flag-validation-logic" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      The Flag Validation Logic
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>More importantly, I found what appeared to be flag validation code. The decompiled JavaScript contained several key elements:</p>
+<ol>
+<li>
+<p><strong>Flag Format Validation</strong>: The code checks for the standard CTF flag format:</p>
+<ul>
+<li>Must start with <code>'idek{'</code></li>
+<li>Must end with <code>'}'</code></li>
+<li>The content between must match a specific pattern: <code>/^[a-zA-Z0-9_]{61}$/</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Flag Structure</strong>: The validation revealed the flag structure:</p>
+<ul>
+<li>Total length: 61 characters (excluding the <code>idek{</code> and <code>}</code> wrapper)</li>
+<li>Position 16 must be <code>'_'</code></li>
+<li>Position 33 must be <code>'_'</code></li>
+<li>This creates a three-part structure: <code>PART1_PART2_PART3</code></li>
+<li>Part 1: 16 characters (positions 0-15)</li>
+<li>Part 2: 16 characters (positions 17-32)</li>
+<li>Part 3: 27 characters (positions 34-60)</li>
+</ul>
+</li>
+<li>
+<p><strong>Three Validation Functions</strong>: The code contained three separate validation methods, one for each part of the flag:</p>
+<ul>
+<li>1: Validates the first 16 characters</li>
+<li>2: Validates the middle 16 characters</li>
+<li>3: Validates the final 27 characters</li>
+</ul>
+</li>
+<li>
+<p><strong>Trigger Condition</strong>: There&rsquo;s special logic that activates when the last three text blocks created spell out <code>['The', 'flag', 'is']</code> in that exact order</p>
+</li>
+</ol>
+<h2 id="reverse-engineering-the-flag-parts" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Reverse Engineering the Flag Parts
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>Now came the challenging part: understanding how each of the three validation functions worked and what they expected as input.</p>
+<h3 id="part-1-the-date-hash-xor-challenge" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Part 1: The Date-Hash-XOR Challenge
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>The first part of the flag (16 characters) used a particularly interesting validation approach:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">javascript</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">r10</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r10</span>.<span style="color:#a6e22e">toString</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r10</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r10</span>.<span style="color:#a6e22e">bind</span>(<span style="color:#a6e22e">r6</span>)(<span style="color:#a6e22e">r1</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r6</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r10</span>.<span style="color:#a6e22e">padStart</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r5</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;0&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r10</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r6</span>.<span style="color:#a6e22e">bind</span>(<span style="color:#a6e22e">r10</span>)(<span style="color:#a6e22e">r5</span>, <span style="color:#a6e22e">r1</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ... more date manipulation ...
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">r11</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r2</span>.Date;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;2025-&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r12</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r1</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">r10</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;-&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r12</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">r1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r19</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r1</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">r10</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Creates date string like &#34;2025-00-00&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">r10</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r11</span>.<span style="color:#a6e22e">prototype</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r10</span> <span style="color:#f92672">=</span> Object.<span style="color:#a6e22e">create</span>(<span style="color:#a6e22e">r10</span>, {<span style="color:#a6e22e">constructor</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">r11</span>}});
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r20</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r10</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">r20</span>[<span style="color:#a6e22e">r11</span>](<span style="color:#a6e22e">r19</span>, <span style="color:#a6e22e">r18</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r10</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r1</span> <span style="color:#66d9ef">instanceof</span> Object <span style="color:#f92672">?</span> <span style="color:#a6e22e">r1</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">r10</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r10</span>.<span style="color:#a6e22e">toISOString</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r1</span>.<span style="color:#a6e22e">bind</span>(<span style="color:#a6e22e">r10</span>)();
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r10</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r6</span>.<span style="color:#a6e22e">bind</span>(<span style="color:#a6e22e">r9</span>)(<span style="color:#a6e22e">r1</span>);</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>The validation works as follows:</p>
+<ol>
+<li><strong>Date Object Creation</strong>: A JavaScript Date object is created with the string <code>&quot;2025-00-00&quot;</code> - which is technically invalid but JavaScript handles it gracefully</li>
+<li><strong>Date Normalization</strong>: The invalid date gets normalized to <code>&quot;2024-11-30T00:00:00.000Z&quot;</code> when <code>toISOString()</code> is called (JavaScript date handling can be quite quirky)</li>
+<li><strong>SHA-256 Hashing</strong>: This normalized date string gets hashed with SHA-256</li>
+<li><strong>XOR Validation</strong>: The first part of the input flag is XORed against a hardcoded key</li>
+<li><strong>Comparison</strong>: If the XOR result matches the SHA-256 hash, the first part passes validation</li>
+</ol>
+<p>The relevant XOR validation code:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">javascript</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> [<span style="color:#ae81ff">207</span>, <span style="color:#ae81ff">143</span>, <span style="color:#ae81ff">244</span>, <span style="color:#ae81ff">109</span>, <span style="color:#ae81ff">98</span>, <span style="color:#ae81ff">219</span>, <span style="color:#ae81ff">179</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">93</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">118</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">154</span>, <span style="color:#ae81ff">106</span>, <span style="color:#ae81ff">77</span>, <span style="color:#ae81ff">248</span>, <span style="color:#ae81ff">135</span>, <span style="color:#ae81ff">143</span>, <span style="color:#ae81ff">226</span>, <span style="color:#ae81ff">26</span>, <span style="color:#ae81ff">102</span>, <span style="color:#ae81ff">102</span>, <span style="color:#ae81ff">88</span>, <span style="color:#ae81ff">231</span>, <span style="color:#ae81ff">123</span>, <span style="color:#ae81ff">239</span>, <span style="color:#ae81ff">122</span>, <span style="color:#ae81ff">77</span>, <span style="color:#ae81ff">46</span>, <span style="color:#ae81ff">235</span>, <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">227</span>];
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ... XOR operations with this hardcoded key
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">r6</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r8</span>.<span style="color:#a6e22e">charCodeAt</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r6</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r6</span>.<span style="color:#a6e22e">bind</span>(<span style="color:#a6e22e">r8</span>)(<span style="color:#a6e22e">r2</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r4</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_closure6_slot1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r4</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r4</span>[<span style="color:#a6e22e">r7</span>];
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r4</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r6</span> <span style="color:#f92672">^</span> <span style="color:#a6e22e">r4</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r5</span> <span style="color:#f92672">===</span> <span style="color:#a6e22e">r4</span>;</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><h3 id="inverting-part-1-validation" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Inverting Part 1 Validation
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>This validation was straightforward to reverse since it&rsquo;s a simple XOR operation. I wrote a Python script to invert the process:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">python</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> hashlib
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> xor
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>key <span style="color:#f92672">=</span> [<span style="color:#ae81ff">207</span>, <span style="color:#ae81ff">143</span>, <span style="color:#ae81ff">244</span>, <span style="color:#ae81ff">109</span>, <span style="color:#ae81ff">98</span>, <span style="color:#ae81ff">219</span>, <span style="color:#ae81ff">179</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">93</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">118</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">154</span>, <span style="color:#ae81ff">106</span>, <span style="color:#ae81ff">77</span>, <span style="color:#ae81ff">248</span>, <span style="color:#ae81ff">135</span>, <span style="color:#ae81ff">143</span>, <span style="color:#ae81ff">226</span>, <span style="color:#ae81ff">26</span>, <span style="color:#ae81ff">102</span>, <span style="color:#ae81ff">102</span>, <span style="color:#ae81ff">88</span>, <span style="color:#ae81ff">231</span>, <span style="color:#ae81ff">123</span>, <span style="color:#ae81ff">239</span>, <span style="color:#ae81ff">122</span>, <span style="color:#ae81ff">77</span>, <span style="color:#ae81ff">46</span>, <span style="color:#ae81ff">235</span>, <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">227</span>]
+</span></span><span style="display:flex;"><span>xor_key <span style="color:#f92672">=</span> bytes(key)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;xor_key&#34;</span>, xor_key)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>date_iso <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;2024-11-30T00:00:00.000Z&#34;</span>
+</span></span><span style="display:flex;"><span>sha256_hash <span style="color:#f92672">=</span> hashlib<span style="color:#f92672">.</span>sha256(date_iso<span style="color:#f92672">.</span>encode())<span style="color:#f92672">.</span>digest()
+</span></span><span style="display:flex;"><span>date_iso_hashs <span style="color:#f92672">=</span> sha256_hash
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;-----&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>xored <span style="color:#f92672">=</span> xor(date_iso_hashs, xor_key)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;xored</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74"> </span><span style="color:#e6db74">{</span>xored<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>part <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, len(xored), <span style="color:#ae81ff">2</span>):
+</span></span><span style="display:flex;"><span>    part <span style="color:#f92672">+=</span> chr(xored[i])
+</span></span><span style="display:flex;"><span>print(part)
+</span></span><span style="display:flex;"><span>print(part[::<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>This gave me the first 16 characters of the flag.</p>
+<h3 id="part-2-the-lights-out-game-challenge" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Part 2: The Lights Out Game Challenge
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>The second part of the flag validation was much more creative - it implemented a <strong>Lights Out</strong> puzzle game!</p>
+<p>The relevant JavaScript code initialized two 8×8 grids:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">javascript</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">r3</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Array(<span style="color:#ae81ff">33</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> [<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>];
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r3</span>[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">r1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> [<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">0</span>];
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r3</span>[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">r1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> [<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">5</span>];
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r3</span>[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">r1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ... more grid initialization coordinates ...
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r14</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Array(<span style="color:#ae81ff">36</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> [<span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">4</span>];
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r14</span>[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">r1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> [<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">6</span>];
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r14</span>[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">r1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ... second grid coordinates ...
+</span></span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>The validation works as follows:</p>
+<ol>
+<li><strong>Grid Setup</strong>: Two 8×8 grids are initialized with specific positions set to 1, others to 0</li>
+<li><strong>Lights Out Rules</strong>: Each &ldquo;move&rdquo; flips a cell and its orthogonal neighbors (up, down, left, right)</li>
+<li><strong>Goal</strong>: Find the sequence of moves that makes all cells in the grid equal to 0</li>
+<li><strong>Flag Encoding</strong>: The solution pattern encodes the flag characters - each row of moves represents one byte/character</li>
+</ol>
+<h3 id="solving-the-lights-out-puzzle" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Solving the Lights Out Puzzle
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>This is essentially a linear algebra problem over GF(2) (binary field). I used Gaussian elimination to solve it:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">python</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">index</span>(r, c):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> r <span style="color:#f92672">*</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">+</span> c
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">neighbors</span>(r, c):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> dr, dc <span style="color:#f92672">in</span> [(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>), (<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>), (<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>), (<span style="color:#ae81ff">0</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>), (<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>)]:
+</span></span><span style="display:flex;"><span>        nr, nc <span style="color:#f92672">=</span> r <span style="color:#f92672">+</span> dr, c <span style="color:#f92672">+</span> dc
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&lt;=</span> nr <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">and</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&lt;=</span> nc <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">8</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">yield</span> index(nr, nc)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Build the effect matrix A</span>
+</span></span><span style="display:flex;"><span>A <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>), dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>uint8)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> r <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+</span></span><span style="display:flex;"><span>        i <span style="color:#f92672">=</span> index(r, c)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> neighbors(r, c):
+</span></span><span style="display:flex;"><span>            A[j, i] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>  <span style="color:#75715e"># column i = effect of clicking position i</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Initial state (first grid)</span>
+</span></span><span style="display:flex;"><span>grid <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>    [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>b <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([bit <span style="color:#66d9ef">for</span> row <span style="color:#f92672">in</span> grid <span style="color:#66d9ef">for</span> bit <span style="color:#f92672">in</span> row], dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>uint8)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Gaussian elimination mod 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gauss_mod2</span>(A, b):
+</span></span><span style="display:flex;"><span>    A <span style="color:#f92672">=</span> A<span style="color:#f92672">.</span>copy()
+</span></span><span style="display:flex;"><span>    b <span style="color:#f92672">=</span> b<span style="color:#f92672">.</span>copy()
+</span></span><span style="display:flex;"><span>    n <span style="color:#f92672">=</span> len(b)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> col <span style="color:#f92672">in</span> range(n):
+</span></span><span style="display:flex;"><span>        pivot <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> row <span style="color:#f92672">in</span> range(col, n):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> A[row, col]:
+</span></span><span style="display:flex;"><span>                pivot <span style="color:#f92672">=</span> row
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> pivot <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>  <span style="color:#75715e"># null column</span>
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> pivot <span style="color:#f92672">!=</span> col:
+</span></span><span style="display:flex;"><span>            A[[col, pivot]] <span style="color:#f92672">=</span> A[[pivot, col]]
+</span></span><span style="display:flex;"><span>            b[[col, pivot]] <span style="color:#f92672">=</span> b[[pivot, col]]
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> row <span style="color:#f92672">in</span> range(n):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> row <span style="color:#f92672">!=</span> col <span style="color:#f92672">and</span> A[row, col]:
+</span></span><span style="display:flex;"><span>                A[row] <span style="color:#f92672">^=</span> A[col]
+</span></span><span style="display:flex;"><span>                b[row] <span style="color:#f92672">^=</span> b[col]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> b
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>solution <span style="color:#f92672">=</span> gauss_mod2(A, b)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Convert solution to characters</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> r <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+</span></span><span style="display:flex;"><span>    number <span style="color:#f92672">=</span> int(<span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">.</span>join(str(solution[index(r, c)]) <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>)), <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>    print(chr(number), end<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>)</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>By changing the initial grid matrix, this same script could solve for the second set of 8 characters in Part 2.</p>
+<h3 id="part-3-rc4-cryptography-with-physics-parameters" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Part 3: RC4 Cryptography with Physics Parameters
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>The final part of the flag (27 characters) used RC4 encryption - the encryption key was derived from the physics simulation parameters used by the app!</p>
+<p>Looking at the JavaScript code, I found the relevant section:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">javascript</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">r7</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_closure2_slot8</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r7</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r7</span>.<span style="color:#a6e22e">current</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r19</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r7</span>.<span style="color:#a6e22e">gravity</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r7</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_closure2_slot8</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r7</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r7</span>.<span style="color:#a6e22e">current</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r18</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r7</span>.<span style="color:#a6e22e">airResistance</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r7</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_closure2_slot8</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r7</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r7</span>.<span style="color:#a6e22e">current</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r17</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r7</span>.<span style="color:#a6e22e">bounceDamping</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r7</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_closure2_slot8</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r7</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r7</span>.<span style="color:#a6e22e">current</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r16</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r7</span>.<span style="color:#a6e22e">collisionDamping</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r6</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_closure2_slot8</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r6</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r6</span>.<span style="color:#a6e22e">current</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r15</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r6</span>.<span style="color:#a6e22e">zeroClampThreshold</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r6</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r2</span>.<span style="color:#a6e22e">HermesInternal</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r7</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r6</span>.<span style="color:#a6e22e">concat</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r20</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r10</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r20</span>[<span style="color:#a6e22e">r7</span>](<span style="color:#a6e22e">r19</span>, <span style="color:#a6e22e">r18</span>, <span style="color:#a6e22e">r17</span>, <span style="color:#a6e22e">r16</span>, <span style="color:#a6e22e">r15</span>, <span style="color:#a6e22e">r14</span>);</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>And the ciphertext comparison:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">javascript</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">r3</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">a0</span>, <span style="color:#a6e22e">a1</span>) { <span style="color:#75715e">// Environment: r3
+</span></span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> [<span style="color:#ae81ff">134</span>, <span style="color:#ae81ff">145</span>, <span style="color:#ae81ff">231</span>, <span style="color:#ae81ff">193</span>, <span style="color:#ae81ff">40</span>, <span style="color:#ae81ff">196</span>, <span style="color:#ae81ff">78</span>, <span style="color:#ae81ff">177</span>, <span style="color:#ae81ff">206</span>, <span style="color:#ae81ff">34</span>, <span style="color:#ae81ff">168</span>, <span style="color:#ae81ff">148</span>, <span style="color:#ae81ff">66</span>, <span style="color:#ae81ff">43</span>, <span style="color:#ae81ff">66</span>, <span style="color:#ae81ff">136</span>, <span style="color:#ae81ff">194</span>, <span style="color:#ae81ff">158</span>, <span style="color:#ae81ff">195</span>, <span style="color:#ae81ff">255</span>, <span style="color:#ae81ff">243</span>, <span style="color:#ae81ff">123</span>, <span style="color:#ae81ff">190</span>, <span style="color:#ae81ff">218</span>, <span style="color:#ae81ff">173</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">3</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">r0</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">a1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">r1</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r1</span>[<span style="color:#a6e22e">r0</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">r0</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">a0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">r0</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r0</span> <span style="color:#f92672">===</span> <span style="color:#a6e22e">r1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">r0</span>;
+</span></span><span style="display:flex;"><span>};</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>The validation works by:</p>
+<ol>
+<li><strong>Key Generation</strong>: Concatenating physics parameters: gravity + airResistance + bounceDamping + collisionDamping + zeroClampThreshold</li>
+<li><strong>RC4 Encryption</strong>: Using the concatenated string as the RC4 key</li>
+<li><strong>Comparison</strong>: The input flag part is encrypted and compared against the hardcoded ciphertext array</li>
+</ol>
+<h3 id="solving-the-rc4-challenge" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Solving the RC4 Challenge
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>I implemented an RC4 decryption function and used the physics parameters as the key:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">python</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">rc4_decrypt</span>(ciphertext, key):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Standard RC4 implementation for decryption
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Key Scheduling Algorithm (KSA)</span>
+</span></span><span style="display:flex;"><span>    S <span style="color:#f92672">=</span> list(range(<span style="color:#ae81ff">256</span>))
+</span></span><span style="display:flex;"><span>    j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">256</span>):
+</span></span><span style="display:flex;"><span>        j <span style="color:#f92672">=</span> (j <span style="color:#f92672">+</span> S[i] <span style="color:#f92672">+</span> key[i <span style="color:#f92672">%</span> len(key)]) <span style="color:#f92672">%</span> <span style="color:#ae81ff">256</span>
+</span></span><span style="display:flex;"><span>        S[i], S[j] <span style="color:#f92672">=</span> S[j], S[i]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Pseudo-Random Generation Algorithm (PRGA)</span>
+</span></span><span style="display:flex;"><span>    i <span style="color:#f92672">=</span> j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    plaintext <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> byte <span style="color:#f92672">in</span> ciphertext:
+</span></span><span style="display:flex;"><span>        i <span style="color:#f92672">=</span> (i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">256</span>
+</span></span><span style="display:flex;"><span>        j <span style="color:#f92672">=</span> (j <span style="color:#f92672">+</span> S[i]) <span style="color:#f92672">%</span> <span style="color:#ae81ff">256</span>
+</span></span><span style="display:flex;"><span>        S[i], S[j] <span style="color:#f92672">=</span> S[j], S[i]
+</span></span><span style="display:flex;"><span>        keystream_byte <span style="color:#f92672">=</span> S[(S[i] <span style="color:#f92672">+</span> S[j]) <span style="color:#f92672">%</span> <span style="color:#ae81ff">256</span>]
+</span></span><span style="display:flex;"><span>        plaintext_byte <span style="color:#f92672">=</span> byte <span style="color:#f92672">^</span> keystream_byte
+</span></span><span style="display:flex;"><span>        plaintext<span style="color:#f92672">.</span>append(plaintext_byte)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> bytes(plaintext)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Physics parameters from the app</span>
+</span></span><span style="display:flex;"><span>gravity <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.15</span>
+</span></span><span style="display:flex;"><span>airResistance <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.996</span>
+</span></span><span style="display:flex;"><span>bounceDamping <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.7</span>
+</span></span><span style="display:flex;"><span>collisionDamping <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.8</span>
+</span></span><span style="display:flex;"><span>zeroClampThreshold <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.005</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Build key by concatenating parameters (as done by HermesInternal.concat)</span>
+</span></span><span style="display:flex;"><span>key_string <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>gravity<span style="color:#e6db74">}{</span>airResistance<span style="color:#e6db74">}{</span>bounceDamping<span style="color:#e6db74">}{</span>collisionDamping<span style="color:#e6db74">}{</span>zeroClampThreshold<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Key string: </span><span style="color:#e6db74">{</span>key_string<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Encode key (as done by TextEncoder in JavaScript)</span>
+</span></span><span style="display:flex;"><span>key_bytes <span style="color:#f92672">=</span> key_string<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#39;utf-8&#39;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Key bytes: </span><span style="color:#e6db74">{</span>key_bytes<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Hardcoded ciphertext from JavaScript</span>
+</span></span><span style="display:flex;"><span>ciphertext <span style="color:#f92672">=</span> [<span style="color:#ae81ff">134</span>, <span style="color:#ae81ff">145</span>, <span style="color:#ae81ff">231</span>, <span style="color:#ae81ff">193</span>, <span style="color:#ae81ff">40</span>, <span style="color:#ae81ff">196</span>, <span style="color:#ae81ff">78</span>, <span style="color:#ae81ff">177</span>, <span style="color:#ae81ff">206</span>, <span style="color:#ae81ff">34</span>, <span style="color:#ae81ff">168</span>, <span style="color:#ae81ff">148</span>, <span style="color:#ae81ff">66</span>, <span style="color:#ae81ff">43</span>, <span style="color:#ae81ff">66</span>, <span style="color:#ae81ff">136</span>, <span style="color:#ae81ff">194</span>, <span style="color:#ae81ff">158</span>, <span style="color:#ae81ff">195</span>, <span style="color:#ae81ff">255</span>, <span style="color:#ae81ff">243</span>, <span style="color:#ae81ff">123</span>, <span style="color:#ae81ff">190</span>, <span style="color:#ae81ff">218</span>, <span style="color:#ae81ff">173</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">3</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Decrypt</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>    decrypted <span style="color:#f92672">=</span> rc4_decrypt(ciphertext, key_bytes)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Decrypted as string: </span><span style="color:#e6db74">{</span>decrypted<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#39;utf-8&#39;</span>, errors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;ignore&#39;</span>)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Error during decryption: </span><span style="color:#e6db74">{</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>This approach successfully revealed the final 27 characters of the flag by reversing the RC4 encryption using the physics parameters as the decryption key.</p>
+<h2 id="solution" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Solution
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>Combining all three parts, the complete flag was:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">text</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>idek{d3spit3_th3_nam3_No_Expo_was_Used_in_the_cr34t10n_of_7hi5_4pp}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>The flag itself is a clever reference to the challenge name &ldquo;Exposition&rdquo; - despite the name, no actual Expo (React Native development framework) was used in creating the app!</p>
+<h2 id="lessons-learned" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Lessons Learned
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>This challenge was an excellent introduction to React Native reverse engineering and taught several valuable techniques:</p>
+<h3 id="technical-skills-gained" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Technical Skills Gained
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p><strong>Hermes Bytecode Analysis</strong>: Learning to identify and decompile Hermes JavaScript bytecode using tools like <code>hermes-dec</code></p>
+<h3 id="javascript-quirks" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      JavaScript Quirks
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>A fun side discovery was JavaScript&rsquo;s bizarre date handling behavior. The invalid date <code>&quot;2025-00-00&quot;</code> automatically normalizing to <code>&quot;2024-11-30T00:00:00.000Z&quot;</code> is exactly the kind of quirk that makes JavaScript both fascinating and frustrating. There&rsquo;s actually a <a href="https://jsdate.wtf/">hilarious quiz about JavaScript date oddities</a> that demonstrates just how unpredictable the Date object can be!</p>
+<h2 id="flag" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Flag
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p><code>idek{d3spit3_th3_nam3_No_Expo_was_Used_in_the_cr34t10n_of_7hi5_4pp}</code></p>
+<hr>
+
+      </div>
+    </div>
+  </article>
+</div>
+
+<style>
+  .toc {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  .toc li {
+    position: relative;
+    margin: 0.35rem 0;
+    padding-left: 1.25rem;
+     
+    overflow-wrap: anywhere;
+     
+    word-break: break-word;
+  }
+
+  .toc a {
+    display: block;
+     
+    padding: 0.15rem 0;
+    color: rgba(209, 213, 219, 0.92);
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-color: rgba(99, 102, 241, 0.85);
+    text-underline-offset: 3px;
+  }
+
+   
+  .toc ul ul {
+    margin: 0.4rem 0 0.4rem 0.35rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid rgba(55, 65, 81, 0.6);
+  }
+
+  .toc ul ul>li {
+    padding-left: 1.75rem;
+  }
+
+   
+  .toc ul ul>li::before {
+    content: "├";
+    position: absolute;
+    left: 0.35rem;
+    top: 0.2rem;
+     
+    color: rgba(99, 102, 241, 0.75);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .toc ul ul>li:last-child::before {
+    content: "└";
+  }
+
+   
+  @media (min-width: 1024px) {
+    .toc {
+      max-height: calc(100vh - 9rem);
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+  }
+
+
+   
+  .md-content ul,
+  .md-content ol {
+    margin: 1rem 0;
+    padding-left: 1.35rem;
+  }
+
+  .md-content ul {
+    list-style: disc;
+  }
+
+  .md-content ul ul {
+    list-style: circle;
+  }
+
+  .md-content ul ul ul {
+    list-style: square;
+  }
+
+  .md-content ol {
+    list-style: decimal;
+  }
+
+  .md-content ol ol {
+    list-style: lower-roman;
+  }
+
+  .md-content ol ol ol {
+    list-style: lower-alpha;
+  }
+
+  .md-content li {
+    margin: 0.35rem 0;
+  }
+
+   
+  .md-content pre,
+  .md-content code {
+    tab-size: 4;
+  }
+</style>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="border-t border-gray-800 bg-[#070709] text-gray-400">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col md:flex-row items-center justify-between py-6 space-y-4 md:space-y-0">
+
+      
+      <div class="text-sm sm:text-base md:text-lg">
+        <span class="relative inline-block">
+          © 2026 Luca Palumbo. All rights reserved. <br>
+          Made with <a href="https://gohugo.io" target="_blank">Hugo</a> | <a
+            href="https://github.com/Enerhim/enervoid-theme" target="_blank">Enervoid</a>
+        </span>
+      </div>
+
+      
+      <div class="flex items-center space-x-6 text-sm sm:text-base md:text-lg">
+
+        
+        <a href='https://github.com/LucaPalumbo' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-github-original"></i>
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://twitter.com/Luca_Palumbo_' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-twitter-original"></i>
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://linkedin.com/in/luca-palumbo-b9baa020a' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-linkedin-plain"></i>
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+
+      </div>
+    </div>
+  </div>
+</div>
+
+  </footer>
+</body>
+
+</html>

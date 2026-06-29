@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link rel="icon" type="image/png" href="/avatar.png">
+<title>DefCamp Quals</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+  integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap');
+
+  .font-jersey {
+
+    font-family: "Ubuntu Sans Mono", monospace;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+
+  .md-content .katex-display {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .md-content .katex-display>.katex {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: 300ms ease-in-out;
+  }
+
+  .is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  html.is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  html.is-animating {
+    cursor: progress;
+  }
+
+  html.is-leaving .swup-transition-fade {
+    opacity: 0;
+  }
+</style>
+
+<script src="https://unpkg.com/swup@4"></script>
+<script src="https://unpkg.com/@swup/preload-plugin@3"></script>
+<script src="https://unpkg.com/@swup/progress-plugin@3"></script>
+<script>
+  const swup = new Swup({
+    containers: ['#swup'],
+    animationSelector: '[class*="swup-transition-"]',
+    cache: true,
+    preload: true,
+    animateHistoryBrowsing: true,
+
+    plugins: [
+      new SwupPreloadPlugin(),
+      new SwupProgressPlugin()
+    ]
+  })
+  window.swup = swup
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  crossorigin="anonymous"></script>
+
+<script>
+  
+
+  
+  const KATEX_CONFIG = {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false}
+    ],
+    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+    throwOnError: false
+  };
+
+  
+  function renderKatex() {
+    
+    if (typeof renderMathInElement !== "function") {
+      console.log("⏳ Waiting for KaTeX to load...");
+      return;
+    }
+
+    
+    const contentArea = document.getElementById('swup') || document.body;
+
+    try {
+      renderMathInElement(contentArea, KATEX_CONFIG);
+      console.log("✅ KaTeX rendered successfully");
+    } catch (error) {
+      console.error("❌ KaTeX rendering error:", error);
+    }
+  }
+
+  
+  function renderKatexWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof renderMathInElement === "function") {
+        renderKatex();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ KaTeX auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering KaTeX...");
+        
+        setTimeout(() => renderKatexWithRetry(3, 50), 50);
+      });
+      console.log("✅ KaTeX-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderKatexWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+  
+  window.renderKatex = renderKatex;
+</script>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  let initialized = false;
+
+  function renderMermaid() {
+    const contentArea = document.getElementById('swup') || document.body;
+    const mermaidBlocks = contentArea.querySelectorAll('.language-mermaid, .mermaid');
+
+    if (mermaidBlocks.length === 0) {
+      console.log("ℹ️ No mermaid blocks found on this page");
+      return;
+    }
+
+    if (!initialized) {
+      mermaid.initialize({startOnLoad: false, theme: 'dark'});
+      initialized = true;
+    }
+
+    mermaidBlocks.forEach(el => {
+      if (el.dataset.processed === 'true') {
+        const source = el.dataset.mermaidSource;
+        if (source) {
+          el.innerHTML = source;
+          el.removeAttribute('data-processed');
+        }
+      } else {
+        el.dataset.mermaidSource = el.textContent;
+      }
+    });
+
+    mermaid.run({nodes: mermaidBlocks})
+      .then(() => console.log("✅ Mermaid rendered successfully"))
+      .catch(err => console.error("❌ Mermaid rendering error:", err));
+  }
+
+  function renderMermaidWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof mermaid.initialize === "function") {
+        renderMermaid();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ Mermaid auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering mermaid...");
+        
+        setTimeout(() => renderMermaidWithRetry(3, 50), 50);
+      });
+      console.log("✅ Mermaid-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderMermaidWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+
+
+</script>
+
+
+</head>
+
+<body class="min-h-screen flex flex-col bg-black font-jersey text-white text-3xl">
+  <header>
+    <div class="sticky absolute top-0 z-50">
+  <nav class="w-full border-b border-gray-800 bg-[#070709]/95 backdrop-blur-sm text-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        
+        <div class="flex items-center gap-3">
+
+          <a href='http://localhost:1313/' class="flex items-center gap-3 group" aria-label="Homepage">
+
+            <img src='https://picsum.photos/200' alt="Luca Palumbo"
+              class="w-10 h-10 rounded-sm border-2 border-gray-700 object-cover transition-transform duration-300 transform group-hover:scale-105"
+              style="animation: border-breathe 4s ease-in-out infinite;" />
+            <span class="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-wide">
+              Luca Palumbo
+              <span class="inline-block ml-2" style="animation: flicker 1.6s steps(2, end) infinite;">_</span>
+            </span>
+          </a>
+        </div>
+
+        
+        <div class="flex items-center gap-4">
+          
+          <div class="hidden md:flex items-center">
+            
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/projects/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a aria-current="true" href="/writeup/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Writeups</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/extra/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Extra</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+          </div>
+
+          
+          <div class="md:hidden">
+            <button id="nav-toggle" aria-controls="mobile-menu" aria-expanded="false"
+              class="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label="Open menu">
+              <svg class="h-6 w-6 text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div id="mobile-menu" class="md:hidden hidden pb-4">
+        
+        
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/projects/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a aria-current="true" href="/writeup/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Writeups</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/extra/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Extra</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+      </div>
+    </div>
+  </nav>
+
+  
+  <style>
+    @keyframes flicker {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      10% {
+        opacity: 0.2;
+        transform: translateY(-1px);
+      }
+
+      20% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes border-breathe {
+      0% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+
+      50% {
+        box-shadow: 0 0 18px 6px rgba(99, 102, 241, 0.03);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+    }
+  </style>
+
+  
+  <script>
+    (function () {
+      const btn = document.getElementById('nav-toggle');
+      const menu = document.getElementById('mobile-menu');
+      if (!btn || !menu) return;
+      btn.addEventListener('click', () => {
+        const open = menu.classList.toggle('hidden') === false;
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+</div>
+
+  </header>
+
+  <main class="flex-1 w-full">
+    <div id="swup" class="swup-transition-fade">
+      <div class="max-w-3xl lg:max-w-6xl xl:max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-10 lg:py-16">
+        
+<div class="grid grid-cols-12 gap-8">
+  
+  <aside class="hidden lg:block col-span-3">
+    <div class="sticky top-24">
+      <div class="mb-3 text-xs uppercase tracking-widest text-gray-500">Table of contents</div><nav class="toc border border-gray-800/70 bg-[#070709] rounded-sm p-4 text-base text-gray-300">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#reverse-engineering---mach-triangle">Reverse Engineering - mach-triangle</a></li>
+    <li><a href="#reverse-engineering---burnt-out">Reverse Engineering - burnt-out</a></li>
+  </ul>
+</nav>
+      </nav></div>
+  </aside>
+
+  
+  <article class="col-span-12 lg:col-span-9">
+    <header class="mb-6">
+  <h1 class="text-2xl sm:text-3xl md:text-4xl tracking-wide text-white">
+    DefCamp Quals
+  </h1>
+
+  <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm sm:text-base text-gray-400">
+    <span class="font-mono">Sep 12, 2025 • 00:00</span>
+    <span class="text-gray-700">/</span>
+    <span class="font-mono">8 min read</span>
+  </div><div class="mt-3 flex flex-wrap gap-2"><a href="/%20tags/reverse-engineering"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #reverse engineering
+    </a><a href="/%20tags/defcamp"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #defcamp
+    </a></div></header>
+
+
+    
+    <div class="lg:hidden mb-6">
+      <details class="border border-gray-800/70 bg-[#070709] rounded-sm">
+        <summary class="cursor-pointer select-none px-4 py-3 text-gray-200 hover:text-white transition-colors">
+          Table of contents
+        </summary>
+        <div class="px-4 pb-4 toc text-base text-gray-300">
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#reverse-engineering---mach-triangle">Reverse Engineering - mach-triangle</a></li>
+    <li><a href="#reverse-engineering---burnt-out">Reverse Engineering - burnt-out</a></li>
+  </ul>
+</nav>
+        </div>
+      </details>
+    </div>
+
+    <div class="border border-gray-800/70 bg-[#070709] rounded-sm p-5 sm:p-7">
+
+      <div class="md-content text-lg sm:text-xl leading-relaxed text-gray-200">
+        <h2 id="reverse-engineering---mach-triangle" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Reverse Engineering - mach-triangle
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+
+
+
+
+
+
+
+<figure class="my-8">
+  <blockquote
+    class="relative rounded-xl border border-white/[0.07] bg-black/40 px-5 py-4 text-gray-300 transition-shadow duration-200 hover:shadow-[0_0_0_1px_rgba(96,165,250,0.08)]">
+
+    <span class="absolute inset-y-3 left-0 w-0.5 rounded-full bg-blue-400/20"></span>
+    <span class="absolute right-4 top-2.5 select-none font-mono text-[0.6rem] tracking-widest text-white/10">///</span>
+
+    <div
+      class="font-mono text-sm leading-relaxed [&_code]:rounded [&_code]:bg-white/5 [&_code]:px-1.5 [&_code]:py-0.5 [&_em]:text-gray-400 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:text-white">
+      <p>Flag: <code>DCTF{77cf682bd72ae03d3644c1f43b97020fcc6446b2c88c02757be0e46c40dcc90b}</code></p>
+
+    </div>
+  </blockquote>
+</figure>
+
+
+<p>The file provided is a Mach-O 64-bit executable.</p>
+<p>The executable reads a password from <code>argv</code> and validates it. If the password is correct it print &lsquo;Correct&rsquo;.</p>
+<p>The algorithm used to validate the password works like this:</p>
+<ul>
+<li>the buffer <code>buffer_1</code> and <code>int_buffer</code> are filled in a way that does not depend on user input</li>
+<li>the input is padded to reach length multiple of 8</li>
+<li>a chunk of 8 bytes of the input gets XORed with a <code>xor_key</code> ( initially an initialization vector )</li>
+<li>this XORed value is passed to a <code>final</code> function that encrypts it, and the resulting chunk is saved in the output buffer</li>
+<li>the <code>xor_key</code> is updated with the output of the previous chunk</li>
+<li>a new chunk get xorred and passed to <code>final</code>, and so on&hellip;</li>
+</ul>
+<p>This is basically a CBC block cipher</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">c</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  xor_key <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(<span style="color:#a6e22e">byte</span> (<span style="color:#f92672">*</span>) [<span style="color:#ae81ff">8</span>])IV;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> (<span style="color:#66d9ef">int</span>)len_padded; i <span style="color:#f92672">=</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">8</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; j <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">8</span>; j <span style="color:#f92672">=</span> j <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>      xorred[j] <span style="color:#f92672">=</span> input_padded[i <span style="color:#f92672">+</span> j] <span style="color:#f92672">^</span> xor_key[j];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">final</span>(xorred,buffer_1,size,int_buffer,output <span style="color:#f92672">+</span> i);
+</span></span><span style="display:flex;"><span>    xor_key <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(<span style="color:#a6e22e">byte</span> (<span style="color:#f92672">*</span>) [<span style="color:#ae81ff">8</span>])(output <span style="color:#f92672">+</span> i);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span>;</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>The reversed <code>final</code> function looks like this:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">c</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">final</span>(byte <span style="color:#f92672">*</span>xorred_input,byte <span style="color:#f92672">*</span>buffer_1,<span style="color:#66d9ef">int</span> size,<span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>int_buffer,undefined8 out)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  byte bVar1;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> y;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> k;
+</span></span><span style="display:flex;"><span>  byte scramble [<span style="color:#ae81ff">8</span>];
+</span></span><span style="display:flex;"><span>  byte byte;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> j;
+</span></span><span style="display:flex;"><span>  uint integrer;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> i;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> m;
+</span></span><span style="display:flex;"><span>  byte result [<span style="color:#ae81ff">8</span>];
+</span></span><span style="display:flex;"><span>  byte <span style="color:#f92672">*</span>input;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> div;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  result <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(<span style="color:#a6e22e">byte</span> (<span style="color:#f92672">*</span>) [<span style="color:#ae81ff">8</span>])xorred_input;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> (m <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; m <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">8</span>; m <span style="color:#f92672">=</span> m <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>    div <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (size <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>      div <span style="color:#f92672">=</span> m <span style="color:#f92672">/</span> size;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    result[m] <span style="color:#f92672">=</span> result[m] <span style="color:#f92672">^</span> buffer_1[m <span style="color:#f92672">-</span> div <span style="color:#f92672">*</span> size];
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">4</span>; i <span style="color:#f92672">=</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>    integrer <span style="color:#f92672">=</span> int_buffer[i];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; j <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">8</span>; j <span style="color:#f92672">=</span> j <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>      byte <span style="color:#f92672">=</span> (<span style="color:#66d9ef">char</span>)integrer <span style="color:#f92672">+</span> (<span style="color:#66d9ef">char</span>)j <span style="color:#f92672">+</span> (<span style="color:#66d9ef">char</span>)i;
+</span></span><span style="display:flex;"><span>      result[j] <span style="color:#f92672">=</span> (<span style="color:#f92672">&amp;</span>sbox)[(<span style="color:#66d9ef">int</span>)(uint)(result[j] <span style="color:#f92672">^</span> byte)];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; k <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">8</span>; k <span style="color:#f92672">=</span> k <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>      scramble[(k <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span> <span style="color:#f92672">+</span> i) <span style="color:#f92672">%</span> <span style="color:#ae81ff">8</span>] <span style="color:#f92672">=</span> result[k];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    result[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> scramble[<span style="color:#ae81ff">0</span>];
+</span></span><span style="display:flex;"><span>    result[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> scramble[<span style="color:#ae81ff">1</span>];
+</span></span><span style="display:flex;"><span>    result[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> scramble[<span style="color:#ae81ff">2</span>];
+</span></span><span style="display:flex;"><span>    result[<span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> scramble[<span style="color:#ae81ff">3</span>];
+</span></span><span style="display:flex;"><span>    result[<span style="color:#ae81ff">4</span>] <span style="color:#f92672">=</span> scramble[<span style="color:#ae81ff">4</span>];
+</span></span><span style="display:flex;"><span>    result[<span style="color:#ae81ff">5</span>] <span style="color:#f92672">=</span> scramble[<span style="color:#ae81ff">5</span>];
+</span></span><span style="display:flex;"><span>    result[<span style="color:#ae81ff">6</span>] <span style="color:#f92672">=</span> scramble[<span style="color:#ae81ff">6</span>];
+</span></span><span style="display:flex;"><span>    result[<span style="color:#ae81ff">7</span>] <span style="color:#f92672">=</span> scramble[<span style="color:#ae81ff">7</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (y <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; y <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">8</span>; y <span style="color:#f92672">=</span> y <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>      result[y] <span style="color:#f92672">=</span> result[y] <span style="color:#f92672">^</span> (byte)(integrer <span style="color:#f92672">&gt;&gt;</span> (ulong)((y <span style="color:#f92672">%</span> <span style="color:#ae81ff">4</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x1f</span>));
+</span></span><span style="display:flex;"><span>      bVar1 <span style="color:#f92672">=</span> <span style="color:#a6e22e">rot_left</span>(result[y],(i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">8</span>);
+</span></span><span style="display:flex;"><span>      result[y] <span style="color:#f92672">=</span> bVar1;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">___memcpy_chk</span>(out,result,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">0xffffffffffffffff</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>So I implemented a python script to reverse this process:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">python</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/env python3</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> xor
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SBOX <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0xd7</span>, <span style="color:#ae81ff">0xc7</span>, <span style="color:#ae81ff">0x0c</span>, <span style="color:#ae81ff">0x56</span>, <span style="color:#ae81ff">0xa3</span>, <span style="color:#ae81ff">0x3b</span>, <span style="color:#ae81ff">0x60</span>, <span style="color:#ae81ff">0x55</span>, <span style="color:#ae81ff">0x2f</span>, <span style="color:#ae81ff">0x88</span>, <span style="color:#ae81ff">0x5d</span>, <span style="color:#ae81ff">0x1d</span>, <span style="color:#ae81ff">0x5e</span>, <span style="color:#ae81ff">0x23</span>, <span style="color:#ae81ff">0x08</span>, <span style="color:#ae81ff">0x3d</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0x32</span>, <span style="color:#ae81ff">0x40</span>, <span style="color:#ae81ff">0x5c</span>, <span style="color:#ae81ff">0x46</span>, <span style="color:#ae81ff">0x06</span>, <span style="color:#ae81ff">0x0b</span>, <span style="color:#ae81ff">0x21</span>, <span style="color:#ae81ff">0x25</span>, <span style="color:#ae81ff">0xc4</span>, <span style="color:#ae81ff">0x3a</span>, <span style="color:#ae81ff">0x04</span>, <span style="color:#ae81ff">0x78</span>, <span style="color:#ae81ff">0x2b</span>, <span style="color:#ae81ff">0x11</span>, <span style="color:#ae81ff">0x58</span>, <span style="color:#ae81ff">0x0d</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0x37</span>, <span style="color:#ae81ff">0x35</span>, <span style="color:#ae81ff">0xa5</span>, <span style="color:#ae81ff">0x36</span>, <span style="color:#ae81ff">0x6d</span>, <span style="color:#ae81ff">0x2c</span>, <span style="color:#ae81ff">0x00</span>, <span style="color:#ae81ff">0x92</span>, <span style="color:#ae81ff">0x2a</span>, <span style="color:#ae81ff">0x4f</span>, <span style="color:#ae81ff">0x13</span>, <span style="color:#ae81ff">0x28</span>, <span style="color:#ae81ff">0xdb</span>, <span style="color:#ae81ff">0x64</span>, <span style="color:#ae81ff">0x0f</span>, <span style="color:#ae81ff">0x8a</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0x1c</span>, <span style="color:#ae81ff">0xc6</span>, <span style="color:#ae81ff">0xd5</span>, <span style="color:#ae81ff">0xb4</span>, <span style="color:#ae81ff">0xa6</span>, <span style="color:#ae81ff">0x9c</span>, <span style="color:#ae81ff">0x47</span>, <span style="color:#ae81ff">0x82</span>, <span style="color:#ae81ff">0x3f</span>, <span style="color:#ae81ff">0x1f</span>, <span style="color:#ae81ff">0x83</span>, <span style="color:#ae81ff">0x39</span>, <span style="color:#ae81ff">0x48</span>, <span style="color:#ae81ff">0x93</span>, <span style="color:#ae81ff">0x9b</span>, <span style="color:#ae81ff">0x7a</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0x22</span>, <span style="color:#ae81ff">0x07</span>, <span style="color:#ae81ff">0x77</span>, <span style="color:#ae81ff">0xe4</span>, <span style="color:#ae81ff">0x63</span>, <span style="color:#ae81ff">0xb7</span>, <span style="color:#ae81ff">0xa0</span>, <span style="color:#ae81ff">0x72</span>, <span style="color:#ae81ff">0x73</span>, <span style="color:#ae81ff">0x4e</span>, <span style="color:#ae81ff">0x6f</span>, <span style="color:#ae81ff">0x09</span>, <span style="color:#ae81ff">0x42</span>, <span style="color:#ae81ff">0x5a</span>, <span style="color:#ae81ff">0x8b</span>, <span style="color:#ae81ff">0x6a</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0x81</span>, <span style="color:#ae81ff">0x33</span>, <span style="color:#ae81ff">0x67</span>, <span style="color:#ae81ff">0xfd</span>, <span style="color:#ae81ff">0xbd</span>, <span style="color:#ae81ff">0x4b</span>, <span style="color:#ae81ff">0xe1</span>, <span style="color:#ae81ff">0x62</span>, <span style="color:#ae81ff">0x1a</span>, <span style="color:#ae81ff">0xb8</span>, <span style="color:#ae81ff">0x5f</span>, <span style="color:#ae81ff">0x7e</span>, <span style="color:#ae81ff">0xeb</span>, <span style="color:#ae81ff">0x26</span>, <span style="color:#ae81ff">0x79</span>, <span style="color:#ae81ff">0x98</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0x85</span>, <span style="color:#ae81ff">0x70</span>, <span style="color:#ae81ff">0x65</span>, <span style="color:#ae81ff">0x10</span>, <span style="color:#ae81ff">0x96</span>, <span style="color:#ae81ff">0x1b</span>, <span style="color:#ae81ff">0xf3</span>, <span style="color:#ae81ff">0xb0</span>, <span style="color:#ae81ff">0xee</span>, <span style="color:#ae81ff">0xae</span>, <span style="color:#ae81ff">0x7d</span>, <span style="color:#ae81ff">0x6e</span>, <span style="color:#ae81ff">0x19</span>, <span style="color:#ae81ff">0xba</span>, <span style="color:#ae81ff">0xa9</span>, <span style="color:#ae81ff">0xc8</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0x12</span>, <span style="color:#ae81ff">0x05</span>, <span style="color:#ae81ff">0x3c</span>, <span style="color:#ae81ff">0x91</span>, <span style="color:#ae81ff">0x9d</span>, <span style="color:#ae81ff">0xa7</span>, <span style="color:#ae81ff">0xe3</span>, <span style="color:#ae81ff">0xe0</span>, <span style="color:#ae81ff">0x03</span>, <span style="color:#ae81ff">0x44</span>, <span style="color:#ae81ff">0xad</span>, <span style="color:#ae81ff">0x45</span>, <span style="color:#ae81ff">0xb2</span>, <span style="color:#ae81ff">0x94</span>, <span style="color:#ae81ff">0x38</span>, <span style="color:#ae81ff">0xf8</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0xd1</span>, <span style="color:#ae81ff">0x84</span>, <span style="color:#ae81ff">0x8c</span>, <span style="color:#ae81ff">0x61</span>, <span style="color:#ae81ff">0x9a</span>, <span style="color:#ae81ff">0x1e</span>, <span style="color:#ae81ff">0xd3</span>, <span style="color:#ae81ff">0xc1</span>, <span style="color:#ae81ff">0x0a</span>, <span style="color:#ae81ff">0xcb</span>, <span style="color:#ae81ff">0x34</span>, <span style="color:#ae81ff">0x95</span>, <span style="color:#ae81ff">0xde</span>, <span style="color:#ae81ff">0x9f</span>, <span style="color:#ae81ff">0x7c</span>, <span style="color:#ae81ff">0x69</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0x76</span>, <span style="color:#ae81ff">0x17</span>, <span style="color:#ae81ff">0x6b</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x71</span>, <span style="color:#ae81ff">0x50</span>, <span style="color:#ae81ff">0x30</span>, <span style="color:#ae81ff">0x66</span>, <span style="color:#ae81ff">0x7b</span>, <span style="color:#ae81ff">0xbe</span>, <span style="color:#ae81ff">0xd8</span>, <span style="color:#ae81ff">0xe5</span>, <span style="color:#ae81ff">0x2e</span>, <span style="color:#ae81ff">0xca</span>, <span style="color:#ae81ff">0x4c</span>, <span style="color:#ae81ff">0xb9</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0x02</span>, <span style="color:#ae81ff">0xc3</span>, <span style="color:#ae81ff">0xc0</span>, <span style="color:#ae81ff">0x01</span>, <span style="color:#ae81ff">0xed</span>, <span style="color:#ae81ff">0x5b</span>, <span style="color:#ae81ff">0x57</span>, <span style="color:#ae81ff">0xd6</span>, <span style="color:#ae81ff">0xe9</span>, <span style="color:#ae81ff">0xcf</span>, <span style="color:#ae81ff">0xa8</span>, <span style="color:#ae81ff">0x52</span>, <span style="color:#ae81ff">0x97</span>, <span style="color:#ae81ff">0x16</span>, <span style="color:#ae81ff">0xb5</span>, <span style="color:#ae81ff">0x8e</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0x43</span>, <span style="color:#ae81ff">0x54</span>, <span style="color:#ae81ff">0x90</span>, <span style="color:#ae81ff">0xdd</span>, <span style="color:#ae81ff">0xaf</span>, <span style="color:#ae81ff">0xd2</span>, <span style="color:#ae81ff">0x8d</span>, <span style="color:#ae81ff">0xb1</span>, <span style="color:#ae81ff">0xbf</span>, <span style="color:#ae81ff">0xbb</span>, <span style="color:#ae81ff">0xff</span>, <span style="color:#ae81ff">0xcc</span>, <span style="color:#ae81ff">0xf2</span>, <span style="color:#ae81ff">0x8f</span>, <span style="color:#ae81ff">0xec</span>, <span style="color:#ae81ff">0x2d</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0xe6</span>, <span style="color:#ae81ff">0xf6</span>, <span style="color:#ae81ff">0xf7</span>, <span style="color:#ae81ff">0xfa</span>, <span style="color:#ae81ff">0x41</span>, <span style="color:#ae81ff">0x31</span>, <span style="color:#ae81ff">0xd4</span>, <span style="color:#ae81ff">0x15</span>, <span style="color:#ae81ff">0xc9</span>, <span style="color:#ae81ff">0xce</span>, <span style="color:#ae81ff">0xef</span>, <span style="color:#ae81ff">0xfc</span>, <span style="color:#ae81ff">0xc2</span>, <span style="color:#ae81ff">0xda</span>, <span style="color:#ae81ff">0xbc</span>, <span style="color:#ae81ff">0xea</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0xb6</span>, <span style="color:#ae81ff">0xb3</span>, <span style="color:#ae81ff">0xe7</span>, <span style="color:#ae81ff">0x68</span>, <span style="color:#ae81ff">0xaa</span>, <span style="color:#ae81ff">0x0e</span>, <span style="color:#ae81ff">0xa4</span>, <span style="color:#ae81ff">0xe2</span>, <span style="color:#ae81ff">0x9e</span>, <span style="color:#ae81ff">0xac</span>, <span style="color:#ae81ff">0xdf</span>, <span style="color:#ae81ff">0x59</span>, <span style="color:#ae81ff">0xf5</span>, <span style="color:#ae81ff">0x89</span>, <span style="color:#ae81ff">0x18</span>, <span style="color:#ae81ff">0xf9</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0x86</span>, <span style="color:#ae81ff">0x27</span>, <span style="color:#ae81ff">0x6c</span>, <span style="color:#ae81ff">0xcd</span>, <span style="color:#ae81ff">0xd9</span>, <span style="color:#ae81ff">0x51</span>, <span style="color:#ae81ff">0x74</span>, <span style="color:#ae81ff">0xa1</span>, <span style="color:#ae81ff">0xdc</span>, <span style="color:#ae81ff">0xab</span>, <span style="color:#ae81ff">0x14</span>, <span style="color:#ae81ff">0x29</span>, <span style="color:#ae81ff">0x80</span>, <span style="color:#ae81ff">0x7f</span>, <span style="color:#ae81ff">0x75</span>, <span style="color:#ae81ff">0x49</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0x24</span>, <span style="color:#ae81ff">0x53</span>, <span style="color:#ae81ff">0xd0</span>, <span style="color:#ae81ff">0xf4</span>, <span style="color:#ae81ff">0x4a</span>, <span style="color:#ae81ff">0xf0</span>, <span style="color:#ae81ff">0x4d</span>, <span style="color:#ae81ff">0xf1</span>, <span style="color:#ae81ff">0x3e</span>, <span style="color:#ae81ff">0xfb</span>, <span style="color:#ae81ff">0xfe</span>, <span style="color:#ae81ff">0xc5</span>, <span style="color:#ae81ff">0x87</span>, <span style="color:#ae81ff">0xe8</span>, <span style="color:#ae81ff">0xa2</span>, <span style="color:#ae81ff">0x99</span>
+</span></span><span style="display:flex;"><span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>INV_SBOX <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">256</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>data <span style="color:#f92672">=</span> bytes([ <span style="color:#ae81ff">0x84</span>, <span style="color:#ae81ff">0x52</span>, <span style="color:#ae81ff">0x5f</span>, <span style="color:#ae81ff">0x9c</span>, <span style="color:#ae81ff">0xf0</span>, <span style="color:#ae81ff">0xa8</span>, <span style="color:#ae81ff">0x5a</span>, <span style="color:#ae81ff">0x21</span> ])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i, val <span style="color:#f92672">in</span> enumerate(SBOX):
+</span></span><span style="display:flex;"><span>    INV_SBOX[val] <span style="color:#f92672">=</span> i
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">rot_left</span>(byte_val, amount):
+</span></span><span style="display:flex;"><span>    byte_val <span style="color:#f92672">&amp;=</span> <span style="color:#ae81ff">0xFF</span>
+</span></span><span style="display:flex;"><span>    amount <span style="color:#f92672">=</span> amount <span style="color:#f92672">%</span> <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ((byte_val <span style="color:#f92672">&lt;&lt;</span> amount) <span style="color:#f92672">|</span> (byte_val <span style="color:#f92672">&gt;&gt;</span> (<span style="color:#ae81ff">8</span> <span style="color:#f92672">-</span> amount))) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">rot_right</span>(byte_val, amount):
+</span></span><span style="display:flex;"><span>    byte_val <span style="color:#f92672">&amp;=</span> <span style="color:#ae81ff">0xFF</span>
+</span></span><span style="display:flex;"><span>    amount <span style="color:#f92672">=</span> amount <span style="color:#f92672">%</span> <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ((byte_val <span style="color:#f92672">&gt;&gt;</span> amount) <span style="color:#f92672">|</span> (byte_val <span style="color:#f92672">&lt;&lt;</span> (<span style="color:#ae81ff">8</span> <span style="color:#f92672">-</span> amount))) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">undo_final</span>(encrypted_block, bufferozzo, integer_buffer):
+</span></span><span style="display:flex;"><span>    hash_copy <span style="color:#f92672">=</span> list(encrypted_block)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>):  <span style="color:#75715e"># j = 3, 2, 1, 0</span>
+</span></span><span style="display:flex;"><span>        int_element <span style="color:#f92672">=</span> integer_buffer[j]
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+</span></span><span style="display:flex;"><span>            hash_copy[k] <span style="color:#f92672">=</span> rot_right(hash_copy[k], (j <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">8</span>)
+</span></span><span style="display:flex;"><span>            hash_copy[k] <span style="color:#f92672">^=</span> (int_element <span style="color:#f92672">&gt;&gt;</span> ((k <span style="color:#f92672">%</span> <span style="color:#ae81ff">4</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">8</span>)) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        temp <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> ii <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+</span></span><span style="display:flex;"><span>            original_pos <span style="color:#f92672">=</span> (ii <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span> <span style="color:#f92672">+</span> j) <span style="color:#f92672">%</span> <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>            temp[ii] <span style="color:#f92672">=</span> hash_copy[original_pos]
+</span></span><span style="display:flex;"><span>        hash_copy <span style="color:#f92672">=</span> temp
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> jj <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+</span></span><span style="display:flex;"><span>            chiave <span style="color:#f92672">=</span> (int_element <span style="color:#f92672">+</span> jj <span style="color:#f92672">+</span> j) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span>
+</span></span><span style="display:flex;"><span>            hash_copy[jj] <span style="color:#f92672">=</span> INV_SBOX[hash_copy[jj]]
+</span></span><span style="display:flex;"><span>            hash_copy[jj] <span style="color:#f92672">^=</span> chiave
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+</span></span><span style="display:flex;"><span>        hash_copy[i] <span style="color:#f92672">^=</span> bufferozzo[i <span style="color:#f92672">%</span> len(bufferozzo)]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> bytes(hash_copy)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">final_test</span>(hash_block, bufferozzo, integer_buffer):
+</span></span><span style="display:flex;"><span>    hash_copy <span style="color:#f92672">=</span> list(hash_block)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+</span></span><span style="display:flex;"><span>        hash_copy[i] <span style="color:#f92672">^=</span> bufferozzo[i <span style="color:#f92672">%</span> len(bufferozzo)]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">4</span>):
+</span></span><span style="display:flex;"><span>        int_element <span style="color:#f92672">=</span> integer_buffer[j]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> jj <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+</span></span><span style="display:flex;"><span>            chiave <span style="color:#f92672">=</span> (int_element <span style="color:#f92672">+</span> jj <span style="color:#f92672">+</span> j) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span>
+</span></span><span style="display:flex;"><span>            hash_copy[jj] <span style="color:#f92672">=</span> SBOX[hash_copy[jj] <span style="color:#f92672">^</span> chiave]
+</span></span><span style="display:flex;"><span>        temp <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> ii <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+</span></span><span style="display:flex;"><span>            temp[(ii <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span> <span style="color:#f92672">+</span> j) <span style="color:#f92672">%</span> <span style="color:#ae81ff">8</span>] <span style="color:#f92672">=</span> hash_copy[ii]
+</span></span><span style="display:flex;"><span>        hash_copy <span style="color:#f92672">=</span> temp
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+</span></span><span style="display:flex;"><span>            hash_copy[k] <span style="color:#f92672">^=</span> (int_element <span style="color:#f92672">&gt;&gt;</span> ((k <span style="color:#f92672">%</span> <span style="color:#ae81ff">4</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">8</span>)) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span>
+</span></span><span style="display:flex;"><span>            hash_copy[k] <span style="color:#f92672">=</span> rot_left(hash_copy[k], (j <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">8</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> bytes(hash_copy)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    flag_cipher <span style="color:#f92672">=</span> [ <span style="color:#ae81ff">0x93</span>, <span style="color:#ae81ff">0x25</span>, <span style="color:#ae81ff">0x4b</span>, <span style="color:#ae81ff">0x0d</span>, <span style="color:#ae81ff">0x8f</span>, <span style="color:#ae81ff">0x3b</span>, <span style="color:#ae81ff">0x61</span>, <span style="color:#ae81ff">0x44</span>, <span style="color:#ae81ff">0x41</span>, <span style="color:#ae81ff">0x51</span>, <span style="color:#ae81ff">0x54</span>, <span style="color:#ae81ff">0x8b</span>, <span style="color:#ae81ff">0xc4</span>, <span style="color:#ae81ff">0x39</span>, <span style="color:#ae81ff">0x88</span>, <span style="color:#ae81ff">0x41</span>, <span style="color:#ae81ff">0x53</span>, <span style="color:#ae81ff">0xe1</span>, <span style="color:#ae81ff">0xa5</span>, <span style="color:#ae81ff">0xc8</span>, <span style="color:#ae81ff">0x35</span>, <span style="color:#ae81ff">0xd2</span>, <span style="color:#ae81ff">0x3b</span>, <span style="color:#ae81ff">0x55</span>, <span style="color:#ae81ff">0x1c</span>, <span style="color:#ae81ff">0xca</span>, <span style="color:#ae81ff">0x38</span>, <span style="color:#ae81ff">0x53</span>, <span style="color:#ae81ff">0x6d</span>, <span style="color:#ae81ff">0x9c</span>, <span style="color:#ae81ff">0xb2</span>, <span style="color:#ae81ff">0x77</span>, <span style="color:#ae81ff">0xd6</span>, <span style="color:#ae81ff">0x2d</span>, <span style="color:#ae81ff">0xad</span>, <span style="color:#ae81ff">0x89</span>, <span style="color:#ae81ff">0xea</span>, <span style="color:#ae81ff">0xba</span>, <span style="color:#ae81ff">0xbe</span>, <span style="color:#ae81ff">0x35</span>, <span style="color:#ae81ff">0x5e</span>, <span style="color:#ae81ff">0x00</span>, <span style="color:#ae81ff">0x3d</span>, <span style="color:#ae81ff">0xca</span>, <span style="color:#ae81ff">0xfa</span>, <span style="color:#ae81ff">0x54</span>, <span style="color:#ae81ff">0x87</span>, <span style="color:#ae81ff">0x6e</span>, <span style="color:#ae81ff">0xa6</span>, <span style="color:#ae81ff">0x95</span>, <span style="color:#ae81ff">0xac</span>, <span style="color:#ae81ff">0xef</span>, <span style="color:#ae81ff">0xeb</span>, <span style="color:#ae81ff">0x13</span>, <span style="color:#ae81ff">0xe5</span>, <span style="color:#ae81ff">0x94</span>, <span style="color:#ae81ff">0x04</span>, <span style="color:#ae81ff">0xaa</span>, <span style="color:#ae81ff">0x93</span>, <span style="color:#ae81ff">0xbc</span>, <span style="color:#ae81ff">0x3c</span>, <span style="color:#ae81ff">0x99</span>, <span style="color:#ae81ff">0x7e</span>, <span style="color:#ae81ff">0xdd</span>, <span style="color:#ae81ff">0xc0</span>, <span style="color:#ae81ff">0x3e</span>, <span style="color:#ae81ff">0x38</span>, <span style="color:#ae81ff">0xea</span>, <span style="color:#ae81ff">0x82</span>, <span style="color:#ae81ff">0xf1</span>, <span style="color:#ae81ff">0x1b</span>, <span style="color:#ae81ff">0x06</span> ]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    bufferozzo <span style="color:#f92672">=</span>  <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\xb4\x05\x99\xa2\xf1</span><span style="color:#e6db74">Q%</span><span style="color:#ae81ff">\xea\xb4\x05\x99\xa2\xf1</span><span style="color:#e6db74">Q%</span><span style="color:#ae81ff">\xea</span><span style="color:#e6db74">&#39;</span>
+</span></span><span style="display:flex;"><span>    integer_buffer <span style="color:#f92672">=</span>  [<span style="color:#ae81ff">119599210</span>, <span style="color:#ae81ff">3228966940</span>, <span style="color:#ae81ff">2162966584</span>, <span style="color:#ae81ff">2412172536</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, len(flag_cipher), <span style="color:#ae81ff">8</span>):
+</span></span><span style="display:flex;"><span>        enc_block <span style="color:#f92672">=</span> bytes(flag_cipher[i:i<span style="color:#f92672">+</span><span style="color:#ae81ff">8</span>])
+</span></span><span style="display:flex;"><span>        decrypted_block <span style="color:#f92672">=</span> undo_final(enc_block, bufferozzo, integer_buffer)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        plain <span style="color:#f92672">=</span> xor(decrypted_block, data)
+</span></span><span style="display:flex;"><span>        data <span style="color:#f92672">=</span> enc_block
+</span></span><span style="display:flex;"><span>        print(plain<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#39;utf-8&#39;</span>, errors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;ignore&#39;</span>), end<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>)</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>Note: the values contained in the buffer were found using partial static analysis and a debugger on macOS</p>
+<h2 id="reverse-engineering---burnt-out" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Reverse Engineering - burnt-out
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+
+
+
+
+
+
+
+<figure class="my-8">
+  <blockquote
+    class="relative rounded-xl border border-white/[0.07] bg-black/40 px-5 py-4 text-gray-300 transition-shadow duration-200 hover:shadow-[0_0_0_1px_rgba(96,165,250,0.08)]">
+
+    <span class="absolute inset-y-3 left-0 w-0.5 rounded-full bg-blue-400/20"></span>
+    <span class="absolute right-4 top-2.5 select-none font-mono text-[0.6rem] tracking-widest text-white/10">///</span>
+
+    <div
+      class="font-mono text-sm leading-relaxed [&_code]:rounded [&_code]:bg-white/5 [&_code]:px-1.5 [&_code]:py-0.5 [&_em]:text-gray-400 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:text-white">
+      <p>Flag: <code>DCTF{n0w_y0Ur3_7h1nk1n6_w17h_d4t4}</code></p>
+
+    </div>
+  </blockquote>
+</figure>
+
+
+<p>The challenge accepts a JSON input which describes actions to be executed by the binary. The goal is to craft a JSON that triggers the code path that prints the flag.</p>
+<p>The challenge provides the following example input:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">json</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;on_start&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;$type&#34;</span>: <span style="color:#e6db74">&#34;log_action_t&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;Hello World!&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>The <code>log_action_t</code> string is associated with a function that prints the <code>message</code> field, so running the binary with the example prints Hello World!.</p>
+<p>The binary does not map <code>$type</code> strings to functions directly by name. Instead, it computes a simple hash of the string and compares the result against saved hash values. The hash function (reimplemented in Python) is:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">python</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># hash function implemented in python</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">calculate_hash</span>(string):
+</span></span><span style="display:flex;"><span>    hash_value <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> position, char <span style="color:#f92672">in</span> enumerate(string, <span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>        hash_value <span style="color:#f92672">+=</span> ord(char) <span style="color:#f92672">*</span> position
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> hash_value</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>This hashing function is not secure: collisions are easy to find, also by hand.</p>
+<p>When a function is called using this mechanism, the first parameter is always a pointer to a struct (I refer to it as player_t). After investigating I found out that the first two integer of this struct are the position coordinates of the player and the byte located at offset 9 of this struct control whether or not the flag must be printed. If that value is not zero, then the flag is printed.</p>
+<p>So i started searching for a function that writes at that specific offset, and found this:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">c</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>undefined8 <span style="color:#a6e22e">maybe_win</span>(<span style="color:#66d9ef">player_t</span> <span style="color:#f92672">*</span>player,uint <span style="color:#f92672">*</span>mappa,<span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>move_direction)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  uint uVar1;
+</span></span><span style="display:flex;"><span>  undefined8 uVar2;
+</span></span><span style="display:flex;"><span>  uint next_x;
+</span></span><span style="display:flex;"><span>  uint next_y;
+</span></span><span style="display:flex;"><span>  uint x_coord;
+</span></span><span style="display:flex;"><span>  uint y_coord;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  uVar1 <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>move_direction <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#ae81ff">3</span> <span style="color:#f92672">&lt;</span> uVar1) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">__printf_chk</span>(<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;Assertion failed: &#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">__printf_chk</span>(<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;dir cannot be none&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">__printf_chk</span>(<span style="color:#ae81ff">1</span>,<span style="color:#f92672">&amp;</span>DAT_0010a9f7);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">__printf_chk</span>(<span style="color:#ae81ff">1</span>,<span style="color:#f92672">&amp;</span>DAT_0010a9f7);
+</span></span><span style="display:flex;"><span>                    <span style="color:#75715e">/* WARNING: Subroutine does not return */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">exit</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  x_coord <span style="color:#f92672">=</span> player<span style="color:#f92672">-&gt;</span>x_coord;
+</span></span><span style="display:flex;"><span>  y_coord <span style="color:#f92672">=</span> player<span style="color:#f92672">-&gt;</span>y_coord;
+</span></span><span style="display:flex;"><span>  next_y <span style="color:#f92672">=</span> y_coord;
+</span></span><span style="display:flex;"><span>  next_x <span style="color:#f92672">=</span> x_coord;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">switch</span>(<span style="color:#f92672">*</span>move_direction) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    next_y <span style="color:#f92672">=</span> y_coord <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    next_y <span style="color:#f92672">=</span> y_coord <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">3</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    next_x <span style="color:#f92672">=</span> x_coord <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">4</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    next_x <span style="color:#f92672">=</span> x_coord <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  uVar2 <span style="color:#f92672">=</span> <span style="color:#a6e22e">CONCAT71</span>((int7)((ulong)((<span style="color:#66d9ef">long</span>)<span style="color:#f92672">&amp;</span>switchD_00101804<span style="color:#f92672">::</span>switchdataD_0010a84c <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>                                 (<span style="color:#66d9ef">long</span>)(<span style="color:#66d9ef">int</span>)(<span style="color:#f92672">&amp;</span>switchD_00101804<span style="color:#f92672">::</span>switchdataD_0010a84c)[uVar1]) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">8</span>),
+</span></span><span style="display:flex;"><span>                   <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> ((next_y <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0x1e</span>) <span style="color:#f92672">&amp;&amp;</span> (next_x <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0x1e</span>)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (mappa[(ulong)next_x <span style="color:#f92672">*</span> <span style="color:#ae81ff">0x1e</span> <span style="color:#f92672">+</span> (ulong)next_y <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (mappa[(ulong)next_x <span style="color:#f92672">*</span> <span style="color:#ae81ff">0x1e</span> <span style="color:#f92672">+</span> (ulong)next_y <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x386</span>] <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      mappa[(<span style="color:#66d9ef">long</span>)(<span style="color:#66d9ef">int</span>)x_coord <span style="color:#f92672">*</span> <span style="color:#ae81ff">0x1e</span> <span style="color:#f92672">+</span> (<span style="color:#66d9ef">long</span>)(<span style="color:#66d9ef">int</span>)y_coord <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>      player<span style="color:#f92672">-&gt;</span>x_coord <span style="color:#f92672">=</span> next_x;
+</span></span><span style="display:flex;"><span>      player<span style="color:#f92672">-&gt;</span>y_coord <span style="color:#f92672">=</span> next_y;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> ((next_x <span style="color:#f92672">==</span> mappa[<span style="color:#ae81ff">0x70a</span>]) <span style="color:#f92672">&amp;&amp;</span> (next_y <span style="color:#f92672">==</span> mappa[<span style="color:#ae81ff">0x70b</span>])) {
+</span></span><span style="display:flex;"><span>        player<span style="color:#f92672">-&gt;</span>flag_ <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> uVar2;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> uVar2;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>This funciton allows the player to move in a direction specified by the <code>move_direction</code> parameter.</p>
+<p>As you can see at the very end of this function <code>player-&gt;flag_</code> is set to 1 only if the next position of the player is the correct one. Via debugger I found out that the desired position is only one step away, but its coordinates are randomized.</p>
+<p>To trigger the win path we need two things:</p>
+<ul>
+<li>
+<p>Call this function — this requires providing a <code>$type</code> string whose hash matches that function’s saved hash (0x527e).</p>
+</li>
+<li>
+<p>Ensure <code>move_direction</code> is valid; otherwise the function asserts (&ldquo;dir cannot be none&rdquo;).</p>
+</li>
+</ul>
+<p>The <code>move_direction</code> parameter is resolved from a <code>dir</code> string in the input using the same weak hashing scheme as <code>$type</code>. Therefore we can craft both a <code>$type</code> and a <code>dir</code> string that map to the required hashes.</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">json</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;on_start&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;$type&#34;</span>: <span style="color:#e6db74">&#34;mzzzzzzzzzzzzzzzzae&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;dir&#34;</span>: <span style="color:#e6db74">&#34;fvmmmmaA&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>With this JSON the binary executes the target function, moves the player and sets <code>player-&gt;flag_ = 1</code> 25% of the times.</p>
+<p>Bonus: There was also a format-string vulnerability in the code that could be triggered simply by:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">json</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;on_start&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;$type&#34;</span>: <span style="color:#e6db74">&#34;log_action_t&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;%d&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style>
+      </div>
+    </div>
+  </article>
+</div>
+
+<style>
+  .toc {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  .toc li {
+    position: relative;
+    margin: 0.35rem 0;
+    padding-left: 1.25rem;
+     
+    overflow-wrap: anywhere;
+     
+    word-break: break-word;
+  }
+
+  .toc a {
+    display: block;
+     
+    padding: 0.15rem 0;
+    color: rgba(209, 213, 219, 0.92);
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-color: rgba(99, 102, 241, 0.85);
+    text-underline-offset: 3px;
+  }
+
+   
+  .toc ul ul {
+    margin: 0.4rem 0 0.4rem 0.35rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid rgba(55, 65, 81, 0.6);
+  }
+
+  .toc ul ul>li {
+    padding-left: 1.75rem;
+  }
+
+   
+  .toc ul ul>li::before {
+    content: "├";
+    position: absolute;
+    left: 0.35rem;
+    top: 0.2rem;
+     
+    color: rgba(99, 102, 241, 0.75);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .toc ul ul>li:last-child::before {
+    content: "└";
+  }
+
+   
+  @media (min-width: 1024px) {
+    .toc {
+      max-height: calc(100vh - 9rem);
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+  }
+
+
+   
+  .md-content ul,
+  .md-content ol {
+    margin: 1rem 0;
+    padding-left: 1.35rem;
+  }
+
+  .md-content ul {
+    list-style: disc;
+  }
+
+  .md-content ul ul {
+    list-style: circle;
+  }
+
+  .md-content ul ul ul {
+    list-style: square;
+  }
+
+  .md-content ol {
+    list-style: decimal;
+  }
+
+  .md-content ol ol {
+    list-style: lower-roman;
+  }
+
+  .md-content ol ol ol {
+    list-style: lower-alpha;
+  }
+
+  .md-content li {
+    margin: 0.35rem 0;
+  }
+
+   
+  .md-content pre,
+  .md-content code {
+    tab-size: 4;
+  }
+</style>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="border-t border-gray-800 bg-[#070709] text-gray-400">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col md:flex-row items-center justify-between py-6 space-y-4 md:space-y-0">
+
+      
+      <div class="text-sm sm:text-base md:text-lg">
+        <span class="relative inline-block">
+          © 2026 Luca Palumbo. All rights reserved. <br>
+          Made with <a href="https://gohugo.io" target="_blank">Hugo</a> | <a
+            href="https://github.com/Enerhim/enervoid-theme" target="_blank">Enervoid</a>
+        </span>
+      </div>
+
+      
+      <div class="flex items-center space-x-6 text-sm sm:text-base md:text-lg">
+
+        
+        <a href='https://github.com/LucaPalumbo' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-github-original"></i>
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://twitter.com/Luca_Palumbo_' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-twitter-original"></i>
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://linkedin.com/in/luca-palumbo-b9baa020a' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-linkedin-plain"></i>
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+
+      </div>
+    </div>
+  </div>
+</div>
+
+  </footer>
+</body>
+
+</html>

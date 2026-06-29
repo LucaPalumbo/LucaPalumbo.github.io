@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>ROS on Luca Palumbo</title>
+		<link>http://localhost:1313/tags/ros/</link>
+		<description>Recent content in ROS on Luca Palumbo</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<atom:link href="http://localhost:1313/tags/ros/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>DataGlove</title>
+				<link>http://localhost:1313/projects/dataglove/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/projects/dataglove/</guid>
+				<description>Real-time object recognition using the VMG30 sensorized glove by Virtual Realities. Sensor data from the glove is processed using a deep learning model that classifies object interactions in real time.</description>
+			</item>
+			<item>
+				<title>E-Team PacSim</title>
+				<link>http://localhost:1313/projects/eteam-pacsim/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/projects/eteam-pacsim/</guid>
+				<description>A fork of &lt;a href=&#34;https://github.com/pacsim/pacsim&#34;&gt;Pacsim&lt;/a&gt;, a ROS2 autonomous racing cars simulator for formula student competitions. This fork adds a lidar sensor that uses a surface-sampling algorithm to generate a pointcloud of the track (floor and cones).</description>
+			</item>
+	</channel>
+</rss>

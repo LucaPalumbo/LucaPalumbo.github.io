@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Writeup on Luca Palumbo</title>
+		<link>http://localhost:1313/tags/writeup/</link>
+		<description>Recent content in Writeup on Luca Palumbo</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Wed, 06 Aug 2025 12:00:00 +0000</lastBuildDate>
+		
+			<atom:link href="http://localhost:1313/tags/writeup/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Exposition, idekCTF</title>
+				<link>http://localhost:1313/writeup/exposition-idekctf/</link>
+				<pubDate>Wed, 06 Aug 2025 12:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/writeup/exposition-idekctf/</guid>
+				<description>&lt;h1 id=&#34;exposition---idek-ctf-2025-writeup&#34; class=&#34; mt-8 mb-3 text-2xl sm:text-3xl text-white&#34;&gt;&#xA;    &lt;span class=&#34;relative inline-block&#34;&gt;&#xA;      Exposition - Idek CTF 2025 Writeup&#xA;      &lt;span&#xA;        class=&#34;absolute left-0 -bottom-1 h-px w-0 bg-indigo-400&#34;&gt;&lt;/span&gt;&#xA;    &lt;/span&gt;&#xA;&lt;/h1&gt;&#xA;&lt;h2 id=&#34;challenge-overview&#34; class=&#34;mt-8 mb-3 text-xl sm:text-2xl text-white&#34;&gt;&#xA;    &lt;span class=&#34;relative inline-block&#34;&gt;&#xA;      Challenge Overview&#xA;      &lt;span&#xA;        class=&#34;absolute left-0 -bottom-1 h-px w-0 bg-indigo-400&#34;&gt;&lt;/span&gt;&#xA;    &lt;/span&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;Challenge Name:&lt;/strong&gt; Exposition&lt;br&gt;&#xA;&lt;strong&gt;CTF:&lt;/strong&gt; Idek CTF 2025&lt;br&gt;&#xA;&lt;strong&gt;Category:&lt;/strong&gt; Mobile/React Native&lt;/p&gt;&#xA;&lt;p&gt;The challenge presented us with a React Native application consisting of a simple physics-based interface. Users could input text that would spawn as colored rectangles in a physics simulation area, where these rectangles could move and collide with each other.&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

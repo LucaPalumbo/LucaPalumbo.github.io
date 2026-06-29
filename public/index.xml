@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Luca Palumbo</title>
+		<link>http://localhost:1313/</link>
+		<description>Recent content on Luca Palumbo</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Sat, 27 Jun 2026 17:57:40 +0200</lastBuildDate>
+		
+			<atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>About</title>
+				<link>http://localhost:1313/about/</link>
+				<pubDate>Sat, 27 Jun 2026 17:57:40 +0200</pubDate>
+				<guid>http://localhost:1313/about/</guid>
+				<description>&lt;p&gt;Hi, Luca here! Too many interests to summarize but I&amp;rsquo;ll try:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Cybersecurity enthusiast&lt;/li&gt;&#xA;&lt;li&gt;Reverse engineer @ &lt;a href=&#34;https://fibonhack.it&#34;&gt;fibonhack&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;Trying to make a driverless car @ &lt;a href=&#34;https://eteamsquadracorse.unipi.it/&#34;&gt;E-Team&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;Physics BSc&lt;/li&gt;&#xA;&lt;li&gt;Homebrewer 🍻&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+			</item>
+			<item>
+				<title>Dragonball Z Budokai 3 - 22 years old password algorithm finally reversed</title>
+				<link>http://localhost:1313/blog/dbzb3-rev/</link>
+				<pubDate>Sat, 09 May 2026 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/blog/dbzb3-rev/</guid>
+				<description>&lt;p&gt;Dragon Ball Z Budokai 3 is a PlayStation 2 video game released in 2004. The best Dragon Ball game ever, if you ask me :)&lt;/p&gt;&#xA;&lt;p&gt;After spending countless hours playing it as a kid, and after recently replaying it again, I decided to reverse engineer the game to understand how the character password mechanic works.&lt;/p&gt;&#xA;&lt;p&gt;The goal of this little project is to understand how the game turns a password into a character, and how it validates it.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>A_REAL_CTF, lakeCTF 2025 Quals</title>
+				<link>http://localhost:1313/writeup/a_real_ctf-lakectf/</link>
+				<pubDate>Sun, 30 Nov 2025 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/writeup/a_real_ctf-lakectf/</guid>
+				<description>Unity game &amp;amp; rust reversing</description>
+			</item>
+			<item>
+				<title>DefCamp Quals</title>
+				<link>http://localhost:1313/writeup/-defcampctf/</link>
+				<pubDate>Fri, 12 Sep 2025 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/writeup/-defcampctf/</guid>
+				<description>Short writeups of 2 challenges</description>
+			</item>
+			<item>
+				<title>C2mmunication, CTFZone 2025 Quals</title>
+				<link>http://localhost:1313/writeup/c2mmunication-ctfzone/</link>
+				<pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/writeup/c2mmunication-ctfzone/</guid>
+				<description>Dissecting a simple C2 for windows</description>
+			</item>
+			<item>
+				<title>Exposition, idekCTF 2025</title>
+				<link>http://localhost:1313/writeup/exposition-idekctf/</link>
+				<pubDate>Sat, 02 Aug 2025 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/writeup/exposition-idekctf/</guid>
+				<description>Reverse engineering a React Native application</description>
+			</item>
+			<item>
+				<title>DataGlove</title>
+				<link>http://localhost:1313/projects/dataglove/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/projects/dataglove/</guid>
+				<description>Real-time object recognition using the VMG30 sensorized glove by Virtual Realities. Sensor data from the glove is processed using a deep learning model that classifies object interactions in real time.</description>
+			</item>
+			<item>
+				<title>E-Team PacSim</title>
+				<link>http://localhost:1313/projects/eteam-pacsim/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/projects/eteam-pacsim/</guid>
+				<description>A fork of &lt;a href=&#34;https://github.com/pacsim/pacsim&#34;&gt;Pacsim&lt;/a&gt;, a ROS2 autonomous racing cars simulator for formula student competitions. This fork adds a lidar sensor that uses a surface-sampling algorithm to generate a pointcloud of the track (floor and cones).</description>
+			</item>
+			<item>
+				<title>Ghidra Unstrip</title>
+				<link>http://localhost:1313/projects/ghidra-unstrip/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/projects/ghidra-unstrip/</guid>
+				<description>Ghidra Unstrip automatically extracts functions, variables, types, and decompiled source code from Ghidra&amp;rsquo;s analysis and adds both symbol table (.symtab) and DWARF debug info to stripped binaries, making them fully debuggable with GDB and other tools.</description>
+			</item>
+			<item>
+				<title>k-pwn notes</title>
+				<link>http://localhost:1313/extra/kernel-pwn-notes/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/extra/kernel-pwn-notes/</guid>
+				<description>&lt;h1 id=&#34;privilege-escalation&#34; class=&#34; mt-8 mb-3 text-2xl sm:text-3xl text-white&#34;&gt;&#xA;    &lt;span class=&#34;relative inline-block&#34;&gt;&#xA;      Privilege escalation&#xA;      &lt;span&#xA;        class=&#34;absolute left-0 -bottom-1 h-px w-0 bg-indigo-400&#34;&gt;&lt;/span&gt;&#xA;    &lt;/span&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;whenever you find a way to call arbitrary functions you should try to call:&lt;/p&gt;&#xA;&lt;div class=&#34;my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden&#34;&gt;&#xA;  &lt;div class=&#34;flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]&#34;&gt;&#xA;    &lt;span class=&#34;text-xs uppercase tracking-widest text-gray-500&#34;&gt;c&lt;/span&gt;&#xA;    &lt;span class=&#34;text-xs text-gray-600 font-mono&#34;&gt;///&lt;/span&gt;&#xA;  &lt;/div&gt;&#xA;  &lt;div class=&#34;codewrap overflow-x-auto&#34;&gt;&#xA;    &lt;div class=&#34;p-4&#34;&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;commit_creds&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;prepare_kernel_cred&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;));&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&#xA;  &lt;/div&gt;&#xA;&lt;/div&gt;&#xA;&lt;style&gt;&#xA;  .codewrap pre,&#xA;  .codewrap .chroma { background: transparent !important; margin: 0 !important; }&#xA;  .codewrap pre { padding: 0 !important; overflow: visible !important; }&#xA;  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }&#xA;  .codewrap { background: rgba(0,0,0,0.20); }&#xA;&lt;/style&gt;&lt;p&gt;to get root privileges.&#xA;An altervative is to use:&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Pikachu Volleyball RL</title>
+				<link>http://localhost:1313/projects/pikachu-volleyball-rl/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/projects/pikachu-volleyball-rl/</guid>
+				<description>A fork of Pikachu Volleyball where you can play against an AI trained via Reinforcement Learning</description>
+			</item>
+	</channel>
+</rss>

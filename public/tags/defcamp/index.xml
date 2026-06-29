@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Defcamp on Luca Palumbo</title>
+		<link>http://localhost:1313/tags/defcamp/</link>
+		<description>Recent content in Defcamp on Luca Palumbo</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Fri, 12 Sep 2025 00:00:00 +0000</lastBuildDate>
+		
+			<atom:link href="http://localhost:1313/tags/defcamp/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>DefCamp Quals</title>
+				<link>http://localhost:1313/writeup/-defcampctf/</link>
+				<pubDate>Fri, 12 Sep 2025 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/writeup/-defcampctf/</guid>
+				<description>Short writeups of 2 challenges</description>
+			</item>
+	</channel>
+</rss>

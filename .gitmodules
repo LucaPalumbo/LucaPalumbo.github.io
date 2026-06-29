@@ -1,0 +1,3 @@
+[submodule "themes/enervoid"]
+	path = themes/enervoid
+	url = https://github.com/Enerhim/enervoid-theme.git

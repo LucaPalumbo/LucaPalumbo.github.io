@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Extra on Luca Palumbo</title>
+		<link>http://localhost:1313/extra/</link>
+		<description>Recent content in Extra on Luca Palumbo</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Mon, 01 Jan 0001 00:00:00 +0000</lastBuildDate>
+		
+			<atom:link href="http://localhost:1313/extra/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>k-pwn notes</title>
+				<link>http://localhost:1313/extra/kernel-pwn-notes/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>http://localhost:1313/extra/kernel-pwn-notes/</guid>
+				<description>&lt;h1 id=&#34;privilege-escalation&#34; class=&#34; mt-8 mb-3 text-2xl sm:text-3xl text-white&#34;&gt;&#xA;    &lt;span class=&#34;relative inline-block&#34;&gt;&#xA;      Privilege escalation&#xA;      &lt;span&#xA;        class=&#34;absolute left-0 -bottom-1 h-px w-0 bg-indigo-400&#34;&gt;&lt;/span&gt;&#xA;    &lt;/span&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;whenever you find a way to call arbitrary functions you should try to call:&lt;/p&gt;&#xA;&lt;div class=&#34;my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden&#34;&gt;&#xA;  &lt;div class=&#34;flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]&#34;&gt;&#xA;    &lt;span class=&#34;text-xs uppercase tracking-widest text-gray-500&#34;&gt;c&lt;/span&gt;&#xA;    &lt;span class=&#34;text-xs text-gray-600 font-mono&#34;&gt;///&lt;/span&gt;&#xA;  &lt;/div&gt;&#xA;  &lt;div class=&#34;codewrap overflow-x-auto&#34;&gt;&#xA;    &lt;div class=&#34;p-4&#34;&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;commit_creds&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;prepare_kernel_cred&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;));&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&#xA;  &lt;/div&gt;&#xA;&lt;/div&gt;&#xA;&lt;style&gt;&#xA;  .codewrap pre,&#xA;  .codewrap .chroma { background: transparent !important; margin: 0 !important; }&#xA;  .codewrap pre { padding: 0 !important; overflow: visible !important; }&#xA;  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }&#xA;  .codewrap { background: rgba(0,0,0,0.20); }&#xA;&lt;/style&gt;&lt;p&gt;to get root privileges.&#xA;An altervative is to use:&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

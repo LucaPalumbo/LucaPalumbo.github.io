@@ -1,0 +1,34 @@
+{{ define "main" }}
+<article class="max-w-4xl mx-auto px-4 sm:px-6 pt-24 pb-12">
+  <header class="mb-8">
+    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-wide text-white mb-4">
+      {{ .Title }}
+    </h1>
+    
+    {{ if not .Date.IsZero }}
+    <div class="text-sm sm:text-base text-gray-400 font-mono">
+      {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
+      {{ $dateHuman := .Date | time.Format "Jan 02, 2006" }}
+      <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+    </div>
+    {{ end }}
+  </header>
+
+  <div class="border border-gray-800/70 bg-[#070709] rounded-sm p-6 sm:p-8">
+    <div class="md-content text-lg sm:text-xl leading-relaxed text-gray-200
+                [&_a]:text-blue-300 [&_a]:underline [&_a:hover]:text-blue-200 [&_a]:transition-colors
+                [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-white [&_h2]:mt-8 [&_h2]:mb-4
+                [&_h3]:text-xl [&_h3]:font-medium [&_h3]:text-gray-100 [&_h3]:mt-6 [&_h3]:mb-3
+                [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4
+                [&_li]:mb-2">
+      {{ .Content }}
+    </div>
+  </div>
+
+  {{ if .Params.tags }}
+  <div class="mt-8">
+    {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
+  </div>
+  {{ end }}
+</article>
+{{ end }}

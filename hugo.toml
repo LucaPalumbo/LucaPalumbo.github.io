@@ -1,0 +1,58 @@
+baseURL = 'https://lucapalumbo.github.io/'
+languageCode = 'en-us'
+title = "Luca Palumbo"
+theme = "enervoid"
+
+[menus]
+  [[menus.main]]
+    name = 'Blog'
+    pageRef = '/blog'
+    weight = 10
+
+  [[menus.main]]
+    name = 'Projects'
+    pageRef = '/projects'
+    weight = 20
+  
+  [[menus.main]]
+    name = 'Writeups'
+    pageRef = '/writeup'
+    weight = 30
+
+  [[menus.main]]
+    name = 'Extra'
+    pageRef = '/extra'
+    weight = 40
+
+[params]
+  avatar = "https://picsum.photos/200"
+
+  [[params.socials]]
+      link = "https://github.com/LucaPalumbo"
+      icon = "devicon-github-original"
+  [[params.socials]]
+      link = "https://twitter.com/Luca_Palumbo_"
+      icon = "devicon-twitter-original"
+   [[params.socials]]
+      link = "https://linkedin.com/in/luca-palumbo-b9baa020a"
+      icon = "devicon-linkedin-plain"
+
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.extensions.passthrough]
+      enable = true
+      [markup.goldmark.extensions.passthrough.delimiters]
+        block = [['$$','$$'], ['\\[','\\]']]
+        inline = [['$','$'], ['\\(','\\)']]
+
+    [markup.goldmark.parser]
+      [markup.goldmark.parser.attribute]
+        block = true
+
+[markup.highlight]
+  noClasses = true
+  codeFences = true
+  guessSyntax = true
+  tabWidth = 4
+  style = "monokai"
