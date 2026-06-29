@@ -1,6 +1,6 @@
 +++
 date = '2026-05-09'
-draft = true
+draft = false
 title = 'Dragonball Z Budokai 3 - 22 years old password algorithm finally reversed'
 tags = ["reverse engineering", "playstation 2", "MIPS"]
 +++
