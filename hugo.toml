@@ -25,7 +25,7 @@ theme = "enervoid"
     weight = 40
 
 [params]
-  avatar = "https://picsum.photos/200"
+  avatar = "/images/beetlejuice.jpg"
 
   [[params.socials]]
       link = "https://github.com/LucaPalumbo"
